@@ -93,7 +93,6 @@ const calculateLevel = ({canRead, canCreate, canUpdate, canDelete, canPublish} :
 
     if(canRead){
 
-        if()
     } else {
 
     }
