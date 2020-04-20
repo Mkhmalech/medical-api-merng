@@ -3,6 +3,7 @@ import routes from './routes';
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { uri } from "./config"
+import { Auth } from "./common/auth";
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => { console.log('MongoDB connected...') })
@@ -24,12 +25,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use(isAuth);
-
-// app.get('/testexpress',(req, res, next)=>{
-//     res.send("requete recieved");
-//     next()
-// })
+app.use(Auth);
 
 app.use('/', routes(express.Router()));
 
