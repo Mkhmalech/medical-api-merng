@@ -6,19 +6,21 @@ interface USER {
     userId : string
     email  : string
     account? : any
-    role? : string
-    permissions? : object
+    role? : object[]
+    permissions? : object[]
 }
 
 interface Req extends Request {
     user? : USER
     hasAuthorization? : (user : USER) => boolean
+    message ?: string
 }
 
 const checkAutorization = (user : USER, module? : string) : boolean=> {
 
-    const hasAuth : boolean = false;
+    let hasAuth : boolean = false;
 
+    // if(user.hasAuth === 'supadmin') return hasAuth = true;
     /**
      * canRead : true ; level 1
      * canCreate : true; level 11
@@ -68,12 +70,12 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
             req.hasAuthorization = checkAutorization
 
         } catch {
-            res.send('token_expired')
+            req.message = "token_expired"
         }
         
 
     } else {
-        res.send('not_allowed')
+        req.message = 'not_allowed'
     }
 
  // continue
