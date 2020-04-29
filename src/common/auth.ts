@@ -6,8 +6,8 @@ interface USER {
     userId : string
     email  : string
     account? : any
-    role? : object[]
-    permissions? : object[]
+    role? : any[]
+    permissions? : any[]
 }
 
 interface Req extends Request {
@@ -19,8 +19,6 @@ interface Req extends Request {
 const checkAutorization = (user : USER, module? : string) : boolean=> {
 
     let hasAuth : boolean = false;
-
-    // if(user.hasAuth === 'supadmin') return hasAuth = true;
     /**
      * canRead : true ; level 1
      * canCreate : true; level 11
@@ -29,13 +27,14 @@ const checkAutorization = (user : USER, module? : string) : boolean=> {
      * canPublish : true; level 11111
      */
     const level : number = 0;
-
+    if(user === undefined || user.role === null || user.role === undefined || user.role.length <= 0) return hasAuth = false;
     if(!module) {
 
-        
+        if(user.role[0].name === "supadmin") hasAuth = true;
+        return hasAuth = false;
 
-    } else {
-        
+    } else {        
+        if(user.role[0].name === "supadmin" || user.role[0].name === "director" ) hasAuth = true;
     }
 
 
@@ -67,17 +66,19 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                 permissions : userData.permissions || undefined
             };
 
-            req.hasAuthorization = checkAutorization
+            req.message = undefined;
 
-        } catch {
+            
+
+        } catch(e) {
             req.message = "token_expired"
         }
         
 
     } else {
-        req.message = 'not_allowed'
+        req.message = 'no_token_founded'
     }
-
+    req.hasAuthorization = checkAutorization
  // continue
     next()
 }
