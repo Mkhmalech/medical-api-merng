@@ -30,15 +30,12 @@ const checkAutorization = (user : USER, module? : string) : boolean=> {
     if(user === undefined || user.role === null || user.role === undefined || user.role.length <= 0) return hasAuth = false;
     if(!module) {
 
-        if(user.role[0].name === "supadmin") hasAuth = true;
-        return hasAuth = false;
+        if(user.role[0].name === "supadmin") return hasAuth = true;
 
     } else {        
-        if(user.role[0].name === "supadmin" || user.role[0].name === "director" ) hasAuth = true;
+        if(user.role[0].name === "supadmin" || user.role[0].name === "director" ) return hasAuth = true;
     }
-
-
-
+    
     return hasAuth
 }
 
