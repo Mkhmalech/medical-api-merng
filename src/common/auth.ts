@@ -1,12 +1,13 @@
 import {Request, Response, NextFunction} from "express";
 import jwt from 'jsonwebtoken';
 import User from '../user-medical-api/src/controllers/User';
+import { LABO } from "../lab-medical-api/src/labos/module/labo";
 
 interface USER {
     userId : string
     email  : string
     account? : any
-    role? : any[]
+    role? : any
     permissions? : any[]
 }
 
@@ -14,27 +15,52 @@ interface Req extends Request {
     user? : USER
     hasAuthorization? : (user : USER) => boolean
     message ?: string
+    roles ? : any[]
+    permissions? :  {
+        role : string
+        permissions : any[]
+    }
+    accountName? : string
 }
 
 const checkAutorization = (user : USER, module? : string) : boolean=> {
 
     let hasAuth : boolean = false;
     /**
-     * canRead : true ; level 1
-     * canCreate : true; level 11
-     * canUpdate : true; level 111
-     * canDelete : true; level 1111
-     * canPublish : true; level 11111
+     * @1 step - verify in @userDb ittyni role if isAdmin give authorization noLimit
+     * 
+     * @2 step - verify in @userDb at @account role if @isDirector give account authorization no limit
+     * 
+     * if not get @role and @module and check activated authorization from @accountDb at @setting @permissions
+     * 
+     * @ step - verify @accountDb at @staff if exist redirect to profile module to activate account in @userDb
+     * 
      */
     const level : number = 0;
-    if(user === undefined || user.role === null || user.role === undefined || user.role.length <= 0) return hasAuth = false;
+
+    // if no role return no_auth
+    if(user === undefined || user.role === null || user.role === undefined ) return hasAuth = false;
+
+    // if the user is a supadmin return has_auth
+    if(user.role === "supadmin") return hasAuth = true;
+
+    // if user is the account holder
+    if(user.role === "director") return hasAuth = true;
+
+    /**********************************
+     * don t modify this part untill 
+     * modify function of modules 
+     * ********************************/
     if(!module) {
 
-        if(user.role[0].name === "supadmin") return hasAuth = true;
+        if(user.role === "supadmin") return hasAuth = true;
 
-    } else {        
-        if(user.role[0].name === "supadmin" || user.role[0].name === "director" ) return hasAuth = true;
+    } else {     
+        const componentName : string = user.permissions 
+            && user.permissions.find((d:any) => d.componentName == module);
+        console.log(componentName)
     }
+    /******************************************************************************************************/
     
     return hasAuth
 }
@@ -44,38 +70,72 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
     const user= new User();
 
     // extract auth
-    const {authorization} = req.headers;
+    const {authorization, account } = req.headers;
 
+    // get account name
+
+    const accountName = typeof account === 'string' && account.split(' ')[1];
+
+    // get account modules permissions
+    const accountData = await LABO.findOne({'account.name' : accountName})
+    
     if(authorization){
-        const token = authorization.split(' ')[1]
+        const token = authorization.split(' ')[1];
+        let employer : any;
+        let employerRole : any;
+        
 
         try {
 
             const { userId }: any = jwt.verify(token, 'mysuperTokenlogin');
 
-            const userData = await user.findUserById(userId);
+            if(accountData) {
+                employer = accountData.staff.find((d:any) =>d._id == `${userId}`);
+                employerRole = employer && accountData.setting.team.find((c:any)=> c._id == `${employer.role}`);
+            }
 
-            req.user = {
-                userId : userData.id,
-                email : userData.email,
-                account : userData.account || undefined,
-                role : userData.role || undefined,
-                permissions : userData.permissions || undefined
-            };
+            if(!employer){
 
-            req.message = undefined;
+                try{
+                    const userData = await user.findUserById(userId) || undefined;
+                    
+                    req.user = {
+                        userId : userData.id || employer._id,
+                        email : userData.email || employer.firstName,
+                        account : (accountData && accountData._id) || undefined,
+                        role : userData.role.name || undefined,
+                    };
+                } catch {
 
-            
+                    return req.message = "no_user_founded";
+                }
+                
+            } else {
+                req.user = {
+                    userId :  employer._id,
+                    email :  employer.firstName,
+                    account : (accountData && accountData._id) || undefined,
+                    role :  employerRole.role || undefined,
+                    permissions : employerRole.permissions || undefined
+                };
+            }
+
+            req.message = "user_success";
 
         } catch(e) {
             req.message = "token_expired"
         }
         
-
+        
     } else {
         req.message = 'no_token_founded'
     }
+    // get verification function
     req.hasAuthorization = checkAutorization
+
+    // catch account name
+    req.accountName = `${accountName}`
+    
  // continue
     next()
 }
