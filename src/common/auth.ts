@@ -6,7 +6,7 @@ import { LABO } from "../lab-medical-api/src/labos/module/labo";
 interface USER {
     userId : string
     email  : string
-    account? : any
+    accountId? : any
     role? : any
     permissions? : any[]
 }
@@ -26,12 +26,21 @@ interface Req extends Request {
 const checkAutorization = (user : USER, module? : string) : boolean=> {
 
     let hasAuth : boolean = false;
+
+    // if no role return no_auth
+    if(user === undefined || user.role === null || user.role === undefined ) return hasAuth = false;
+
+
     /**
      * @1 step - verify in @userDb ittyni role if isAdmin give authorization noLimit
-     * 
-     * @2 step - verify in @userDb at @account role if @isDirector give account authorization no limit
-     * 
-     * if not get @role and @module and check activated authorization from @accountDb at @setting @permissions
+     */
+     // if the user is a supadmin return has_auth
+        if(user.role === "supadmin") return hasAuth = true;
+     /* @2 step - verify in @userDb at @account role if @isDirector give account authorization no limit
+     */
+    // if user is the account holder
+        if(user.role === "client") return hasAuth = true;
+     /* if not get @role and @module and check activated authorization from @accountDb at @setting @permissions
      * 
      * @ step - verify @accountDb at @staff if exist redirect to profile module to activate account in @userDb
      * 
@@ -41,8 +50,7 @@ const checkAutorization = (user : USER, module? : string) : boolean=> {
     // if no role return no_auth
     if(user === undefined || user.role === null || user.role === undefined ) return hasAuth = false;
 
-    // if the user is a supadmin return has_auth
-    if(user.role === "supadmin") return hasAuth = true;
+    
 
     // if user is the account holder
     if(user.role === "director") return hasAuth = true;
@@ -73,20 +81,17 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
     const {authorization, account } = req.headers;
 
     // get account name
-
-    const accountName = typeof account === 'string' && account.split(' ')[1];
+    const accountId = typeof account === 'string' && account.split(' ')[1];
 
     // get account modules permissions
-    const accountData = await LABO.findOne({'account.name' : accountName})
+    const accountData = (accountId && accountId!=='null' && accountId!=='ittyni' && await LABO.findById(accountId))
     
     if(authorization){
         const token = authorization.split(' ')[1];
         let employer : any;
         let employerRole : any;
-        
 
         try {
-
             const { userId }: any = jwt.verify(token, 'mysuperTokenlogin');
 
             if(accountData) {
@@ -102,8 +107,9 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                     req.user = {
                         userId : userData.id || employer._id,
                         email : userData.email || employer.firstName,
-                        account : (accountData && accountData._id) || undefined,
+                        accountId : (accountData && accountData._id) || undefined,
                         role : userData.role.name || undefined,
+                        permissions : (accountData && accountData.extensions) || undefined
                     };
                 } catch {
 
@@ -114,7 +120,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                 req.user = {
                     userId :  employer._id,
                     email :  employer.firstName,
-                    account : (accountData && accountData._id) || undefined,
+                    accountId : (accountData && accountData._id) || undefined,
                     role :  employerRole.role || undefined,
                     permissions : employerRole.permissions || undefined
                 };
@@ -124,8 +130,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
 
         } catch(e) {
             req.message = "token_expired"
-        }
-        
+        }  
         
     } else {
         req.message = 'no_token_founded'
@@ -134,7 +139,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
     req.hasAuthorization = checkAutorization
 
     // catch account name
-    req.accountName = `${accountName}`
+    req.accountName = `${accountData && accountData.account.name}`
     
  // continue
     next()

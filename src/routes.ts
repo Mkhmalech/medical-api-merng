@@ -1,8 +1,7 @@
 import express from "express";
 import * as HandlerUser from './user-medical-api/index'
 import * as HandlerLab from './lab-medical-api/index'
-import path from 'path'
-import {readFileSync} from 'fs'
+
 
 
 interface expressExchange {
@@ -21,19 +20,24 @@ const routes = ($: express.Router) => {
         res.send("Hello From Server")
     });
 
-    $.all('/api/tests', HandlerLab.LabTests)
+    $.all('/tests', HandlerLab.LabTests)
 
-    $.all('/api/users', HandlerUser.User);
+    $.all('/users', HandlerUser.User);
 
-    $.all('/api/labos', HandlerLab.Labo);
+    $.all('/labos', HandlerLab.Labo);
 
     // $.all('/search', HandlerSearch.Search)
 
-    $.all('/api/labos/staff', HandlerLab.Staff);
+    $.all('/labos/staff', HandlerLab.Staff);
 
+    // lab referrals module
+    $.all('/labos/referral', HandlerLab.LabReferrals);
 
+    // lab referrals module
+    $.all('/labos/order', HandlerLab.LabOrders);
+    
     // lab appointement module
-    $.all('/api/labos/appointement', HandlerLab.LabAppointement);
+    $.all('/labos/appointement', HandlerLab.LabAppointement);
 
     $.get('/medicalapi.jpg',(
         req : express.Request,
@@ -43,7 +47,6 @@ const routes = ($: express.Router) => {
         
     });
     
-
     return $;
 }
 
