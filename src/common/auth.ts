@@ -8,6 +8,9 @@ interface USER {
     email  : string
     accountId? : any
     role? : any
+    enabledAt? : string
+    enabledBy? : string
+    status? : string
     permissions? : any[]
 }
 
@@ -90,6 +93,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
         const token = authorization.split(' ')[1];
         let employer : any;
         let employerRole : any;
+        let role : any;
 
         try {
             const { userId }: any = jwt.verify(token, 'mysuperTokenlogin');
@@ -109,8 +113,16 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                         email : userData.email || employer.firstName,
                         accountId : (accountData && accountData._id) || undefined,
                         role : userData.role.name || undefined,
-                        permissions : (accountData && accountData.extensions) || undefined
+                        status : userData.status || undefined,
                     };
+                    if(userData.role.name === 'employer'){    
+                        role = await LABO.findById(accountId).select('setting').then((t:any)=>{
+                            return t.setting.team.find((c:any)=> c.role == userData.accounts[0].role);
+                        });                  
+                        req.user.permissions = role.permissions || undefined
+                    } else {
+                        req.user.permissions = (accountData && accountData.extensions) || undefined
+                    }
                 } catch {
 
                     return req.message = "no_user_founded";
@@ -122,6 +134,9 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                     email :  employer.firstName,
                     accountId : (accountData && accountData._id) || undefined,
                     role :  employerRole.role || undefined,
+                    enabledAt :  employer.createdAt || undefined,
+                    enabledBy :  employer.addedBy || undefined,
+                    status :  'not_user',
                     permissions : employerRole.permissions || undefined
                 };
             }

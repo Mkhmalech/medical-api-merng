@@ -1,6 +1,7 @@
 import express from "express";
 import * as HandlerUser from './user-medical-api/index'
 import * as HandlerLab from './lab-medical-api/index'
+import * as HandlerCabinet from './cabinet-medical-api'
 
 
 
@@ -38,7 +39,11 @@ const routes = ($: express.Router) => {
     
     // lab appointement module
     $.all('/labos/appointement', HandlerLab.LabAppointement);
-
+    /********************************
+     * routes to cabinets
+     ********************************/
+    $.all('/cabinets', HandlerCabinet.Cabinet)
+    // ====================>cabinet end
     $.get('/medicalapi.jpg',(
         req : express.Request,
         res : express.Response,
