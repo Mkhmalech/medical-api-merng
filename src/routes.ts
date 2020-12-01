@@ -3,8 +3,6 @@ import * as HandlerUser from './user-medical-api/index'
 import * as HandlerLab from './lab-medical-api/index'
 import * as HandlerCabinet from './cabinet-medical-api'
 
-
-
 interface expressExchange {
     req : express.Request
     res : express.Response

@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from "express";
 import jwt from 'jsonwebtoken';
 import User from '../user-medical-api/src/controllers/User';
 import { LABO } from "../lab-medical-api/src/labos/module/labo";
+import { CABINET } from "../cabinet-medical-api/src/module/cabinets";
 
 interface USER {
     userId : string
@@ -13,7 +14,6 @@ interface USER {
     status? : string
     permissions? : any[]
 }
-
 interface Req extends Request {
     user? : USER
     hasAuthorization? : (user : USER) => boolean
@@ -88,6 +88,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
 
     // get account modules permissions
     const accountData = (accountId && accountId!=='null' && accountId!=='ittyni' && await LABO.findById(accountId))
+    const cabinetData = (accountId && accountId!=='null' && accountId!=='ittyni' && await CABINET.findById(accountId))
     
     if(authorization){
         const token = authorization.split(' ')[1];
@@ -121,7 +122,8 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                         });                  
                         req.user.permissions = role.permissions || undefined
                     } else {
-                        req.user.permissions = (accountData && accountData.extensions) || undefined
+                        req.user.permissions = (accountData && accountData.extensions) 
+                            || (cabinetData && cabinetData.extensions) || undefined
                     }
                 } catch {
 
@@ -159,7 +161,6 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
  // continue
     next()
 }
-
 interface Permissions {
     canRead : boolean
     canCreate : boolean
@@ -167,6 +168,7 @@ interface Permissions {
     canDelete : boolean
     canPublish : boolean
 }
+
 const calculateLevel = ({canRead, canCreate, canUpdate, canDelete, canPublish} : Permissions) : number => {
 
     let levelCalculated : number = 0;
