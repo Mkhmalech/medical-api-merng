@@ -112,7 +112,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
                     req.user = {
                         userId : userData.id || employer._id,
                         email : userData.email || employer.firstName,
-                        accountId : (accountData && accountData._id) || undefined,
+                        accountId : (accountData && accountData._id) || (cabinetData && cabinetData._id) || undefined,
                         role : userData.role.name || undefined,
                         status : userData.status || undefined,
                     };

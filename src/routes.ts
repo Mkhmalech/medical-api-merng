@@ -40,7 +40,9 @@ const routes = ($: express.Router) => {
     /********************************
      * routes to cabinets
      ********************************/
-    $.all('/cabinets', HandlerCabinet.Cabinet)
+    $.all('/cabinets', HandlerCabinet.Cabinet);
+    // cabinet order
+    $.all('/cabinets/order', HandlerLab.LabOrders);
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(
         req : express.Request,
