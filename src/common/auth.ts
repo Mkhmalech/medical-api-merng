@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from "express";
 import jwt from 'jsonwebtoken';
 import User from '../user-medical-api/src/controllers/User';
-import { LABO } from "../lab-medical-api/src/labos/module/labo";
-import { CABINET } from "../cabinet-medical-api/src/module/cabinets";
+import { LABO } from "../health-provider/lab-medical-api/src/labos/module/labo";
+import { CABINET } from "../health-provider/cabinet-medical-api/src/module/cabinets";
 
 interface USER {
     userId : string
@@ -85,7 +85,7 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
 
     // get account name
     const accountId = typeof account === 'string' && account.split(' ')[1];
-
+    
     // get account modules permissions
     const accountData = (accountId && accountId!=='null' && accountId!=='ittyni' && await LABO.findById(accountId))
     const cabinetData = (accountId && accountId!=='null' && accountId!=='ittyni' && await CABINET.findById(accountId))
@@ -98,6 +98,9 @@ export const Auth = async (req : Req, res : Response, next : NextFunction) => {
 
         try {
             const { userId }: any = jwt.verify(token, 'mysuperTokenlogin');
+
+            // token expired when user still work
+            if(!userId) return new Error('TOKEN_EXPIRED')
 
             if(accountData) {
                 employer = accountData.staff.find((d:any) =>d._id == `${userId}`);
