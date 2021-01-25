@@ -13,6 +13,10 @@ import * as HandlerAM from './extensions/account_manager'
 import * as HandlerPR from './extensions/patient_record'
 // import extensions handler
 import * as HandlerNGAP from './extensions/ngap_manager'
+// import extensions handler
+import * as HandlerCCAM from './extensions/ccam_manager'
+// import extensions handler
+import * as HandlerICD from './extensions/icd_manager'
 
 
 interface expressExchange {
@@ -79,6 +83,16 @@ const routes = ($: express.Router) => {
      * NGAP Manager Api v0.1
      ********************************/
     $.all('/ngap', HandlerNGAP.NGAPManger);
+
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/ccam', HandlerCCAM.CCAMManger);
+
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/icd', HandlerICD.ICDManger);
     
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(

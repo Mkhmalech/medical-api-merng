@@ -8,4 +8,5 @@ export const cabinetResolver = {
     cabinetPatientDetails : Cabinet.cabinetPatientDetails,
     cabinetFindPatient : Cabinet.cabinetFindPatient,
     cabinetAddLabOrder : Cabinet.cabinetAddLabOrder,
+    addMultipleCabinets : Cabinet.addMultipleCabinets,
 };

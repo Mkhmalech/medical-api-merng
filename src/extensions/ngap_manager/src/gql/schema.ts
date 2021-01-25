@@ -6,6 +6,7 @@ export const NgapSchema = buildSchema(`
     }
     type NGAPMutation {
         modifyActe(code: String) : String
+        addMultiActes : String
     }
     schema {
         query : NGAPQuery

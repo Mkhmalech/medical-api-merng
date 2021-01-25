@@ -12,5 +12,6 @@ export const MedicineResolver = {
     listAtcChapter: Medicine.listAtcChapter,
     listAtcGroup: Medicine.listAtcGroup,
     listAtcSousGroup: Medicine.listAtcSousGroup,
-    listDrugByAtc: Medicine.listDrugByAtc
+    listDrugByAtc: Medicine.listDrugByAtc,
+    createSiteMapDrugs: Medicine.createSiteMapDrugs
 };

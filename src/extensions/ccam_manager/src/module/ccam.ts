@@ -4,7 +4,8 @@ type ccamModel = Iccam & Document;
 
 const coefficient = new Schema({
     country : String, 
-    coefficient : String
+    price : String,
+    currency : String
 })
 interface Iccam {
     code : string,
@@ -13,8 +14,13 @@ interface Iccam {
 }
 
 const ccam = new Schema({
-    code : String,
-    label : String,
+    acteLabel : String,
+    acteCode : String,
+    groupLabel : String,
+    groupCode : String,
+    phaseCode : String,
+    phaseLabel : String,
+    activityLabel : String,
     coefficients : [coefficient]
 })
 

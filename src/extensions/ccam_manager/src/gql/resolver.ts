@@ -1,6 +1,6 @@
 import * as CCAM from '../controller/ccam'
 export const ccamResolver = {
     fetchActe : CCAM.fetchActe,
-    modifyActe : CCAM.addMultiActes,
-    addMultiActes : CCAM.modifyActe,
+    modifyActe : CCAM.modifyActe,
+    addMultiActes : CCAM.addMultiActes,
 };

@@ -6,6 +6,7 @@ export const CCAMSchema = buildSchema(`
     }
     type CCAMMutation {
         modifyActe(code: String) : String
+        addMultiActes : String
     }
     schema {
         query : CCAMQuery

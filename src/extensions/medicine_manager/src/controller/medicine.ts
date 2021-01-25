@@ -1,6 +1,9 @@
 import { MEDICINE } from '../module/medicine';
-import {medicine} from './Alldrugs';
+import { cities } from './cities';
 import { Atc } from './atc';
+import { PHARMA } from '../../../../health-provider/pharmacy-medical-api/src/module/pharma';
+const fs = require('fs');
+
 export const fetchMedicine = async ({id}:any)=>{
     const res : any = await MEDICINE.findById(id);
     if(!res) return "no_result_founded"
@@ -87,4 +90,27 @@ export const listDrugById = async({id}:any)=>{
     const res : any = await MEDICINE.findById(id);
     if(!res) return "no_result_founded"
     return(res);
+}
+export const createSiteMapDrugs = async ({id}:any)=>{
+    // let sitmap : string = '';    
+    // let sitemap : string = '';    
+
+    // for (let i = 0; i < cities.length; i++) {
+    //     const res = await PHARMA.find({'contact.address.city': cities[i].city}).then((r:any)=>{
+    //         if(r){
+    //             r.map((m:any)=>{
+    //                 sitmap += `<url><loc>https://ittyni.com/annuaire/pharmacie/maroc/${cities[i].city}/${m._id}</loc><lastmod>${new Date().toISOString()}</lastmod><priority>0.80</priority></url>`;
+    //             })
+    //         }
+    //     })
+
+    //     console.log(`city ${cities[i].city} finished`)
+        
+    // }
+
+    // fs.writeFileSync(`./sitemap.xml`, sitmap, (err:any, doc:any) => {
+    //     if (err) throw err
+    //     console.log(doc)
+    // });
+    return "no_permissions_to_be_here"
 }

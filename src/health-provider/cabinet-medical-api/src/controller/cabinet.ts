@@ -1,6 +1,7 @@
 import { PATIENT } from "../../../../extensions/patient_record/src/module/patient";
 import { TESTS } from "../../../../health-provider/lab-medical-api/src/labTests/module/labtests";
 import { CABINET } from "../module/cabinets"
+import {cabinets} from './cabinets'
 
 /**
  * create new cabinet 
@@ -23,7 +24,32 @@ export const createNewCabinet = async ({ name }: any, { user }: any) => {
 
     else return new Error("cabinet_saved_successfully")
 }
+// add multiple cabinets
+export const addMultipleCabinets = async () => {
+    // for (let i = 0; i < cabinets.length; i++) {
+    //     const cb = cabinets[i];
+    //     let newCabinet : any= new CABINET({
+    //         account :{
+    //             name : cb.name,
+    //             type : cb.type
+    //         },
+    //         contact : {
+    //             address : {
+    //                 city : cb.city,
+    //                 street : cb.street
+    //             }
+    //         }
+    //     })
 
+    //     if(cb.tele.length>0)  newCabinet.contact.tele.fix.push(cb.tele);
+
+    //     const res = await newCabinet.save();
+
+    //     if(res) console.log(`${i} from ${cabinets.length}`)
+    // }
+
+    return "finished"
+}
 /**
  * list all existing cabinets
  * 

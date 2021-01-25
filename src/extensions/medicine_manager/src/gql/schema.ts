@@ -47,6 +47,7 @@ export const MedicineSchema = buildSchema(`
     }
     type MedicineMutation {
         addMultiMedicine : String
+        createSiteMapDrugs : String
     }
     schema {
         query : MedicineQuery

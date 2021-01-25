@@ -59,7 +59,7 @@ const pharma = new Schema({
                 type: String,
             },
         },
-    },  
+    }, 
 })
 
 export const PHARMA = model<pharmaModel>('PHARMA', pharma)

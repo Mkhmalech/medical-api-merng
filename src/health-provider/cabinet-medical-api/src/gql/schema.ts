@@ -86,6 +86,7 @@ export const CabinetSchema = buildSchema(`
         cabinetAddLabOrder(
             id : String, panel : [String], laboId : String
         ) : String
+        addMultipleCabinets : String
     }
     schema {
         query : RootQuery
