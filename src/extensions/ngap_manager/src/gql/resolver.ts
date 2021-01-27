@@ -1,6 +1,9 @@
 import * as NGAP from '../controller/ngap'
 export const ngapResolver = {
-    fetchActe : NGAP.fetchActe,
+    fetchActes : NGAP.fetchActes,
     modifyActe : NGAP.modifyActe,
     addMultiActes : NGAP.addMultiActes,
+    fetchChapters : NGAP.fetchChapters,
+    fetchGroups : NGAP.fetchGroups,
+    fetchActeDetails : NGAP.fetchActeDetails,
 };

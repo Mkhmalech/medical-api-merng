@@ -27,7 +27,9 @@ const city = `city : String`
 const cabinetAccount = `type CabinetAccount {
     ${cabinetName}
 }`
-
+const Street = `street : String`
+const City = `city : String`
+const Fix = `fix : [String]`
 export const CabinetSchema = buildSchema(`
     ${cabinetAccount}
     type OrderTest {
@@ -64,9 +66,25 @@ export const CabinetSchema = buildSchema(`
         ID : PatientID
         contact: PatientContact
     }
+    type Address {
+        ${Street}
+        ${City}
+    }
+    type Tele {
+        ${Fix}
+    }
+    type CabinetContact {
+        address : Address
+        tele : Tele
+    }
     type Cabinet {
         _id : ID
         account : CabinetAccount
+        contact : CabinetContact
+    }
+    type CabinetByCity {
+        city : String
+        total : Float
     }
     type RootQuery {
         findCabinet: String
@@ -74,6 +92,10 @@ export const CabinetSchema = buildSchema(`
         listCabinetPatients : [Patient]
         cabinetPatientDetails(id : String) : Patient
         cabinetFindPatient(query : String) : [Patient]
+        listCabinetsCities : [CabinetByCity]
+        listCabinetsTwntyByCity(city : String) : [Cabinet]
+        listCabinetsAllByCity(city : String) : [Cabinet]
+        listCabinetDetailsById(id : String) : Cabinet
     }
     type RootMutation {
         createNewCabinet(name : String) : String

@@ -1,7 +1,7 @@
 import { PATIENT } from "../../../../extensions/patient_record/src/module/patient";
 import { TESTS } from "../../../../health-provider/lab-medical-api/src/labTests/module/labtests";
 import { CABINET } from "../module/cabinets"
-import {cabinets} from './cabinets'
+import {cabCity} from './cabinetCity'
 
 /**
  * create new cabinet 
@@ -50,6 +50,40 @@ export const addMultipleCabinets = async () => {
 
     return "finished"
 }
+/**
+ * list all existing cabinets
+ * 
+ */
+export const listCabinetsCities = async () => cabCity;
+/**
+ * list all existing cabinets
+ * 
+ */
+export const listCabinetsTwntyByCity = async ({city}:any) => {
+    const res = await CABINET.find({"contact.address.city" : city.toUpperCase()}).select("account contact");
+    if (!res) return "no_result_founded";
+    else return res.slice(0, 20).map(() =>
+        res.splice(Math.floor(Math.random() * res.length), 1)[0]
+    );
+};
+/**
+ * list all existing cabinets
+ * 
+ */
+export const listCabinetsAllByCity = async ({city}:any) => {
+    const res = await CABINET.find({"contact.address.city" : city.toUpperCase()}).select("account contact");
+    if (!res) return "no_result_founded";
+    return res
+};
+/**
+ * list all existing cabinets
+ * 
+ */
+export const listCabinetDetailsById = async ({id}:any) => {
+    const res = await CABINET.findById(id).select("account contact");
+    if (!res) return "no_result_founded";
+    return res
+};
 /**
  * list all existing cabinets
  * 

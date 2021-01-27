@@ -9,4 +9,8 @@ export const cabinetResolver = {
     cabinetFindPatient : Cabinet.cabinetFindPatient,
     cabinetAddLabOrder : Cabinet.cabinetAddLabOrder,
     addMultipleCabinets : Cabinet.addMultipleCabinets,
+    listCabinetsCities : Cabinet.listCabinetsCities,
+    listCabinetsTwntyByCity : Cabinet.listCabinetsTwntyByCity,
+    listCabinetsAllByCity : Cabinet.listCabinetsAllByCity,
+    listCabinetDetailsById : Cabinet.listCabinetDetailsById,
 };
