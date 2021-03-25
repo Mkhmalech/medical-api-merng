@@ -2,6 +2,7 @@ import { buildSchema } from "graphql";
 
 // cabinet varaibles
 const cabinetName = `name : String`
+const cabinetType = `type : String`
 // test 
 const laboName = `LaboName : String`
 const laboId = `LaboId : ID`
@@ -16,7 +17,7 @@ const firstname = `firstname : String`
 const lastname = `lastname : String`
 const gender = `gender : String`
 const mobile = `mobile : String`
-const DOB = `DOB : String`
+const DOB = `dob : String`
 const IDType = `IDType : String`
 const IDNum = `IDNum : String`
 const email = `email : String`
@@ -25,11 +26,13 @@ const street = `street : String`
 const city = `city : String`
 // cabinet properties
 const cabinetAccount = `type CabinetAccount {
-    ${cabinetName}
+    ${cabinetName} ${cabinetType}
 }`
 const Street = `street : String`
 const City = `city : String`
 const Fix = `fix : [String]`
+const acteCode = "acteCode : String";
+const actLabel = "actLabel : String";
 export const CabinetSchema = buildSchema(`
     ${cabinetAccount}
     type OrderTest {
@@ -73,6 +76,11 @@ export const CabinetSchema = buildSchema(`
     type Tele {
         ${Fix}
     }
+    type ICD {
+        _id : ID
+        ${acteCode}
+        ${actLabel}
+    }
     type CabinetContact {
         address : Address
         tele : Tele
@@ -86,6 +94,23 @@ export const CabinetSchema = buildSchema(`
         city : String
         total : Float
     }
+    type WaitingStatus{
+        updatedAt : String
+        updatedBy : String
+        now : String
+        before : String
+    }
+    type WaitingRoom {
+        patient : Patient
+        arrivedAt : String
+        finishedAt : String
+        viewedAt : String
+        number : Int
+        motif : String
+        icd : ICD
+        visitType : String
+        status : [WaitingStatus]
+    }
     type RootQuery {
         findCabinet: String
         listAllCabinets: [Cabinet]
@@ -96,6 +121,7 @@ export const CabinetSchema = buildSchema(`
         listCabinetsTwntyByCity(city : String) : [Cabinet]
         listCabinetsAllByCity(city : String) : [Cabinet]
         listCabinetDetailsById(id : String) : Cabinet
+        listWaitingPatients : [WaitingRoom]
     }
     type RootMutation {
         createNewCabinet(name : String) : String
@@ -109,6 +135,13 @@ export const CabinetSchema = buildSchema(`
             id : String, panel : [String], laboId : String
         ) : String
         addMultipleCabinets : String
+        addPatientToWaitingRoom(id : ID, motif : String, visitType : String): String
+        updatePatientToViewed(id : ID): [WaitingRoom]
+        updatePatientToFinished(id : ID): [WaitingRoom]
+        setPatientToViewed(num : Int): WaitingRoom
+        setPatientToFinished(num : Int): WaitingRoom
+        setPatientToWaiting(num : Int): String
+        createCabinetsSiteMap : String
     }
     schema {
         query : RootQuery

@@ -31,10 +31,12 @@ export const NgapSchema = buildSchema(`
         fetchGroups(letter : String) : [String]
         fetchActes(group : String) : [Ngap]
         fetchActeDetails(code : String) : Ngap
+        searchNgapActe(q: String) : [Ngap]
     }
     type NGAPMutation {
         modifyActe(code: String) : String
         addMultiActes : String
+        createNgapSiteMap : String
     }
     schema {
         query : NGAPQuery

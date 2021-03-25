@@ -6,4 +6,6 @@ export const ngapResolver = {
     fetchChapters : NGAP.fetchChapters,
     fetchGroups : NGAP.fetchGroups,
     fetchActeDetails : NGAP.fetchActeDetails,
+    searchNgapActe : NGAP.searchNgapActe,
+    createNgapSiteMap : NGAP.createNgapSiteMap,
 };

@@ -10,53 +10,27 @@ const extensionSchema = new Schema({
  * payement
  */
 const payement = new Schema({
-    payementId : { type: Schema.Types.ObjectId, ref: 'PAYEMENT' },
-    patientId : { type: Schema.Types.ObjectId, ref: 'PATIENT' },
-    cabinetId : { type: Schema.Types.ObjectId, ref: 'CABINET' }
+    payementId : { type: Schema.Types.ObjectId, ref: 'PAYEMENT' }
+})
+/**
+ * waiting patient
+ */
+const waitingPatient = new Schema({
+    patient : { type: Schema.Types.ObjectId, ref: 'PATIENT' },
+    arrivedAt : String,
+    finishedAt : String,
+    viewedAt : String,
+    number : Number,
+    icd : { type: Schema.Types.ObjectId, ref: 'ICD' },
+    motif : String,
+    visitType : String,
+    status : [{updatedAt : String, updatedBy : { type: Schema.Types.ObjectId, ref: 'USER' }, now : String, before: String}]
 })
 /**
  * patient of cabinet
  */
 const patient = new Schema({
-    patientId : { type: Schema.Types.ObjectId, ref: 'PATIENT' },
-    civility : String,
-    firstname: String,
-    lastname: String,
-    gender: String,
-    DOB : String,
-    ID : {
-        IDType : String,
-        IDNum : String
-    },
-    contact : {
-        tele : [{
-            mobile : String,
-            fix : String
-        }],
-        email : {type : String},
-        address: {
-            region: {
-                type: String,
-            },
-
-            province: {
-                type: String,
-            },
-
-            commune: {
-                type: String,
-            },
-
-            street: {
-                type: String,
-            },
-
-            city: {
-                type: String,
-            },
-        }
-    },
-    payements : [payement]
+    patientId : { type: Schema.Types.ObjectId, ref: 'PATIENT' }
 })
 interface ICabinetModel extends Document {
     account: {
@@ -77,6 +51,8 @@ interface ICabinetModel extends Document {
     patients : any[],
 
     payement : any[]
+
+    waitingRoom : any[]
 }
 
 const CabinetSchema: Schema = new Schema({
@@ -130,7 +106,11 @@ const CabinetSchema: Schema = new Schema({
      * cabinet incomes
      * payement
      */
-    payements : [payement]
+    payements : [payement],
+    /**
+     * waitng room
+     */
+    waitingRoom : [waitingPatient]
     
 });
 

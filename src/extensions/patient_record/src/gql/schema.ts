@@ -1,10 +1,11 @@
 import { buildSchema } from "graphql";
 
 const civility = `civility : String`
+const gender = `gender : String`
 const firstname = `firstname : String`
 const lastname = `lastname : String`
 const tele = `tele : String`
-const DOB = `DOB : String`
+const DOB = `dob : String`
 const IDType = `IDType : String`
 const IDNum = `IDNum : String`
 const mobile = `mobile : String`
@@ -20,7 +21,12 @@ export const PatientSchema = buildSchema(`
     type PatientMut {
         addNewPatientToAccount(
             ${civility}, ${firstname}!, ${lastname}!,
-            ${tele}, ${DOB}!, ${IDType}, ${IDNum},
+            ${tele}, ${DOB}!, ${IDType}, ${IDNum}, ${gender},
+            ${email}, ${region}, ${street}, ${city},
+        ): String
+        addNewPatient(
+            ${civility}, ${firstname}!, ${lastname}!,
+            ${tele}, ${DOB}!, ${IDType}, ${IDNum}, ${gender},
             ${email}, ${region}, ${street}, ${city},
         ): String
     }

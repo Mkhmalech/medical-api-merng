@@ -20,7 +20,7 @@ interface IPatient {
     lastname: string,
     gender: string,
     tele?: string,
-    DOB : any,
+    dob : any,
     ID : {
         IDType : String
         IDNum : String
@@ -55,7 +55,7 @@ const patient = new Schema({
     firstname: String,
     lastname: String,
     gender: String,
-    DOB : String,
+    dob : String,
     ID : {
         IDType : String,
         IDNum : String

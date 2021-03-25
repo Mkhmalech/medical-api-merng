@@ -36,7 +36,7 @@ export const cabCity = [
         "total": 79
     },
     {
-        "city": "CASABLANCA",
+        "city": "CASA",
         "total": 3335
     },
     {
