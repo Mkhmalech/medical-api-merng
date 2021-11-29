@@ -1,11 +1,11 @@
 import { MEDICINE } from '../module/medicine';
 import { cities } from './cities';
 import { Atc } from './atc';
-import { PHARMA } from '../../../../health-provider/pharmacy-medical-api/src/module/pharma';
+import { PHARMA } from '../../../pharmacy_manager/src/module/pharma';
 const fs = require('fs');
 
 export const fetchMedicine = async ({id}:any)=>{
-    const res : any = await MEDICINE.findById(id);
+    const res : any = await MEDICINE.findByIdAndUpdate(id, {$inc : {"views" : 1}});
     if(!res) return "no_result_founded"
     return(res);
 }

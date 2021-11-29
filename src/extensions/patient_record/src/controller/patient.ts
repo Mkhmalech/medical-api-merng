@@ -1,4 +1,4 @@
-import { CABINET } from "../../../../health-provider/cabinet-medical-api/src/module/cabinets"
+import { CABINET } from "../../../../extensions/cabinet-manager/src/module/cabinets"
 import { PATIENT } from "../module/patient"
 
 export const addNewPatientToAccount = async (args: any, { user }: any) => {
@@ -22,7 +22,7 @@ export const addNewPatientToAccount = async (args: any, { user }: any) => {
             });
 
             newPatient.permissions.push({ cabinetId: user.accountId });
-            newPatient.update.push({ updatedAt: new Date().toLocaleDateString(), updatedBy: user.userID })
+            newPatient.update.push({ updatedAt: new Date().toLocaleDateString(), updatedBy: user._id })
             const res = await newPatient.save();
             if (res) {
                 const cabinet = await CABINET.findOne({ "_id": user.accountId });
@@ -42,7 +42,7 @@ export const addNewPatientToAccount = async (args: any, { user }: any) => {
     // collection
     else {
         const res = await CABINET.findOne({ "_id": user.accountId })
-            .then((cabinet) => {
+            .then((cabinet:any) => {
                 let newPatient = {
                     civility: args.civility,
                     firstname: args.firstname,

@@ -15,13 +15,15 @@ interface IMedicine {
     composition : string,
     category : string,
     atc : string
+    views : number
 }
 
 const Medicine = new Schema({
     names : [name] ,
     composition : String,
     category : String, 
-    atc : String
+    atc : String,
+    views : Number
 })
 
 export const MEDICINE = model<medicineModel>('MEDICINE', Medicine)

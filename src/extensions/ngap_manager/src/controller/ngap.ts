@@ -65,7 +65,7 @@ export const fetchActes = async ({ group }: any) => {
 }
 
 export const fetchActeDetails = async ({ code }: any) => {
-    const res = await NGAP.findOne({ acteCode: code });
+    const res = await NGAP.findOneAndUpdate({ acteCode: code }, {$inc : {"views" : 1}});
     return (res)
 }
 
@@ -75,20 +75,20 @@ export const searchNgapActe = async ({ q }: any) => {
 }
 
 export const createNgapSiteMap = async () => {
-    let sitmap: string = '';
+    // let sitmap: string = '';
 
-    const res = await NGAP.find().then((n: any) => {
-        if (n) {
-            n.map((m: any) => {
-                sitmap += `<url><loc>https://ittyni.com/actes-tarifs/nomenclature-generale-des-actes-professionnels/${m.acteCode}</loc><lastmod>${new Date().toISOString()}</lastmod><priority>0.80</priority></url>`;
-            })
-        }
-    })
+    // const res = await NGAP.find().then((n: any) => {
+    //     if (n) {
+    //         n.map((m: any) => {
+    //             sitmap += `<url><loc>https://ittyni.com/actes-tarifs/nomenclature-generale-des-actes-professionnels/${m.acteCode}</loc><lastmod>${new Date().toISOString()}</lastmod><priority>0.80</priority></url>`;
+    //         })
+    //     }
+    // })
 
-    // console.log(sitmap)
+    // // console.log(sitmap)
 
-    fs.writeFileSync(`./cabinetSitemap.xml`, sitmap, (err:any, doc:any) => {
-        if (err) throw err
-        console.log(doc)
-    });
+    // fs.writeFileSync(`./cabinetSitemap.xml`, sitmap, (err:any, doc:any) => {
+    //     if (err) throw err
+    //     console.log(doc)
+    // });
 }

@@ -15,6 +15,7 @@ interface INgap {
     chapterLabel: string
     groupCode: string
     groupLabel: string
+    views : number
 }
 
 const Ngap = new Schema({
@@ -26,6 +27,7 @@ const Ngap = new Schema({
     chapterLabel: String,
     groupCode: String,
     groupLabel: String,
+    views : Number
 })
 
 export const NGAP = model<ngapModel>('NGAP', Ngap)

@@ -1,9 +1,9 @@
 import express from "express";
-import * as HandlerUser from './user-medical-api/index'
-import * as HandlerLab from './health-provider/lab-medical-api/index'
-import * as HandlerCabinet from './health-provider/cabinet-medical-api'
+import * as HandlerUser from './extensions/user_manager/index'
+import * as HandlerLab from './extensions/lab-manager/index'
+import * as HandlerCabinet from './extensions/cabinet-manager'
 // import extensions handler
-import * as HandlerPHARMA from './health-provider/pharmacy-medical-api'
+import * as HandlerPHARMA from './extensions/pharmacy_manager'
 
 // import extensions handler
 import * as HandlerMedicine from './extensions/medicine_manager'
@@ -17,6 +17,10 @@ import * as HandlerNGAP from './extensions/ngap_manager'
 import * as HandlerCCAM from './extensions/ccam_manager'
 // import extensions handler
 import * as HandlerICD from './extensions/icd_manager'
+// component
+import * as HandlerComponent from './extensions/component_manager'
+// component
+import * as HandlerQU from './extensions/queuing_system'
 
 
 interface expressExchange {
@@ -94,6 +98,16 @@ const routes = ($: express.Router) => {
      ********************************/
     $.all('/icd', HandlerICD.ICDManger);
     
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/component', HandlerComponent.ComponentManger);
+
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/queuing', HandlerQU.QueuingManger);
+    
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(
         req : express.Request,
@@ -102,6 +116,7 @@ const routes = ($: express.Router) => {
     {
         
     });
+      
     
     return $;
 }

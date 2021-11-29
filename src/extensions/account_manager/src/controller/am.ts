@@ -1,6 +1,6 @@
 /*  health provider account */
 
-import { CABINET } from "../../../../health-provider/cabinet-medical-api/src/module/cabinets"
+import { CABINET } from "../../../../extensions/cabinet-manager/src/module/cabinets"
 
 // change account name
 export const updateAccountName = async ({name}:any, {user} : any) => {
