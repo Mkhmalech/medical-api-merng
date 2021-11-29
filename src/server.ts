@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { uri } from "./config"
 import { Auth } from "./common/auth";
-import path from 'path'
+
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => { console.log('MongoDB connected...') })
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Account');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Account, AccountType, Component, machinetoken');
     res.setHeader('X-Powered-By', 'ittyni.com')
     if (req.method === 'OPTIONS') return res.sendStatus(200);
     next();
@@ -31,6 +31,6 @@ app.use(Auth);
 
 app.use('/', routes(express.Router()));
 
-app.listen(8080, () => {
-    console.log(`application listening on port : ${8080}`)
+app.listen(8060, () => {
+    console.log(`application listening on port : ${8060}`)
 })

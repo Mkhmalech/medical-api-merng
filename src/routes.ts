@@ -1,7 +1,27 @@
 import express from "express";
-import * as HandlerUser from './user-medical-api/index'
-import * as HandlerLab from './lab-medical-api/index'
-import * as HandlerCabinet from './cabinet-medical-api'
+import * as HandlerUser from './extensions/user_manager/index'
+import * as HandlerLab from './extensions/lab-manager/index'
+import * as HandlerCabinet from './extensions/cabinet-manager'
+// import extensions handler
+import * as HandlerPHARMA from './extensions/pharmacy_manager'
+
+// import extensions handler
+import * as HandlerMedicine from './extensions/medicine_manager'
+// import extensions handler
+import * as HandlerAM from './extensions/account_manager'
+// import extensions handler
+import * as HandlerPR from './extensions/patient_record'
+// import extensions handler
+import * as HandlerNGAP from './extensions/ngap_manager'
+// import extensions handler
+import * as HandlerCCAM from './extensions/ccam_manager'
+// import extensions handler
+import * as HandlerICD from './extensions/icd_manager'
+// component
+import * as HandlerComponent from './extensions/component_manager'
+// component
+import * as HandlerQU from './extensions/queuing_system'
+
 
 interface expressExchange {
     req : express.Request
@@ -43,6 +63,51 @@ const routes = ($: express.Router) => {
     $.all('/cabinets', HandlerCabinet.Cabinet);
     // cabinet order
     $.all('/cabinets/order', HandlerLab.LabOrders);
+
+    /********************************
+     * Account Manager Api v0.1
+     ********************************/
+    $.all('/accountmanager', HandlerAM.AccountManger);
+
+    /********************************
+     * Account Manager Api v0.1
+     ********************************/
+    $.all('/patient', HandlerPR.Patient);
+
+    /********************************
+     * Medicine Manager Api v0.1
+     ********************************/
+    $.all('/medicine', HandlerMedicine.Medicine);
+    
+    /********************************
+     * Pharma Manager Api v0.1
+     ********************************/
+    $.all('/pharma', HandlerPHARMA.PharmaManger);
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/ngap', HandlerNGAP.NGAPManger);
+
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/ccam', HandlerCCAM.CCAMManger);
+
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/icd', HandlerICD.ICDManger);
+    
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/component', HandlerComponent.ComponentManger);
+
+    /********************************
+     * NGAP Manager Api v0.1
+     ********************************/
+    $.all('/queuing', HandlerQU.QueuingManger);
+    
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(
         req : express.Request,
@@ -51,6 +116,7 @@ const routes = ($: express.Router) => {
     {
         
     });
+      
     
     return $;
 }

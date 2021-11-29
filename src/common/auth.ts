@@ -1,184 +1,125 @@
-import {Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken';
-import User from '../user-medical-api/src/controllers/User';
-import { LABO } from "../lab-medical-api/src/labos/module/labo";
-import { CABINET } from "../cabinet-medical-api/src/module/cabinets";
+import User from '../extensions/user_manager/src/controllers/User';
+import { LABO } from "../extensions/lab-manager/src/labos/module/labo";
+import { CABINET } from "../extensions/cabinet-manager/src/module/cabinets";
+import { Supadmin } from "./supadmin";
+import { Db } from "./db";
+import { USER } from "../extensions/user_manager/index";
+
 
 interface USER {
-    userId : string
-    email  : string
-    accountId? : any
-    role? : any
-    enabledAt? : string
-    enabledBy? : string
-    status? : string
-    permissions? : any[]
+    _id: string
+    email: string
+    username: string
+    accountId?: any
+    role?: any
+    enabledAt?: string
+    enabledBy?: string
+    status?: string
+    permissions?: any[]
+    supadmin?: any
+    newToken?: string
+    accounts?: any[]
+    ua: string | undefined
 }
 interface Req extends Request {
-    user? : USER
-    hasAuthorization? : (user : USER) => boolean
-    message ?: string
-    roles ? : any[]
-    permissions? :  {
-        role : string
-        permissions : any[]
+    user?: USER
+    account?: {
+        _id: string
+        type: string | boolean
+    },
+    component?: any,
+    machine?: any
+    hasAuthorization?: (user: USER) => boolean
+    message?: string
+    roles?: any[]
+    permissions?: {
+        role: string
+        permissions: any[]
     }
-    accountName? : string
+    accountName?: string
 }
 
-const checkAutorization = (user : USER, module? : string) : boolean=> {
+export const Auth = async (req: Req, res: Response, next: NextFunction) => {
 
-    let hasAuth : boolean = false;
-
-    // if no role return no_auth
-    if(user === undefined || user.role === null || user.role === undefined ) return hasAuth = false;
-
-
-    /**
-     * @1 step - verify in @userDb ittyni role if isAdmin give authorization noLimit
-     */
-     // if the user is a supadmin return has_auth
-        if(user.role === "supadmin") return hasAuth = true;
-     /* @2 step - verify in @userDb at @account role if @isDirector give account authorization no limit
-     */
-    // if user is the account holder
-        if(user.role === "client") return hasAuth = true;
-     /* if not get @role and @module and check activated authorization from @accountDb at @setting @permissions
-     * 
-     * @ step - verify @accountDb at @staff if exist redirect to profile module to activate account in @userDb
-     * 
-     */
-    const level : number = 0;
-
-    // if no role return no_auth
-    if(user === undefined || user.role === null || user.role === undefined ) return hasAuth = false;
-
-    
-
-    // if user is the account holder
-    if(user.role === "director") return hasAuth = true;
-
-    /**********************************
-     * don t modify this part untill 
-     * modify function of modules 
-     * ********************************/
-    if(!module) {
-
-        if(user.role === "supadmin") return hasAuth = true;
-
-    } else {     
-        const componentName : string = user.permissions 
-            && user.permissions.find((d:any) => d.componentName == module);
-        console.log(componentName)
-    }
-    /******************************************************************************************************/
-    
-    return hasAuth
-}
-
-export const Auth = async (req : Req, res : Response, next : NextFunction) => {
     // instantiate user class
-    const user= new User();
+    const User = new Db(USER);
 
     // extract auth
-    const {authorization, account } = req.headers;
+    const { authorization, account, accounttype, component, machinetoken } = req.headers;
+
+    const userAgent = req.headers['user-agent'];
 
     // get account name
     const accountId = typeof account === 'string' && account.split(' ')[1];
+    const accountType = typeof accounttype === 'string' && accounttype.split(' ')[1];
+    const componentId = typeof component === 'string' && component.split(' ')[1];
+    // queuing system machine identification
+    const machineToken = typeof machinetoken === 'string' && machinetoken.split(' ')[1] !== 'null'&& machinetoken.split(' ')[1];
 
-    // get account modules permissions
-    const accountData = (accountId && accountId!=='null' && accountId!=='ittyni' && await LABO.findById(accountId))
-    const cabinetData = (accountId && accountId!=='null' && accountId!=='ittyni' && await CABINET.findById(accountId))
     
-    if(authorization){
+
+    req.machine = machineToken&& jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
+
+    // get component data to serialize
+    if (componentId) {
+        req.component = {
+            _id: componentId
+        }
+    }
+    // get account data to serialize
+    if (accountId) {
+        req.account = {
+            _id: accountId,
+            type: accountType && accountType,
+        }
+    }
+    // get user data to serialze 
+    if (authorization) {
+
         const token = authorization.split(' ')[1];
-        let employer : any;
-        let employerRole : any;
-        let role : any;
 
         try {
-            const { userId }: any = jwt.verify(token, 'mysuperTokenlogin');
 
-            if(accountData) {
-                employer = accountData.staff.find((d:any) =>d._id == `${userId}`);
-                employerRole = employer && accountData.setting.team.find((c:any)=> c._id == `${employer.role}`);
-            }
+            const { _id }: any = jwt.verify(token, 'iTTyniTokenApplicationByKHM@MEDv1.1');
 
-            if(!employer){
+            // token expired
+            if (!_id) req.message = 'TOKEN_EXPIRED'
 
-                try{
-                    const userData = await user.findUserById(userId) || undefined;
-                    
-                    req.user = {
-                        userId : userData.id || employer._id,
-                        email : userData.email || employer.firstName,
-                        accountId : (accountData && accountData._id) || (cabinetData && cabinetData._id) || undefined,
-                        role : userData.role.name || undefined,
-                        status : userData.status || undefined,
-                    };
-                    if(userData.role.name === 'employer'){    
-                        role = await LABO.findById(accountId).select('setting').then((t:any)=>{
-                            return t.setting.team.find((c:any)=> c.role == userData.accounts[0].role);
-                        });                  
-                        req.user.permissions = role.permissions || undefined
-                    } else {
-                        req.user.permissions = (accountData && accountData.extensions) 
-                            || (cabinetData && cabinetData.extensions) || undefined
-                    }
-                } catch {
+            else {
 
-                    return req.message = "no_user_founded";
-                }
-                
-            } else {
+                const connectedUser = await User.getDocById(_id);
+
                 req.user = {
-                    userId :  employer._id,
-                    email :  employer.firstName,
-                    accountId : (accountData && accountData._id) || undefined,
-                    role :  employerRole.role || undefined,
-                    enabledAt :  employer.createdAt || undefined,
-                    enabledBy :  employer.addedBy || undefined,
-                    status :  'not_user',
-                    permissions : employerRole.permissions || undefined
-                };
+
+                    _id: connectedUser._id,
+                    email: connectedUser.email,
+                    username: connectedUser.email.split('@')[0],
+                    accounts: connectedUser.accounts,
+                    role: connectedUser.role,
+                    // status: userData.status || undefined,
+                    supadmin: Supadmin,
+                    // enabledAt: employer.createdAt || undefined,
+                    // enabledBy: employer.addedBy || undefined,
+                    // permissions: employerRole.permissions || undefined
+                    // componentDb: employerRole.permissions || undefined
+                    // componentName: employerRole.permissions || undefined
+                    // accountDb: employerRole.permissions || undefined
+                    ua: userAgent
+                }
+
             }
 
-            req.message = "user_success";
+        } catch {
 
-        } catch(e) {
-            req.message = "token_expired"
-        }  
-        
+            req.message = 'TOKEN_EXPIRED'
+        }
+
     } else {
-        req.message = 'no_token_founded'
+        req.message = 'NO_TOKEN_FOUNDED'
     }
-    // get verification function
-    req.hasAuthorization = checkAutorization
 
-    // catch account name
-    req.accountName = `${accountData && accountData.account.name}`
-    
- // continue
+    // continue
     next()
-}
-interface Permissions {
-    canRead : boolean
-    canCreate : boolean
-    canUpdate : boolean
-    canDelete : boolean
-    canPublish : boolean
-}
-
-const calculateLevel = ({canRead, canCreate, canUpdate, canDelete, canPublish} : Permissions) : number => {
-
-    let levelCalculated : number = 0;
-
-    if(canRead){
-
-    } else {
-
-    }
-
-
-    return levelCalculated
 }
