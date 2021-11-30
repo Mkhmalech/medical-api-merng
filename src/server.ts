@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { uri } from "./config"
 import { Auth } from "./common/auth";
+import exServer from 'express-ws'
+import { WS } from "./ws";
 
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
@@ -27,7 +29,11 @@ app.use((req, res, next) => {
     next();
 });
 
+
 app.use(Auth);
+
+WS(app);
+
 
 app.use('/', routes(express.Router()));
 
