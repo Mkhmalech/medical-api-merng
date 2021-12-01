@@ -6,6 +6,12 @@ const deskId = 'deskId : ID'
 const deskNum = 'deskNum : Number'
 // token
 const token = 'token : String'
+//  queuing
+const Qname = 'name : String ';
+const Qsymbol = 'symbol : String ';
+const Qcolor = 'color : String ';
+const Qdescription = 'description : String ';
+const queuing = `type Queuing { ${Qname} ${Qsymbol} ${Qcolor} ${Qdescription}}`
 // machine data
 const number = `number : Int `
 const user = `type User {${id} firstName : String lastName : String, picture : String} `
@@ -46,7 +52,7 @@ export const QueuingSchema = buildSchema(`
         getTickets : [Ticket]
     }
     type QueuingMutation {
-        createQueuing : String
+        createQueuing(${Qname},${Qsymbol},${Qcolor},${Qdescription}) : String
         addNewDesk : String
         addNewLabeler : String
         setWorker(${token}) : Worker

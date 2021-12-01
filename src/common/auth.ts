@@ -58,8 +58,7 @@ export const Auth = async (req: Req, res: Response, next: NextFunction) => {
     // queuing system machine identification
     const machineToken = typeof machinetoken === 'string' && machinetoken.split(' ')[1] !== 'null'&& machinetoken.split(' ')[1];
 
-    
-
+    // fix bug token not malformed
     req.machine = machineToken&& jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
 
     // get component data to serialize

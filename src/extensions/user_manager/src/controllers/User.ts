@@ -433,7 +433,7 @@ class User extends Roles {
       .then((newUser: any) => ({
         token: jwt.sign({ _id: newUser._id, email: newUser.email, createdAt: new Date().toUTCString() },
           "iTTyniTokenApplicationByKHM@MEDv1.1", { expiresIn: "8h" }),
-        tokenExpired: 1,
+        tokenExpired: 8,
         _id: newUser._id,
         email: newUser.email,
         picture: newUser.picture,

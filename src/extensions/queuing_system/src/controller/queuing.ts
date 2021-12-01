@@ -5,7 +5,11 @@ import jwt from "jsonwebtoken";
 
 // create queuing
 export const createQueuing = async (args: any, {user} : any) =>{
-    
+    // check user 
+    // if (!user._id) return Error("USER_NOT_CONNECTED");
+    // insert data
+    const res = await new Db(QUEUING).createNewDoc({...args, activatedBy:"5dc3f2e86e6e3e21d027bed1", activatedAt: new Date().toUTCString()});
+    return res;
 }
 // add new desk
 export const addNewDesk = async (args: any, { user, account, machine }: any) => {
