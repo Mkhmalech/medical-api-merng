@@ -300,6 +300,24 @@ export class Db {
 
         return this.doneMessage
     }
+    /**
+     * 
+     * @param data 
+     * @returns 
+     */
+    createNewDocAndGetId = async (data: any) => {
+        let filteredData = this.filterData(data);
+
+        let newDoc = new this.db({
+            ...filteredData
+        })
+
+        const r = await newDoc.save();
+
+        if (r.length <= 0) return Error(this.NotSavedMessage);
+
+        return r["_id"]
+    }
     // check existing
     checkExisting = async (d: any) => {
         const r = await this.db.find(d);

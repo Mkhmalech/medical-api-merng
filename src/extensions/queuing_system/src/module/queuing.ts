@@ -6,7 +6,7 @@ const desk = new Schema({
      * token : {type : String, unique : true},
      * token = {number , userAgent }
      **/
-    number: { type: Number, unique: true },
+    number: { type: Number },
     location: {
         latitude: { type: String },
         longitude: { type: String }
@@ -22,7 +22,7 @@ const desk = new Schema({
 })
 // queuing labelers
 const labeler = new Schema({
-    number: { type: Number, unique: true },
+    number: { type: Number },
     location: {
         latitude: { type: String },
         longitude: { type: String }
@@ -37,7 +37,7 @@ const labeler = new Schema({
     status: { type: String, enum: ['active', 'inactive', 'deleted', 'paused'], default: 'paused' }
 })
 const ticket = new Schema({
-    number: { type: Number, unique: true },
+    number: { type: Number },
     addedBy: { type: Schema.Types.ObjectId, ref: "USER" },
     addedAt: { type: String, default: new Date().toUTCString() },
     userAgent: { type: String },
@@ -50,7 +50,7 @@ const ticket = new Schema({
 })
 
 interface IQueuing {
-    desks: any[]
+    desks : any[]
     labelers: any[]
     workFlow: any[]
     activatedBy: string

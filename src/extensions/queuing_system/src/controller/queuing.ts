@@ -8,8 +8,12 @@ export const createQueuing = async (args: any, {user} : any) =>{
     // check user 
     // if (!user._id) return Error("USER_NOT_CONNECTED");
     // insert data
-    const res = await new Db(QUEUING).createNewDoc({...args, activatedBy:"5dc3f2e86e6e3e21d027bed1", activatedAt: new Date().toUTCString()});
-    return res;
+    const res = await new Db(QUEUING).createNewDocAndGetId({...args, activatedBy:"5dc3f2e86e6e3e21d027bed1", activatedAt: new Date().toUTCString()});
+    if(res){
+        const addToAcc = await new Db(LABO).setSubDocsPushWithoutFilter("5e98b9dd6b69b720e0c34fce",  {queuings : res} )
+        if(addToAcc) return res;
+        else return ("QUEUING_NOT_SAVED_TO_ACCOUNT")
+    } else return Error("QUEUING_NOT_SAVED")
 }
 // add new desk
 export const addNewDesk = async (args: any, { user, account, machine }: any) => {
