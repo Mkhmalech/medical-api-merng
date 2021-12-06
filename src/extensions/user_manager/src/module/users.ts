@@ -29,14 +29,15 @@ const Role: Schema = new Schema({
   updateddAt: String,
 });
 
-const Permission: Schema = new Schema({
+export const Permission: Schema = new Schema({
+  component: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
   canRead: Boolean,
   canCreate: Boolean,
   canUpdate: Boolean,
   canDelete: Boolean,
   canPublish: Boolean,
-  addedBy: String,
-  addedAt: Date,
+  addedBy: { type: Schema.Types.ObjectId, ref: "USER" },
+  addedAt: { type: String, default: new Date().toUTCString() },
 });
 const Session: Schema = new Schema({
   at : String,

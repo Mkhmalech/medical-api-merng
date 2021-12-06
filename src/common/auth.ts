@@ -56,10 +56,22 @@ export const Auth = async (req: Req, res: Response, next: NextFunction) => {
     const accountType = typeof accounttype === 'string' && accounttype.split(' ')[1];
     const componentId = typeof component === 'string' && component.split(' ')[1];
     // queuing system machine identification
-    const machineToken = typeof machinetoken === 'string' && machinetoken.split(' ')[1] !== 'null'&& machinetoken.split(' ')[1];
+    const machineToken = typeof machinetoken === 'string' && machinetoken.split(' ')[1];
 
-    // fix bug token not malformed
-    req.machine = machineToken&& jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
+    try {
+        if (machineToken) {
+
+            const machine = jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
+
+            if(!machine) req.machine = {error : "TOKEN_NOT_VALID"}
+
+            else{
+                req.machine = machine;
+            }
+        }
+    } catch(e){
+        req.machine = { error : e }
+    }
 
     // get component data to serialize
     if (componentId) {

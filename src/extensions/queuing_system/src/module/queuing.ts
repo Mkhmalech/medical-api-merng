@@ -59,6 +59,7 @@ interface IQueuing {
     symbol: string
     color ?: string
     description ?: string
+    status ?: string
     updates ?: any[]
 }
 
@@ -71,6 +72,8 @@ const queuing = new Schema({
     color: { type: String },
 
     description: { type: String },
+
+    status : { type : String, enum : ["active", "inactive", "deleted"], default: "active"},
 
     desks: [desk],
 

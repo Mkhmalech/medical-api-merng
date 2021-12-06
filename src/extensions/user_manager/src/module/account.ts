@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 export const Permission: Schema = new Schema({
-    componentId: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
+    component: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
     canRead: Boolean,
     canCreate: Boolean,
     canUpdate: Boolean,

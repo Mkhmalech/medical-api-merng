@@ -4,90 +4,88 @@ import { QUEUING } from "../module/queuing";
 import jwt from "jsonwebtoken";
 
 // create queuing
-export const createQueuing = async (args: any, {user} : any) =>{
+export const createQueuing = async (args: any, { user, account }: any) => {
     // check user 
-    // if (!user._id) return Error("USER_NOT_CONNECTED");
+    if (!user._id) return Error("USER_NOT_CONNECTED");
+    // check user 
+    if (!account._id) return Error("ACCOUNT_NOT_EXIST");
     // insert data
-    const res = await new Db(QUEUING).createNewDocAndGetId({...args, activatedBy:"5dc3f2e86e6e3e21d027bed1", activatedAt: new Date().toUTCString()});
-    if(res){
-        const addToAcc = await new Db(LABO).setSubDocsPushWithoutFilter("5e98b9dd6b69b720e0c34fce",  {queuings : res} )
-        if(addToAcc) return res;
+    const res = await new Db(QUEUING).createNewDocAndGetId({ ...args, activatedBy: user._id, activatedAt: new Date().toUTCString(), status: "active" });
+    if (res) {
+        const addToAcc = await new Db(LABO).setSubDocsPushWithoutFilter({ _id: account._id }, { queuings: res })
+        if (addToAcc) return res;
         else return ("QUEUING_NOT_SAVED_TO_ACCOUNT")
     } else return Error("QUEUING_NOT_SAVED")
 }
+// fetchQueuings
+export const fetchQueuings = async (args: any, { user, account }: any) => {
+    // check user 
+    if (!user._id) return Error("USER_NOT_CONNECTED");
+    // check user 
+    if (!account._id) return Error("ACCOUNT_NOT_EXIST");
+
+    const res = await new Db(LABO).getSubDoc(account._id, "queuings", "queuings");
+    if (!res) return Error("NO_QUEUINGS_FOUNDED")
+    else return res
+}
 // add new desk
-export const addNewDesk = async (args: any, { user, account, machine }: any) => {
+export const addNewDesk = async ({ _id }: any, { user, account, machine }: any) => {
     let newDeskNum: number;
     // check if already is Machine
     if (machine._id) return Error("MACHINE_ALREADY_EXIST");
 
-    // check if installed
-    const labo = await new Db(LABO).getDocById(account._id);
-
     // get available desks numbers
-    const deskNums = await new Db(QUEUING).subDocPropertyInArray(labo.queuing, 'desks');
+    const deskNums = await new Db(QUEUING).subDocPropertyInArray(_id, 'desks');
 
     newDeskNum = (deskNums && missingNumber(deskNums)) || 1;
 
-    if (labo.queuing) {
-        const qu = await new Db(QUEUING).getDocByIdAndUpdate(labo.queuing, {
-            desks: {
-                number: newDeskNum,
-                addedBy: user._id,
-                userAgent: user.ua
-            }
-        })
+    const qu = await new Db(QUEUING).getDocByIdAndUpdate(_id, {
+        desks: {
+            number: newDeskNum,
+            addedBy: user._id,
+            userAgent: user.ua
+        }
+    })
 
-        let newDesk = qu.desks.find((d: any) => ((d.number === newDeskNum) && (d.status != "deleted")));
+    let newDesk = qu.desks.find((d: any) => ((d.number === newDeskNum) && (d.status != "deleted")));
 
-        return qu ? jwt.sign({
-            _id: newDesk._id, type: 'desks',
-            number: newDesk.number, createdAt: new Date().toUTCString(), queuingId: labo.queuing,
-        }, "iTTyniTokenApplicationByKHM@MEDv1.1") : Error("DESK_NOT_SAVED")
-    } else {
-        return Error("QUEUING_SYSTEM_NOT_INSTALLED")
-    }
+    return qu ? jwt.sign({
+        _id: newDesk._id, type: 'desks',
+        number: newDesk.number, createdAt: new Date().toUTCString(), queuingId: _id
+    }, "iTTyniTokenApplicationByKHM@MEDv1.1") : Error("DESK_NOT_SAVED")
+
 }
-export const addNewLabeler = async (args: any, { user, account, machine }: any) => {
+export const addNewLabeler = async ({ _id }: any, { user, account, machine }: any) => {
     let newLabelerNum: number;
     // check if already is Machine
     if (machine._id) return Error("MACHINE_ALREADY_EXIST");
 
-    // check if installed
-    const labo = await new Db(LABO).getDocById(account._id);
-
     // get available desks numbers
-    const labelerNums = await new Db(QUEUING).subDocPropertyInArray(labo.queuing, 'labelers');
+    const labelerNums = await new Db(QUEUING).subDocPropertyInArray(_id, 'labelers');
 
     newLabelerNum = (labelerNums && missingNumber(labelerNums));
 
-    if (labo.queuing) {
-        const qu = await new Db(QUEUING).getDocByIdAndUpdate(labo.queuing, {
-            labelers: {
-                number: newLabelerNum,
-                addedBy: user._id,
-                userAgent: user.ua
-            }
-        })
+    const qu = await new Db(QUEUING).getDocByIdAndUpdate(_id, {
+        labelers: {
+            number: newLabelerNum,
+            addedBy: user._id,
+            userAgent: user.ua
+        }
+    })
 
-        let newLabeler = qu.labelers.find((d: any) => ((d.number === newLabelerNum) && (d.status != "deleted")));
+    let newLabeler = qu.labelers.find((d: any) => ((d.number === newLabelerNum) && (d.status != "deleted")));
 
+    return qu ? jwt.sign({
+        _id: newLabeler._id, type: 'labelers',
+        number: newLabeler.number, createdAt: new Date().toUTCString(), queuingId: _id,
+    }, "iTTyniTokenApplicationByKHM@MEDv1.1") : Error("LABELER_NOT_SAVED");
 
-        return qu ? jwt.sign({
-            _id: newLabeler._id, type: 'labelers',
-            number: newLabeler.number, createdAt: new Date().toUTCString(), queuingId: labo.queuing,
-        }, "iTTyniTokenApplicationByKHM@MEDv1.1") : Error("LABELER_NOT_SAVED");
-
-    } else {
-        return Error("QUEUING_SYSTEM_NOT_INSTALLED")
-    }
-}
-export const installQueing = async (args: any, { user, account }: any) => {
 
 }
+
 export const getMachine = async ({ token }: any, { user, account }: any) => {
 
-    let { _id, type }: any = jwt.verify(token, 'iTTyniTokenApplicationByKHM@MEDv1.1');
+    let { _id, type, queuingId }: any = jwt.verify(token, 'iTTyniTokenApplicationByKHM@MEDv1.1');
 
     const Machine = await new Db(QUEUING).getSubDocById({ [`${type}._id`]: _id }, { [`${type}.$`]: 1 }, type);
 
@@ -96,7 +94,8 @@ export const getMachine = async ({ token }: any, { user, account }: any) => {
         number: Machine.number,
         workers: Machine.workes,
         status: Machine.status,
-        type: type
+        type: type,
+        queuingId : queuingId
     })
 }
 export const setWorker = async ({ token }: any, { user, account }: any) => {
@@ -166,17 +165,18 @@ export const getAllMachines = async ({ type }: any, { user, account }: any) => {
 /**
  * tickets 
  */
-export const addTicket = async ({ status }: any, { user, account, machine }: any) => {
+export const addTicket = async ({ token }: any, { user, account, machine }: any) => {
     // check if already is Machine
     if (!machine._id) return Error("MACHINE_HAS_NO_RIGHT");
     // check if account exist
     if (!account._id) return Error("ACCOUNT_NOT_EXIST");
-    // check if installed
-    const labo = await new Db(LABO).getDocById(account._id);
     // check user 
     if (!user._id) return Error("USER_NOT_CONNECTED");
+    // get queuing
+    let { _id, type, queuingId }: any = jwt.verify(token, 'iTTyniTokenApplicationByKHM@MEDv1.1');
+    // get workflow
+    const r = await new Db(QUEUING).getSubDoc(queuingId, 'workFlow');
 
-    const r = await new Db(QUEUING).getSubDoc(labo.queuing, 'workFlow');
     // workFlow never used
     if (r.length <= 0) {
         r.push({
@@ -194,7 +194,7 @@ export const addTicket = async ({ status }: any, { user, account, machine }: any
             }]
         });
 
-        const u = await new Db(QUEUING).setSubDocsPushWithoutFilter({ '_id': labo.queuing }, {
+        const u = await new Db(QUEUING).setSubDocsPushWithoutFilter({ '_id': queuingId }, {
             workFlow: r
         })
 
@@ -213,7 +213,7 @@ export const addTicket = async ({ status }: any, { user, account, machine }: any
         if (i >= 0) {
             // console.log(i)
             // r[i].tickets.push);
-            const u = await new Db(QUEUING).updateSubDocs({ '_id': labo.queuing },
+            const u = await new Db(QUEUING).updateSubDocs({ '_id': queuingId },
                 {
                     arrayFilters: [{ 'i._id': r[i]._id }], new: true
                 }, {
@@ -234,7 +234,7 @@ export const addTicket = async ({ status }: any, { user, account, machine }: any
         }
         // that is a new day
         else {
-            const u = await new Db(QUEUING).updateSubDocs({ '_id': labo.queuing },
+            const u = await new Db(QUEUING).updateSubDocs({ '_id': queuingId },
                 {
                     new: true
                 }, {

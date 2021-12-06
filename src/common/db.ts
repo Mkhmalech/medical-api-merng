@@ -56,7 +56,7 @@ export class Db {
      search and view one or more fields 
      depends on Query 
     */
-    getSubDoc = async (id: ObjectId, subdoc: string, poped?: any) => {
+    getSubDoc = async (id: any, subdoc: string, poped?: any) => {
         const results = await this.db.findById(id).select(subdoc).populate(poped);
         if (!results) return Error(this.NotFoundedMessage)
         return results[subdoc]

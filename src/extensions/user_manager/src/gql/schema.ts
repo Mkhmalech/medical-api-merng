@@ -88,7 +88,7 @@ export const UserSchema = buildSchema(`
 
     type UserRoleAndPermissions {
         ${id}
-        componentId: ID
+        component: ID
         create: Boolean
         read: Boolean
         update: Boolean
@@ -102,7 +102,7 @@ export const UserSchema = buildSchema(`
       permissions: [ UserRoleAndPermissions ]          
     }
     type UserAccountName {
-        lab : ID
+        labo : ID
         cabinet : ID
         pharma : ID
         role : RoleName

@@ -4,7 +4,6 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { uri } from "./config"
 import { Auth } from "./common/auth";
-import exServer from 'express-ws'
 import { WS } from "./ws";
 
 
@@ -32,7 +31,7 @@ app.use((req, res, next) => {
 
 app.use(Auth);
 
-WS(app);
+// WS(app);
 
 
 app.use('/', routes(express.Router()));
