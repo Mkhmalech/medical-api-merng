@@ -21,6 +21,7 @@ export const LabTestsResolver = {
     // update a test
     LabTestNamesUpdate : labTests.namesUpdate,
     LabTestReferenceUpdate : labTests.referenceUpdate,
+    updateDescription : labTests.updateDescription,
     LabTestFinanceUpdate : labTests.financeUpdate,
     LabTestClassificationUpdate : labTests.classificationUpdate,
     LabTestSpecimenUpdate : labTests.specimenUpdate,

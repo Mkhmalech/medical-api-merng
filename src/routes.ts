@@ -48,13 +48,6 @@ import * as HandlerComponent from './extensions/ittyni_module_api'
 // component
 import * as HandlerQU from './extensions/ittyni_queuing_api'
 
-
-interface expressExchange {
-    req : express.Request
-    res : express.Response
-    next : express.NextFunction
-}
-
 const routes = ($: express.Router) => {
 
     $.get("/api", (

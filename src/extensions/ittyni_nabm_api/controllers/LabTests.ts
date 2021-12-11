@@ -321,6 +321,9 @@ export class LabTests {
       });
     }
   };
+  updateDescription = async (args: any, { user }: any) => {
+    console.log(this.filterData(args))
+  }
   financeUpdate = async ({ name, finance, user }: any) => {
     const test = await TESTS.findOne({ "name.en": name });
     if (!test) return false;

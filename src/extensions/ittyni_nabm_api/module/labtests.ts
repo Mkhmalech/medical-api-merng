@@ -20,22 +20,29 @@ const Update = new Schema({
       Bcode: Number
     }
   ],
+  description: {
+    overview: { type: String },
+    why: { type: String },
+    how: { type: String },
+    what: { type: String },
+    when: { type: String },
+  },
   departements: [{ type: Schema.Types.ObjectId, ref: 'DEPARTEMENTS' }],
   components: [{ type: Schema.Types.ObjectId, ref: 'TESTS' }],
   parameter: Boolean,
   group: Boolean,
   panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
   structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },
-  preparation : {
-    fasting : {
-      required : Boolean,
-      duration : {
-        min : Number,
-        max : Number,
-        unit : {type : String, enum : ["minutes", "hours", "days"]}
+  preparation: {
+    fasting: {
+      required: Boolean,
+      duration: {
+        min: Number,
+        max: Number,
+        unit: { type: String, enum: ["minutes", "hours", "days"] }
       }
     },
-    spectialTime : [String]
+    spectialTime: [String]
   },
   specimen: {
     nature: { type: [String] },
@@ -43,7 +50,7 @@ const Update = new Schema({
     anticoagulant: { type: [String] },
     numberoftube: { type: Number },
     volumemin: { type: Number },
-    location : { type : String},
+    location: { type: String },
     stability: [{
       time: { type: Number },
       temperature: { type: Number }
@@ -53,14 +60,15 @@ const Update = new Schema({
 interface ITestModel extends Document {
   reference: any;
   name: any;
+  description: any
   finance: any[];
-  departements : any
-  components : any
-  parameter : any
-  group : any
-  panel : any
-  structure : any
-  preparation : any
+  departements: any
+  components: any
+  parameter: any
+  group: any
+  panel: any
+  structure: any
+  preparation: any
   specimen?: any;
   updates: any;
   views: number
@@ -83,22 +91,29 @@ const TestSchema: Schema = new Schema({
       Bcode: Number
     }
   ],
+  description: {
+    overview: { type: String },
+    why: { type: String },
+    how: { type: String },
+    what: { type: String },
+    when: { type: String },
+  },
   departements: [{ type: Schema.Types.ObjectId, ref: 'DEPARTEMENTS' }],
   components: [{ type: Schema.Types.ObjectId, ref: 'TESTS' }],
   parameter: Boolean,
   group: Boolean,
   panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
   structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },
-  preparation : {
-    fasting : {
-      required : Boolean,
-      duration : {
-        min : Number,
-        max : Number,
-        unit : {type : String, enum : ["minutes", "hours", "days"]}
+  preparation: {
+    fasting: {
+      required: Boolean,
+      duration: {
+        min: Number,
+        max: Number,
+        unit: { type: String, enum: ["minutes", "hours", "days"] }
       }
     },
-    spectialTime : [String]
+    spectialTime: [String]
   },
   specimen: {
     nature: { type: [String] },
@@ -106,16 +121,16 @@ const TestSchema: Schema = new Schema({
     anticoagulant: { type: [String] },
     numberoftube: { type: Number },
     volumemin: { type: Number },
-    location : { type : String},
+    location: { type: String },
     stability: [{
       time: { type: Number },
       temperature: { type: Number }
     }],
-    multiple : {
-      isMultiple : Boolean,
-      duration : Number,
-      times : Number,
-      unit : {type : String, enum : ["minutes", "hours", "days"]}
+    multiple: {
+      isMultiple: Boolean,
+      duration: Number,
+      times: Number,
+      unit: { type: String, enum: ["minutes", "hours", "days"] }
     }
   },
 

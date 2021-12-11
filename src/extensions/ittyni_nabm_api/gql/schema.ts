@@ -10,7 +10,7 @@ const country = `country : String`
 const Bcode = `Bcode : Int`
 const sampleType = `nature : [String]`
 const tubeColor = `tubecolor : [String]`
-const anticoagulant =`anticoagulant : [String]`
+const anticoagulant = `anticoagulant : [String]`
 const tubeNumber = `numberoftube : Int`
 const volumeMin = `volumemin : Int`
 const updatedAt = `updatedAt : String`
@@ -18,6 +18,13 @@ const userId = `_id : ID `
 const fname = `firstName : String `
 const lname = `lastName : String `
 const picture = `picture : String `
+// test descriptio
+const descOverview = `overview: String`
+const descWhy = `why : String `
+const descHow = `how : String `
+const descWhat = `what : String`
+const when = `when: String `
+const testDescription = `type description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${when}}` 
 // lab departments variable
 const departmentNameFr = `fr : String!`
 const departmentNameEn = `en : String`
@@ -40,6 +47,8 @@ export const LabTestsSchema = buildSchema(`
     ${names}
     
     ${reference}
+
+    ${testDescription}
 
     ${finance} 
 
@@ -139,6 +148,7 @@ export const LabTestsSchema = buildSchema(`
         LabTestNamesUpdate (  testId: ID, names : LabTestsNames) : String
         LabTestReferenceUpdate ( id : ID, reference : LabTestsReference ) : String
         LabTestFinanceUpdate ( name : String, finance : LabTestsFinance, user : User ) : Boolean
+        updateDescription(${descOverview},${descWhy},${descHow},${descWhat},${when}) : String
         LabTestClassificationUpdate(
             id : ID, departements : [ID], components : [ID], structure : [ID],
             parameter : Boolean, group : Boolean, panel : Boolean,
