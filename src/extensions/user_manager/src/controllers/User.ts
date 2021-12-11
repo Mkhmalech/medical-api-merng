@@ -6,6 +6,7 @@ import { Db } from "../../../../common/db";
 import { Roles } from "./roles";
 import { CABINET } from "../../../cabinet-manager/src/module/cabinets";
 import * as CUser from "../../../../common/supadmin";
+import { componentResolver } from "../../../component_manager/src/gql/resolver";
 
 
 class User extends Roles {
@@ -218,7 +219,7 @@ class User extends Roles {
       updateComp.updateSubDocs({'_id' : args.userId}, { arrayFilters :[{ 'i.lab': args.accountId }], new: true},
         {
           "accounts.$[i].permissions": {
-            componentId: args.componentId,
+            component: args.componentId,
             canRead: true,
             canCreate: true,
             canUpdate: true,
@@ -243,7 +244,7 @@ class User extends Roles {
       if (account) {
         const exts = args.extensions.map((ext: any) => {
           account.extensions.push({
-            componentId: args._id,
+            component: args._id,
             activatedBy: user._id,
             plan: "free"
           })
@@ -431,16 +432,11 @@ class User extends Roles {
         }
       })
       .then((newUser: any) => ({
+        ...newUser,
         token: jwt.sign({ _id: newUser._id, email: newUser.email, createdAt: new Date().toUTCString() },
           "iTTyniTokenApplicationByKHM@MEDv1.1", { expiresIn: "8h" }),
-        tokenExpired: 1,
-        _id: newUser._id,
-        email: newUser.email,
-        picture: newUser.picture,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        role: newUser.role,
-        accounts: newUser.accounts
+        tokenExpired: 8,
+        createdAt: new Date()
       }))
       .catch((err: any) => {
         throw err;
@@ -451,22 +447,19 @@ class User extends Roles {
   /**
    * ittyni front token verification
    */
-  verifyFrontToken = async ({ token }: any) => {
-    const { email }: any = jwt.verify(token, "iTTyniTokenApplicationByKHM@MEDv1.1");
-    // token expired when user still work
-    if (!email) return new Error('TOKEN_EXPIRED')
+  verifyFrontToken = (args: any, {user, message}:any) => {
+    if(message) return Error(message)
+    
+    return user;
+  }
+  /**
+   * ittyni front token verification
+   */
+  subscribedAccounts = async (args: any, {user, message}:any) => {
+    if(message) return Error(message)
+    const res = await new Db(USER).getSubDocWithPop(user._id, "accounts", "accounts.labo")
 
-    const res = await USER.findOne({ 'email': email }).then((user: any) => ({
-      _id: user._id,
-      email: user.email,
-      picture: user.picture,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-      accounts: user.accounts
-    }))
-
-    return res;
+    return res.map((r:any)=>({name : r.labo.account.name}))
   }
 }
 

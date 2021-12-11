@@ -59,6 +59,8 @@ const UserWithRole = `
  */
  const accountId = `accountId:ID`
  const accoutType = `accountType: String`
+ const accountName = `name: String`
+ const Account = `type Account {${accountName}}`
 
 const linkAccount = `
     id : String
@@ -66,6 +68,8 @@ const linkAccount = `
 `
 
 export const UserSchema = buildSchema(`
+
+    ${Account}
 
     type RoleName {
         name : String
@@ -88,7 +92,7 @@ export const UserSchema = buildSchema(`
 
     type UserRoleAndPermissions {
         ${id}
-        componentId: ID
+        component: ID
         create: Boolean
         read: Boolean
         update: Boolean
@@ -102,7 +106,7 @@ export const UserSchema = buildSchema(`
       permissions: [ UserRoleAndPermissions ]          
     }
     type UserAccountName {
-        lab : ID
+        labo : ID
         cabinet : ID
         pharma : ID
         role : RoleName
@@ -158,6 +162,7 @@ export const UserSchema = buildSchema(`
         ConfirmPassword : String!
     }
 
+
     input inputLinkAccount { ${linkAccount} }
 
     ${roleAndPermissions}
@@ -170,6 +175,8 @@ export const UserSchema = buildSchema(`
         listAll : [UserWithoutPassword!]!
 
         listAllWithRole : [UserWithRole]
+
+        subscribedAccounts : [Account]
     }
 
     type RootMutation {

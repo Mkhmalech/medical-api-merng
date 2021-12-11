@@ -19,6 +19,7 @@ export const userResolver = {
   userProfile: user.getUserProfile,
   verifyToken: user.verifyToken,
   verifyFrontToken: user.verifyFrontToken,
+  subscribedAccounts: user.subscribedAccounts,
   roleAndPermissions: {
     addRoleToUser: user.addRoleToUser,
     updateRoleOfUser: user.updateRoleOfUser,

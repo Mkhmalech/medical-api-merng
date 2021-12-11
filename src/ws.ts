@@ -1,6 +1,7 @@
 import express from "express";
 import expressWs from "express-ws";
 import { TESTS } from "./extensions/lab-manager/src/labTests/module/labtests";
+import { QUEUING } from "./extensions/queuing_system/src/module/queuing";
 
 export const WS = (app: express.Application) => {
 
@@ -20,18 +21,17 @@ export const WS = (app: express.Application) => {
         //         });
         //     });
         // })
-        clients.push(ws);
+        // clients.push(ws);
 
-        const changeStream = TESTS.watch().on('change', change => {
+        // const changeStream = QUEUING.watch().on('change', (change:any) => {
 
-            const {updateDescription: { updatedFields: { views } }} : any = change
+        //     const {updateDescription: { updatedFields }} : any = change
 
-            ws.send(views);
-            
-        });
+        //     ws.send(JSON.stringify(updatedFields[Object.keys(updatedFields)[0]].number));            
+        // });
 
-        ws.on('close', () => {
-            console.log('WebSocket was closed')
-        })
+        // ws.on('close', () => {
+        //     console.log('WebSocket was closed')
+        // })
     })
 }

@@ -24,6 +24,23 @@ export class Db {
         if (!results) throw new Error(this.NotFoundedMessage)
         return results
     }
+    /**
+     * filter data from 
+     * undefined and null values
+     * @param db 
+     */
+    filterData = (data: any) => {
+        let newData = data;
+        for (const property in newData) {
+            if (
+                newData[property] == '' || newData[property] == 'null' || newData[property] == null ||
+                newData[property] == 'undefined' || typeof (newData[property]) == 'undefined'
+            ) {
+                delete newData[property];
+            }
+        }
+        return newData;
+    }
 
     /* 
         public Field : String | Number | undefined | null ;
@@ -39,7 +56,7 @@ export class Db {
      search and view one or more fields 
      depends on Query 
     */
-    getSubDoc = async (id: ObjectId, subdoc: string, poped?: any) => {
+    getSubDoc = async (id: any, subdoc: string, poped?: any) => {
         const results = await this.db.findById(id).select(subdoc).populate(poped);
         if (!results) return Error(this.NotFoundedMessage)
         return results[subdoc]
@@ -186,7 +203,7 @@ export class Db {
      */
     nestedOfsubdocByQuery = async (_id: string) => {
         const doc = await this.db.aggregate([
-            {$unwind : "$workFlow"},
+            { $unwind: "$workFlow" },
             {
                 $match: {
                     $and: [
@@ -194,7 +211,7 @@ export class Db {
                         {
                             $expr: {
                                 '$eq': [
-                                    { "$dateToString": { format: "%Y-%m-%d", date: {$dateFromString : { format:"%Y-%m-%d", dateString : "$workFlow.startAt"} } }},
+                                    { "$dateToString": { format: "%Y-%m-%d", date: { $dateFromString: { format: "%Y-%m-%d", dateString: "$workFlow.startAt" } } } },
                                     { "$dateToString": { format: "%Y-%m-%d", date: new Date() } },
                                 ]
                             }
@@ -271,8 +288,10 @@ export class Db {
      * create new doc
      */
     createNewDoc = async (data: any) => {
+        let filteredData = this.filterData(data);
+
         let newDoc = new this.db({
-            ...data
+            ...filteredData
         })
 
         const r = await newDoc.save();
@@ -280,6 +299,24 @@ export class Db {
         if (r.length <= 0) return Error(this.NotSavedMessage);
 
         return this.doneMessage
+    }
+    /**
+     * 
+     * @param data 
+     * @returns 
+     */
+    createNewDocAndGetId = async (data: any) => {
+        let filteredData = this.filterData(data);
+
+        let newDoc = new this.db({
+            ...filteredData
+        })
+
+        const r = await newDoc.save();
+
+        if (r.length <= 0) return Error(this.NotSavedMessage);
+
+        return r["_id"]
     }
     // check existing
     checkExisting = async (d: any) => {
