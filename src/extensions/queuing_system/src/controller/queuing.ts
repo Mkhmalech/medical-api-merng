@@ -197,7 +197,7 @@ export const addTicket = async ({ token }: any, { user, account, machine }: any)
         const u = await new Db(QUEUING).setSubDocsPushWithoutFilter({ '_id': queuingId }, {
             workFlow: r
         })
-
+        // @todo fix first ticket not returned 
         return u ? u.workFlow[0]._id : Error("QUEUING_DOES_NOT_STARTED");
     }
     // we already worked with workFlow

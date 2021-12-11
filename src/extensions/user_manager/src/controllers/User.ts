@@ -447,19 +447,19 @@ class User extends Roles {
   /**
    * ittyni front token verification
    */
-  verifyFrontToken = async (args: any, {user, message}:any) => {
+  verifyFrontToken = (args: any, {user, message}:any) => {
     if(message) return Error(message)
-    const res = await USER.findById(user._id).then((user: any) => ({
-      _id: user._id,
-      email: user.email,
-      picture: user.picture,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-      accounts: user.accounts
-    }))
+    
+    return user;
+  }
+  /**
+   * ittyni front token verification
+   */
+  subscribedAccounts = async (args: any, {user, message}:any) => {
+    if(message) return Error(message)
+    const res = await new Db(USER).getSubDocWithPop(user._id, "accounts", "accounts.labo")
 
-    return res;
+    return res.map((r:any)=>({name : r.labo.account.name}))
   }
 }
 

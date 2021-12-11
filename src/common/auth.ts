@@ -12,6 +12,9 @@ interface USER {
     _id: string
     email: string
     username: string
+    picture: string
+    firstName: string
+    lastName: string
     accountId?: any
     role?: any
     enabledAt?: string
@@ -63,14 +66,14 @@ export const Auth = async (req: Req, res: Response, next: NextFunction) => {
 
             const machine = jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
 
-            if(!machine) req.machine = {error : "TOKEN_NOT_VALID"}
+            if (!machine) req.machine = { error: "TOKEN_NOT_VALID" }
 
-            else{
+            else {
                 req.machine = machine;
             }
         }
-    } catch(e){
-        req.machine = { error : e }
+    } catch (e) {
+        req.machine = { error: e }
     }
 
     // get component data to serialize
@@ -107,6 +110,9 @@ export const Auth = async (req: Req, res: Response, next: NextFunction) => {
                     _id: connectedUser._id,
                     email: connectedUser.email,
                     username: connectedUser.email.split('@')[0],
+                    firstName: connectedUser.firstName,
+                    lastName: connectedUser.lastName,
+                    picture: connectedUser.picture,
                     accounts: connectedUser.accounts,
                     role: connectedUser.role,
                     // status: userData.status || undefined,
