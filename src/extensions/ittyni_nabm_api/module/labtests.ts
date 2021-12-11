@@ -4,7 +4,7 @@ import { Schema, model, Document } from "mongoose";
 
 // updates schema
 const Update = new Schema({
-  updatedAt: String,
+  updatedAt: {type : String, default : new Date().toUTCString()},
   updatedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
   name: {
     en: String,

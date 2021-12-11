@@ -1,6 +1,7 @@
 import { TESTS } from "../module/labtests";
 import { userFunc } from "../../ittyni_user_api/src";
 import { DEPARTMENTS } from "../module/departments";
+import { Db } from "../../../common/db";
 const fs = require('fs');
 export class LabTests {
 
@@ -322,7 +323,18 @@ export class LabTests {
     }
   };
   updateDescription = async (args: any, { user }: any) => {
-    console.log(this.filterData(args))
+    const test = new Db(TESTS);
+    console.log(test.filterData(args))
+    if (user.role.name === 'supadmin') {
+      test.setSubDocWithoutFilter({ '_id': args._id },
+        Object.keys(test.filterData(args)).reduce((d, v) => ({ ...d, ["description." + v]: args[v] }), {})
+      );
+    } else {
+      test.setSubDocWithoutFilter({ '_id': args._id }, {
+        updates: { description: test.filterData(args), updatedAt: new Date().toUTCString(), updatedBy: user._id }
+      })
+    }
+    return "account_updated_successfully"
   }
   financeUpdate = async ({ name, finance, user }: any) => {
     const test = await TESTS.findOne({ "name.en": name });
@@ -594,10 +606,10 @@ export class LabTests {
     },
       {
         arrayFilters: [{
-            'i._id': updateId
-          },{
-            'j._id': finance._id
-          }
+          'i._id': updateId
+        }, {
+          'j._id': finance._id
+        }
         ]
       }
     );

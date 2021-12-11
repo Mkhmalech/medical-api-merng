@@ -148,7 +148,7 @@ export const LabTestsSchema = buildSchema(`
         LabTestNamesUpdate (  testId: ID, names : LabTestsNames) : String
         LabTestReferenceUpdate ( id : ID, reference : LabTestsReference ) : String
         LabTestFinanceUpdate ( name : String, finance : LabTestsFinance, user : User ) : Boolean
-        updateDescription(${descOverview},${descWhy},${descHow},${descWhat},${when}) : String
+        updateDescription(${id},${descOverview},${descWhy},${descHow},${descWhat},${when}) : String
         LabTestClassificationUpdate(
             id : ID, departements : [ID], components : [ID], structure : [ID],
             parameter : Boolean, group : Boolean, panel : Boolean,
