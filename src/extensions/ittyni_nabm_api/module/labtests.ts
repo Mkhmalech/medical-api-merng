@@ -28,9 +28,9 @@ const Update = new Schema({
     when: { type: String },
   },
   departements: [{ type: Schema.Types.ObjectId, ref: 'DEPARTEMENTS' }],
-  components: [{ type: Schema.Types.ObjectId, ref: 'TESTS' }],
   parameter: Boolean,
   group: Boolean,
+  components: [{ type: Schema.Types.ObjectId, ref: 'TESTS' }],
   panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
   structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },
   preparation: {

@@ -7,7 +7,7 @@ export class LabTests {
 
   // fetching data of test 
   LabTestFrenchById = async ({ id }: any) => {
-    const test = await TESTS.findOne({ "_id": id });
+    const test = await TESTS.findOne({ "_id": id }).populate('departements');
     if (!test) throw new Error("no test found");
 
     return {
@@ -24,6 +24,10 @@ export class LabTests {
         }
       ],
       specimen: { ...test.specimen },
+      description : test.description,
+      departements : test.departements,
+      parameter : test.parameter,
+      group : test.group,
       updates: test.updates
     };
   }
@@ -259,7 +263,7 @@ export class LabTests {
 
     let classification: any = this.filterData(args);
 
-    if (user.role === "supadmin") {
+    if (user.role.name === "supadmin") {
       classification.departements && test.departements.push(classification.departements);
       classification.components && test.components.push(classification.components);
       classification.parameter && (test.parameter = classification.parameter);
@@ -324,7 +328,6 @@ export class LabTests {
   };
   updateDescription = async (args: any, { user }: any) => {
     const test = new Db(TESTS);
-    console.log(test.filterData(args))
     if (user.role.name === 'supadmin') {
       test.setSubDocWithoutFilter({ '_id': args._id },
         Object.keys(test.filterData(args)).reduce((d, v) => ({ ...d, ["description." + v]: args[v] }), {})

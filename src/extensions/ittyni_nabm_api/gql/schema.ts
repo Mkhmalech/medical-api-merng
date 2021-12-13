@@ -24,12 +24,14 @@ const descWhy = `why : String `
 const descHow = `how : String `
 const descWhat = `what : String`
 const when = `when: String `
-const testDescription = `type description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${when}}` 
+const testDescription = `type Description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${when}}` 
 // lab departments variable
 const departmentNameFr = `fr : String!`
 const departmentNameEn = `en : String`
 const depMnem = `mnemonic : String `
 const depDescriptionFr = `fr : String `
+const depDescriptionEn = `en : String `
+
 
 // test types
 const names = `type Name { ${nameEn} ${nameFr}}`
@@ -37,10 +39,13 @@ const reference = `type Reference { ${CPT} ${Mnemonic} }`
 const finance = `type Finance {${id} ${country} ${Bcode} }`
 const specimen = `type Specimen { ${sampleType} ${tubeColor} ${anticoagulant} ${tubeNumber} ${volumeMin}}`
 const updatedBy = `type UpdatedBy { ${userId} ${fname} ${lname} ${picture}}`
+const depDescription = `type DepDescription {${depDescriptionFr} ${depDescriptionEn}} `
+
 
 // departments types
 const departmentName = `type DepName {${departmentNameFr} ${departmentNameEn}} `
-const depDescription = `type DepDescription { ${depDescriptionFr} }`
+
+const testDepartements = `type Departement {name: DepName ${depMnem} description: Description }`
 
 export const LabTestsSchema = buildSchema(`
 
@@ -59,6 +64,9 @@ export const LabTestsSchema = buildSchema(`
     ${departmentName}
 
     ${depDescription}
+
+
+    ${testDepartements}
 
     type Department {
         _id : ID
@@ -93,6 +101,10 @@ export const LabTestsSchema = buildSchema(`
         finance : [Finance]
         specimen : Specimen
         updates : [Update]
+        departements : [Departement]
+        parameter: Boolean
+        group: Boolean
+        description : Description 
     }
 
     input LabTestsNames { 
