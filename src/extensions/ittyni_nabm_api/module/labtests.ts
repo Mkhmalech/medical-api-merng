@@ -88,7 +88,11 @@ const TestSchema: Schema = new Schema({
   finance: [
     {
       country: String,
-      Bcode: Number
+      Bcode: Number,
+      code : String,
+      value : Number,
+      price : Number,
+      currency : String
     }
   ],
   description: {

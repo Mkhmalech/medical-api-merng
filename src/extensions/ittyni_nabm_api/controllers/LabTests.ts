@@ -339,39 +339,24 @@ export class LabTests {
     }
     return "account_updated_successfully"
   }
-  financeUpdate = async ({ name, finance, user }: any) => {
-    const test = await TESTS.findOne({ "name.en": name });
-    if (!test) return false;
-
-    const role = await userFunc.getUserRole(user.email);
-
-    if (role === "m.khmalech@gmail.com") {
-      const isExist = test.finance.findIndex(o => o.country === "Morocco");
-
-      if (test.finance[isExist]) {
-        test.finance[isExist].Bcode = finance.Bcode;
-      } else {
-        test.finance.push(finance);
-      }
+  addNewfinance = async (args: any, {user}:any) => {
+    const res = await TESTS.find({"_id":args._id, "finance.country" : new RegExp(args.country, "i")},{"finance.$":1, _id:0});
+    if(res.length>0){
+      return Error("TARIF_ALREADY_EXIST");
     } else {
-      let update = {
-        updatedBy: user,
-        finance: [
-          {
-            country: finance.country,
-            Bcode: finance.Bcode
-          }
-        ],
-        updatedAt: new Date()
-      };
+      return await new Db(TESTS).getDocByIdAndPushSubDoc(args._id,{
+        finance : this.filterData(args, "_id")
+      })
+    }    
+  }
+  financeUpdate = async (args: any, {user}:any) => {
 
-      test.updates.push(update);
-
-      test.save((err: any) => {
-        if (err) throw new Error(err);
-        else return "Name fr updates Successfully";
-      });
-    }
+    console.log(args)
+    // if (user.role.name === "supadmin") {
+      
+    // } else {
+      
+    // }
   };
   specimenUpdate = async ({ id, volume }: any, { user }: any) => {
     const test = await TESTS.findById(id);
@@ -488,7 +473,7 @@ export class LabTests {
     if (res) return (res)
     else return Error("no_update_founded")
   }
-  filterData = (data: any) => {
+  filterData = (data: any, keyTodelete?:string) => {
     let newData = data;
     for (const property in newData) {
       if (
@@ -498,6 +483,7 @@ export class LabTests {
         delete newData[property];
       }
     }
+    keyTodelete&&delete newData[keyTodelete]
     return newData;
   }
   fetchUpdateById = async ({ id }: any) => {

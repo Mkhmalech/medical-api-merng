@@ -8,6 +8,10 @@ const CPT = `CPT : Int`
 const Mnemonic = `Mnemonic : String`
 const country = `country : String`
 const Bcode = `Bcode : Int`
+const code = `code : String`
+const value = `value : Int`
+const price = `price : Int`
+const currency = `currency : String`
 const sampleType = `nature : [String]`
 const tubeColor = `tubecolor : [String]`
 const anticoagulant = `anticoagulant : [String]`
@@ -36,7 +40,7 @@ const depDescriptionEn = `en : String `
 // test types
 const names = `type Name { ${nameEn} ${nameFr}}`
 const reference = `type Reference { ${CPT} ${Mnemonic} }`
-const finance = `type Finance {${id} ${country} ${Bcode} }`
+const finance = `type Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} }`
 const specimen = `type Specimen { ${sampleType} ${tubeColor} ${anticoagulant} ${tubeNumber} ${volumeMin}}`
 const updatedBy = `type UpdatedBy { ${userId} ${fname} ${lname} ${picture}}`
 const depDescription = `type DepDescription {${depDescriptionFr} ${depDescriptionEn}} `
@@ -159,7 +163,8 @@ export const LabTestsSchema = buildSchema(`
     type LabTestsMutation {
         LabTestNamesUpdate (  testId: ID, names : LabTestsNames) : String
         LabTestReferenceUpdate ( id : ID, reference : LabTestsReference ) : String
-        LabTestFinanceUpdate ( name : String, finance : LabTestsFinance, user : User ) : Boolean
+        LabTestFinanceUpdate ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency} ) : String
+        LabTestAddFinance ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency} ) : String
         updateDescription(${id},${descOverview},${descWhy},${descHow},${descWhat},${when}) : String
         LabTestClassificationUpdate(
             id : ID, departements : [ID], components : [ID], structure : [ID],
