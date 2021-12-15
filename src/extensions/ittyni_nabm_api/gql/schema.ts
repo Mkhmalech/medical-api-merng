@@ -12,6 +12,7 @@ const code = `code : String`
 const value = `value : Int`
 const price = `price : Int`
 const currency = `currency : String`
+const financeDesc = `description : String`
 const sampleType = `nature : [String]`
 const tubeColor = `tubecolor : [String]`
 const anticoagulant = `anticoagulant : [String]`
@@ -40,7 +41,7 @@ const depDescriptionEn = `en : String `
 // test types
 const names = `type Name { ${nameEn} ${nameFr}}`
 const reference = `type Reference { ${CPT} ${Mnemonic} }`
-const finance = `type Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} }`
+const finance = `type Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} ${financeDesc} }`
 const specimen = `type Specimen { ${sampleType} ${tubeColor} ${anticoagulant} ${tubeNumber} ${volumeMin}}`
 const updatedBy = `type UpdatedBy { ${userId} ${fname} ${lname} ${picture}}`
 const depDescription = `type DepDescription {${depDescriptionFr} ${depDescriptionEn}} `
@@ -99,7 +100,7 @@ export const LabTestsSchema = buildSchema(`
     }
 
     type FrTest {
-        id : ID
+        _id : ID
         name : Name
         reference : Reference
         finance : [Finance]

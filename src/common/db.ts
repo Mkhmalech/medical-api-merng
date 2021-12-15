@@ -181,7 +181,7 @@ export class Db {
     /**
      * search by query in one field
      */
-    getDocByIdAndPushSubDoc = async (_id: ObjectId, data: any) => {
+    getDocByIdAndPushSubDoc = async (_id: any, data: any) => {
         const doc = await this.db.updateOne({ '_id': _id }, {
             $push: data
         });

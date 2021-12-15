@@ -92,7 +92,8 @@ const TestSchema: Schema = new Schema({
       code : String,
       value : Number,
       price : Number,
-      currency : String
+      currency : String,
+      description : String
     }
   ],
   description: {
