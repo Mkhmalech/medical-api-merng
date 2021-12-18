@@ -213,8 +213,14 @@ export class LabTests {
       specimen: { ...test.specimen }
     };
   };
-  // =====>>>>>> end of fetching test data 
-  // update test data 
+  // =====>>>>>> end of fetching test data
+  // add new test
+  addNewTest = async (args: any, { user }: any)=>{
+    return new Db(TESTS).createNewDoc({
+      name : args
+    })
+  }
+  // update test data
   namesUpdate = async ({ names, testId }: any, { user }: any) => {
     let updatingMsg: any = await TESTS.findById(testId)
       .then(async test => {

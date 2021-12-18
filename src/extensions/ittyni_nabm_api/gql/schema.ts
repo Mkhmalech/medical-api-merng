@@ -163,6 +163,7 @@ export const LabTestsSchema = buildSchema(`
     }
 
     type LabTestsMutation {
+        LabTestAddNew (${nameFr}, ${nameEn}) : String
         LabTestNamesUpdate (  testId: ID, names : LabTestsNames) : String
         LabTestReferenceUpdate ( id : ID, reference : LabTestsReference ) : String
         LabTestFinanceUpdate ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency},${financeDesc} ) : String

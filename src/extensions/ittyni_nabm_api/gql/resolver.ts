@@ -18,6 +18,9 @@ export const LabTestsResolver = {
     createTestsSiteMap : labTests.createTestsSiteMap,
     fetchTestsByFirstLetter : labTests.fetchTestsByFirstLetter,
 
+    // add test
+    LabTestAddNew : labTests.addNewTest,
+
     // update a test
     LabTestNamesUpdate : labTests.namesUpdate,
     LabTestReferenceUpdate : labTests.referenceUpdate,
