@@ -26,6 +26,7 @@ export const LabTestsResolver = {
     LabTestAddFinance : labTests.addNewfinance,
     LabTestClassificationUpdate : labTests.classificationUpdate,
     LabTestSpecimenUpdate : labTests.specimenUpdate,
+    updateSpecimen : labTests.updateSpecimen,
     LabTestAllUpdate : labTests.updateAll,
     
     // fetch updates

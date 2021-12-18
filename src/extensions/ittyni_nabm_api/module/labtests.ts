@@ -17,7 +17,12 @@ const Update = new Schema({
   finance: [
     {
       country: String,
-      Bcode: Number
+      Bcode: Number,
+      code : String,
+      value : Number,
+      price : Number,
+      currency : String,
+      description : String
     }
   ],
   description: {
@@ -45,7 +50,9 @@ const Update = new Schema({
     spectialTime: [String]
   },
   specimen: {
-    nature: { type: [String] },
+    nature: { type: [String], 
+      // enum : ["serum", "plasma","blood"]
+    },
     tubecolor: { type: [String] },
     anticoagulant: { type: [String] },
     numberoftube: { type: Number },

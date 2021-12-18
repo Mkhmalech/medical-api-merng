@@ -36,6 +36,7 @@ const departmentNameEn = `en : String`
 const depMnem = `mnemonic : String `
 const depDescriptionFr = `fr : String `
 const depDescriptionEn = `en : String `
+// test sample
 
 
 // test types
@@ -164,9 +165,10 @@ export const LabTestsSchema = buildSchema(`
     type LabTestsMutation {
         LabTestNamesUpdate (  testId: ID, names : LabTestsNames) : String
         LabTestReferenceUpdate ( id : ID, reference : LabTestsReference ) : String
-        LabTestFinanceUpdate ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency} ) : String
-        LabTestAddFinance ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency} ) : String
+        LabTestFinanceUpdate ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency},${financeDesc} ) : String
+        LabTestAddFinance ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency},${financeDesc} ) : String
         updateDescription(${id},${descOverview},${descWhy},${descHow},${descWhat},${when}) : String
+        updateSpecimen(${id},${sampleType}, ${tubeColor}, ${anticoagulant}, ${tubeNumber},${volumeMin}):String
         LabTestClassificationUpdate(
             id : ID, departements : [ID], components : [ID], structure : [ID],
             parameter : Boolean, group : Boolean, panel : Boolean,

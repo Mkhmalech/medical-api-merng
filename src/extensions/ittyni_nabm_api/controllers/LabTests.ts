@@ -11,23 +11,18 @@ export class LabTests {
     if (!test) throw new Error("no test found");
 
     return {
-      id: test._id.toString(),
+      _id: test._id,
       name: {
         en: test.name.en,
         fr: test.name.fr
       },
       reference: { ...test.reference },
-      finance: [
-        {
-          Bcode: test.finance[0] ? test.finance[0].Bcode : null,
-          country: test.finance[0] ? test.finance[0].country : null
-        }
-      ],
+      finance: test.finance,
       specimen: { ...test.specimen },
-      description : test.description,
-      departements : test.departements,
-      parameter : test.parameter,
-      group : test.group,
+      description: test.description,
+      departements: test.departements,
+      parameter: test.parameter,
+      group: test.group,
       updates: test.updates
     };
   }
@@ -339,47 +334,47 @@ export class LabTests {
     }
     return "account_updated_successfully"
   }
-  addNewfinance = async (args: any, {user}:any) => {
-    const res = await TESTS.find({"_id":args._id, "finance.country" : new RegExp(args.country, "i")},{"finance.$":1, _id:0});
-    if(res.length>0){
+  addNewfinance = async (args: any, { user }: any) => {
+    const res = await TESTS.find({ "_id": args._id, "finance.country": new RegExp(args.country, "i") }, { "finance.$": 1, _id: 0 });
+    if (res.length > 0) {
       return Error("TARIF_ALREADY_EXIST");
     } else {
-      if(user.role.name==='supadmin'){
-        const r = await new Db(TESTS).setSubDocsPushWithoutFilter({_id : args._id},{
-          "finance" : this.filterData(args, '_id')
+      if (user.role.name === 'supadmin') {
+        const r = await new Db(TESTS).setSubDocsPushWithoutFilter({ _id: args._id }, {
+          "finance": this.filterData(args, '_id')
         })
-        if(r) return "SAVED_SUCCESSFULLY"
+        if (r) return "SAVED_SUCCESSFULLY"
         else return Error("TARIF_NOT_SAVED")
       } else {
-        const r = await new Db(TESTS).setSubDocsPushWithoutFilter({_id : args._id},{
-          updates : {
-            "finance" : this.filterData(args, '_id')
+        const r = await new Db(TESTS).setSubDocsPushWithoutFilter({ _id: args._id }, {
+          updates: {
+            "finance": this.filterData(args, '_id')
           }
         })
-        if(r) return "SAVED_SUCCESSFULLY"
+        if (r) return "SAVED_SUCCESSFULLY"
         else return Error("TARIF_NOT_SAVED")
       }
-    }    
+    }
   }
-  financeUpdate = async (args: any, {user}:any) => {
+  financeUpdate = async (args: any, { user }: any) => {
 
     if (user.role.name === "supadmin") {
-      const res = await new Db(TESTS).setSubDocs({"finance._id":args._id}, {
-        arrayFilters : [{"i._id": args._id}]
-      }, Object.keys(this.filterData(args,'_id')).reduce((d, v) => ({ ...d, ["finance.$[i]." + v]: args[v] }), {}))
-      if(res) return "SAVED_SUCCESSFULLY"
-        else return Error("TARIF_NOT_SAVED")
+      const res = await new Db(TESTS).setSubDocs({ "finance._id": args._id }, {
+        arrayFilters: [{ "i._id": args._id }]
+      }, Object.keys(this.filterData(args, '_id')).reduce((d, v) => ({ ...d, ["finance.$[i]." + v]: args[v] }), {}))
+      if (res) return "SAVED_SUCCESSFULLY"
+      else return Error("TARIF_NOT_SAVED")
 
     } else {
-      const r = await new Db(TESTS).setSubDocsPushWithoutFilter({"finance._id" : args._id},{
-        updates : {
-          "finance" : this.filterData(args, '_id')
+      const r = await new Db(TESTS).setSubDocsPushWithoutFilter({ "finance._id": args._id }, {
+        updates: {
+          "finance": this.filterData(args, '_id')
         }
       })
-      if(r) return "SAVED_SUCCESSFULLY"
+      if (r) return "SAVED_SUCCESSFULLY"
       else return Error("TARIF_NOT_SAVED")
     }
-    
+
   };
   specimenUpdate = async ({ id, volume }: any, { user }: any) => {
     const test = await TESTS.findById(id);
@@ -390,6 +385,29 @@ export class LabTests {
     } else {
     }
   };
+  /**
+   * 
+   * @param param0 
+   * @param param1 
+   * @returns 
+   */
+  updateSpecimen = async (args: any, { user }: any) => {
+    if (user && user.role && user.role.name === 'supadmin') {
+      const r = await new Db(TESTS).setSubDocWithoutFilter({ _id: args._id }, {
+        specimen: this.filterData(args, '_id')
+      })
+      if (r) return "SAVED_SUCCESSFULLY"
+      else return Error("TARIF_NOT_SAVED")
+    } else {
+      const r = await new Db(TESTS).setSubDocsPushWithoutFilter({ _id: args._id }, {
+        updates: {
+          "finance": this.filterData(args, '_id')
+        }
+      })
+      if (r) return "SAVED_SUCCESSFULLY"
+      else return Error("TARIF_NOT_SAVED")
+    }
+  }
   updateAll = async ({ names, reference, finance, preAnalytics }: any, { user }: any) => {
     let specimen = {
       nature: preAnalytics.sampleType,
@@ -496,7 +514,7 @@ export class LabTests {
     if (res) return (res)
     else return Error("no_update_founded")
   }
-  filterData = (data: any, keyTodelete?:string) => {
+  filterData = (data: any, keyTodelete?: string) => {
     let newData = data;
     for (const property in newData) {
       if (
@@ -506,7 +524,7 @@ export class LabTests {
         delete newData[property];
       }
     }
-    keyTodelete&&delete newData[keyTodelete]
+    keyTodelete && delete newData[keyTodelete]
     return newData;
   }
   fetchUpdateById = async ({ id }: any) => {
