@@ -29,5 +29,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: khmammed/ittyni:api-v1.1.4
           labels: ${{ steps.meta.outputs.labels }}
