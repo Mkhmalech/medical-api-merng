@@ -163,16 +163,16 @@ export const LabTestsSchema = buildSchema(`
     }
 
     type LabTestsMutation {
-        LabTestAddNew (${nameFr}, ${nameEn}) : String
+        LabTestAddNew (${nameFr}, ${nameEn}, ${Mnemonic}, ${CPT}) : String
         LabTestNamesUpdate (  testId: ID, names : LabTestsNames) : String
-        LabTestReferenceUpdate ( id : ID, reference : LabTestsReference ) : String
+        LabTestReferenceUpdate ( ${id}, reference : LabTestsReference ) : String
         LabTestFinanceUpdate ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency},${financeDesc} ) : String
         LabTestAddFinance ( ${id}, ${country}, ${Bcode}, ${code}, ${value}, ${price}, ${currency},${financeDesc} ) : String
         updateDescription(${id},${descOverview},${descWhy},${descHow},${descWhat},${when}) : String
         updateSpecimen(${id},${sampleType}, ${tubeColor}, ${anticoagulant}, ${tubeNumber},${volumeMin}):String
         LabTestClassificationUpdate(
-            id : ID, departements : [ID], components : [ID], structure : [ID],
-            parameter : Boolean, group : Boolean, panel : Boolean,
+            ${id}, departements : [String], components : [String], structure : [String],
+            type: String,
         ) : Boolean
 
         LabTestAllUpdate ( 

@@ -204,20 +204,15 @@ export class LabTests {
         fr: test.name.fr
       },
       reference: { ...test.reference },
-      finance: [
-        {
-          Bcode: test.finance[0] ? test.finance[0].Bcode : null,
-          country: test.finance[0] ? test.finance[0].country : null
-        }
-      ],
+      finance: test.finance,
       specimen: { ...test.specimen }
     };
   };
   // =====>>>>>> end of fetching test data
   // add new test
-  addNewTest = async (args: any, { user }: any)=>{
+  addNewTest = async ({en, fr, Mnemonic, CPT}: any, { user }: any)=>{
     return new Db(TESTS).createNewDoc({
-      name : args
+      name : {fr:fr,en:en}, reference:{Mnemonic:Mnemonic, CPT:CPT}
     })
   }
   // update test data
@@ -259,47 +254,19 @@ export class LabTests {
     if (!updatingMsg) return true;
   };
   classificationUpdate = async (args: any, { user }: any) => {
-    const test = await TESTS.findById(args.id);
-    if (!test) return false;
-
-    let classification: any = this.filterData(args);
-
-    if (user.role.name === "supadmin") {
-      classification.departements && test.departements.push(classification.departements);
-      classification.components && test.components.push(classification.components);
-      classification.parameter && (test.parameter = classification.parameter);
-      classification.group && (test.group = classification.group);
-      classification.panel && (test.panel = classification.panel);
-      classification.panel && (test.structure = classification.structure);
-
-      test.save((err: any) => {
-        if (err) throw new Error(err);
-        else return "updated_Successfully_by_admin";
-      });
-    } else {
-      let update = {
-        updatedBy: user._id,
-        departements: classification.departements,
-        components: classification.components,
-        parameter: classification.parameter,
-        group: classification.group,
-        panel: classification.panel,
-        updatedAt: new Date()
-      };
-
-      test.updates.push(update);
-
-      test.save((err: any) => {
-        if (err) throw new Error(err);
-        else return "updated_Successfully";
-      });
-    }
+    // let classification: any = this.filterData(args,'_id');
+    const r= await new Db(TESTS).setSubDocWithoutFilter({_id:args._id}, {
+      departements : this.filterData(args, '_id').departements&&args.departements,
+      components : this.filterData(args, '_id').components&&args.components,
+      [args.type] : true
+    })
+    return r? "CLASSIFICATION_UPDATED_SUCCESSFULLY" : Error("CLASSIFICATION_NOT_UPDATED")
   };
-  referenceUpdate = async ({ id, reference }: any, { user }: any) => {
-    const test = await TESTS.findById(id);
+  referenceUpdate = async ({ _id, reference }: any, { user }: any) => {
+    const test = await TESTS.findById(_id);
     if (!test) return new Error("test_not_founded");
     let newRef = this.filterData(reference);
-    if (user.role === "supadmin") {
+    if (user.role.name === "supadmin") {
       test.reference.CPT = newRef.CPT;
       test.reference.Mnemonic = newRef.Mnemonic;
 

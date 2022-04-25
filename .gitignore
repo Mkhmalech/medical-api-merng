@@ -2,7 +2,7 @@ build
 node_modules
 src/config.ts
 src/user-medical-api
-
+dockerfile
 #todo
 Todo.md
 src/extensions/lab-manager

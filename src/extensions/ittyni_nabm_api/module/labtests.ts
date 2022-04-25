@@ -90,7 +90,7 @@ const TestSchema: Schema = new Schema({
   reference: {
     code: { type: [Number] },
     Mnemonic: { type: String, unique: true },
-    CPT: { type: Number }
+    CPT: { type: Number}
   },
   finance: [
     {
