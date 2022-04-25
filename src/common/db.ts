@@ -154,6 +154,15 @@ export class Db {
         return results ? results : Error(this.NotSavedMessage);
     }
     /**
+     * find sub doc and set array
+     * @param _id 
+     * @returns 
+     */
+    setSubDocWithoutFilter = async (query: any, data: any) => {
+        const results = await this.db.findOneAndUpdate(query, { $set: data }, { new: true });
+        return results ? results : Error(this.NotSavedMessage);
+    }
+    /**
      * search by query in one field
      */
     getDocById = async (_id: ObjectId) => {
@@ -172,7 +181,7 @@ export class Db {
     /**
      * search by query in one field
      */
-    getDocByIdAndPushSubDoc = async (_id: ObjectId, data: any) => {
+    getDocByIdAndPushSubDoc = async (_id: any, data: any) => {
         const doc = await this.db.updateOne({ '_id': _id }, {
             $push: data
         });

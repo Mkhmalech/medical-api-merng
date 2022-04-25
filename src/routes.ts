@@ -1,33 +1,52 @@
 import express from "express";
-import * as HandlerUser from './extensions/user_manager/index'
-import * as HandlerLab from './extensions/lab-manager/index'
-import * as HandlerCabinet from './extensions/cabinet-manager'
+/**
+ * @USER
+ */
+import * as HandlerUser from './extensions/ittyni_user_api/index'
+/**
+ * @LABM
+ */
+import * as HandlerLABM from './extensions/ittyni_labm_api/index'
+/**
+ * @NABM
+ */
+import * as HandlerNABM from './extensions/ittyni_nabm_api/index'
+/**
+ * @STAFF
+ */
+import * as HandlerSTAFF from './extensions/ittyni_staff_api/index'
+/**
+ * @STAFF
+ */
+import * as HandlerREFERRAL from './extensions/ittyni_referrals_api/index'
+/**
+ * @STAFF
+ */
+import * as HandlerORDERS from './extensions/ittyni_orders_api/index'
+/**
+ * @STAFF
+ */
+import * as HandlerAPPOINT from './extensions/ittyni_appointement_api/index'
+import * as HandlerCabinet from './extensions/ittyni_cabinet_api'
 // import extensions handler
-import * as HandlerPHARMA from './extensions/pharmacy_manager'
+import * as HandlerPHARMA from './extensions/ittyni_pharma_api'
 
 // import extensions handler
-import * as HandlerMedicine from './extensions/medicine_manager'
+import * as HandlerMedicine from './extensions/ittyni_medicine_api'
 // import extensions handler
-import * as HandlerAM from './extensions/account_manager'
+import * as HandlerAM from './extensions/ittyni_account_api'
 // import extensions handler
-import * as HandlerPR from './extensions/patient_record'
+import * as HandlerPR from './extensions/ittyni_patient_api'
 // import extensions handler
-import * as HandlerNGAP from './extensions/ngap_manager'
+import * as HandlerNGAP from './extensions/ittyni_ngap_api'
 // import extensions handler
-import * as HandlerCCAM from './extensions/ccam_manager'
+import * as HandlerCCAM from './extensions/ittyni_ccam_api'
 // import extensions handler
-import * as HandlerICD from './extensions/icd_manager'
+import * as HandlerICD from './extensions/ittyni_icd_api'
 // component
-import * as HandlerComponent from './extensions/component_manager'
+import * as HandlerComponent from './extensions/ittyni_module_api'
 // component
-import * as HandlerQU from './extensions/queuing_system'
-
-
-interface expressExchange {
-    req : express.Request
-    res : express.Response
-    next : express.NextFunction
-}
+import * as HandlerQU from './extensions/ittyni_queuing_api'
 
 const routes = ($: express.Router) => {
 
@@ -39,30 +58,30 @@ const routes = ($: express.Router) => {
         res.send("Hello From Server")
     });
 
-    $.all('/tests', HandlerLab.LabTests)
+    $.all('/tests', HandlerNABM.LabTests)
 
     $.all('/users', HandlerUser.User);
 
-    $.all('/labos', HandlerLab.Labo);
+    $.all('/labos', HandlerLABM.Labo);
 
     // $.all('/search', HandlerSearch.Search)
 
-    $.all('/labos/staff', HandlerLab.Staff);
+    $.all('/labos/staff', HandlerSTAFF.Staff);
 
     // lab referrals module
-    $.all('/labos/referral', HandlerLab.LabReferrals);
+    $.all('/labos/referral', HandlerREFERRAL.LabReferrals);
 
     // lab referrals module
-    $.all('/labos/order', HandlerLab.LabOrders);
+    $.all('/labos/order', HandlerORDERS.LabOrders);
     
     // lab appointement module
-    $.all('/labos/appointement', HandlerLab.LabAppointement);
+    $.all('/labos/appointement', HandlerAPPOINT.LabAppointement);
     /********************************
      * routes to cabinets
      ********************************/
     $.all('/cabinets', HandlerCabinet.Cabinet);
     // cabinet order
-    $.all('/cabinets/order', HandlerLab.LabOrders);
+    $.all('/cabinets/order', HandlerORDERS.LabOrders);
 
     /********************************
      * Account Manager Api v0.1

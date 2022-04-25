@@ -1,0 +1,114 @@
+[
+    {
+        "etablissement": "CENTRE DE BIOLOGIE MEDICALE OUISLANE",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535507677",
+        "street": "839  RIAD OUISLANE 1",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE BENALI D ANATOMIE PATHOLOGIQUE",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535528842",
+        "street": "11 RUE ANTSIRABE",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE BIOUGNACH",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535521717",
+        "street": "8 RESIDENCE EL KHAOUARIZMY AVENUE PRINCE MOULAY ABDELLAH, RDC",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE CHBICHEB",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535404526",
+        "street": "RUE HOUCINE BEN ALI. RES ATLAS",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE D ANALYSES ELMAADANI",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535513150",
+        "street": "23 RUE ANTSIRABE",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE D ANALYSES MEDICALES ELFOUNINI",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535524387",
+        "street": "7 PLACE DU MARCHE CENTRAL, AVENUE HASSAN II, 1ER ETAGE",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE D ANALYSES MEDICALES SBAITI",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535517206",
+        "street": "11 ANGLE AVENUE ALLAL BEN ABDELLAH ET RUE ATLAS",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE D ANANALYSES MEDICALES",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535523003",
+        "street": "BD MOHAMMED V. IMM. KHAMLICH",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE DR ELIRAKI",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535530567",
+        "street": "DAR SMEN 1 DERB ZEMMOURI",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE EL MENZEH",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535515008",
+        "street": "BUREAUX PLACE ADMINISTRATIVE, N 26, AVENUE IDRISS II, BUREAU N 7 ET 8, 2EME ETAGE",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE GUENOUN D ANATOMIE PATHOLOGIQUE",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535516855",
+        "street": "14 AVENUE ALLAL BEN ABDELLAH",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE IBN KHALDOUN",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535524748",
+        "street": "10 ROUTE DE FES",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE ISMAILIA",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535452989",
+        "street": "2 AVENUE ENNASR,  DIOUR ESSALAM. IMM 3 ,AL AAILA",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE NEJJAR",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535512531",
+        "street": "6 RUE PASTEUR APPT 3, 1 ER ETAGE VILLE NOUVELLE",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE TAFILALET D ANALYSES MEDICALES",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535525162",
+        "street": "1 RUE MELLILIA AVENUE NEHROU RESIDENCE ATLAS",
+        "city": "MEKNES"
+    },
+    {
+        "etablissement": "LABORATOIRE ZITOUNE",
+        "activite": "LABORATOIRES D ANALYSES",
+        "tele": "0535451339",
+        "street": "93 AVENUE MED BEN AHMED EDIGHOUSSI. ZITOUNE. BP  11168",
+        "city": "MEKNES"
+    }
+]

@@ -1,7 +1,7 @@
 import express from "express";
 import expressWs from "express-ws";
-import { TESTS } from "./extensions/lab-manager/src/labTests/module/labtests";
-import { QUEUING } from "./extensions/queuing_system/src/module/queuing";
+import { TESTS } from "./extensions/ittyni_nabm_api/module/labtests";
+import { QUEUING } from "./extensions/ittyni_queuing_api/src/module/queuing";
 
 export const WS = (app: express.Application) => {
 
