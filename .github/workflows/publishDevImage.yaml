@@ -44,6 +44,6 @@ jobs:
           echo ${{ secrets.KUB_CONFIG}} | base64 --decode > ${HOME}/.kube/config
           cat ${HOME}/.kube/config
       - name : use context 
-        run : kubectl use-context ittyni-cluster
+        run : kubectl config use-context ittyni-cluster
       - name : show running pods 
         run : kubectl get pods
