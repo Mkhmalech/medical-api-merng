@@ -38,6 +38,9 @@ jobs:
     steps:
       - name: checkout the repo 
         uses: actions/checkout@v3
+      - name: Get the version
+        id: get_version
+        run: echo $GITHUB_REF
       - name: Create kubeconfig
         run: |
           mkdir ${HOME}/.kube
