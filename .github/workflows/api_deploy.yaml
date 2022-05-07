@@ -1,4 +1,9 @@
-name: Get Version 
+name: Deploy Image with Version
+
+on:
+  push:
+    tags: 
+      - "*" 
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -6,4 +11,4 @@ jobs:
     steps:
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: echo $GITHUB_REF
