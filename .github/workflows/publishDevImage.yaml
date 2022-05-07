@@ -41,7 +41,7 @@ jobs:
       - name: Create kubeconfig
         run: |
           mkdir ${HOME}/.kube
-          echo {{ secretes.KUB_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+          echo {{ secrets.KUB_CONFIG }} | base64 --decode > ${HOME}/.kube/config
           cat ${HOME}/.kube/config
       - name : use context 
         run : kubectl use-context ittyni-cluster
