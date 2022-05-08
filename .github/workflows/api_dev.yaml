@@ -30,3 +30,20 @@ jobs:
           push: true
           tags: khmammed/ittyni:api_dev
           labels: ${{ steps.meta.outputs.labels }}
+  update_deployment_services:
+    name: deploy to kubernetes cluster
+    needs : "build_image_and_update_image"
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the repo 
+        uses: actions/checkout@v3
+      - name: Get the version
+        id: get_version
+        run: echo $GITHUB_REF
+      - name: Create kubeconfig
+        run: |
+          mkdir ${HOME}/.kube
+          echo ${{ secrets.KUB_CONFIG}} | base64 --decode > ${HOME}/.kube/config
+          cat ${HOME}/.kube/config
+      - name : show running pods 
+        run : kubectl create deployment api-tt --image=khmammed/ittyni:api_dev
