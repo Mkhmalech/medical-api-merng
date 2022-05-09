@@ -45,4 +45,4 @@ jobs:
           echo ${{ secrets.KUB_CONFIG}} | base64 --decode > ${HOME}/.kube/config
           cat ${HOME}/.kube/config
       - name : show running pods 
-        run : kubectl apply -f ttyni-api-deployment.yml
+        run : kubectl apply -f ittyni-api-deployment.yml
