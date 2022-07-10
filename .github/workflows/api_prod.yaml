@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: remove mongoose type file
-        run: rm node_modules/mongoose
+        run: rm node_modules/mongoose/index.d.ts
       - name: Copy mogoose typing file
         run: cp mongoose/index.d.ts node_modules/mongoose
       - name: Build Production
