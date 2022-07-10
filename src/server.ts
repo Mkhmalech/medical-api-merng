@@ -37,5 +37,5 @@ app.use(Auth);
 app.use('/', routes(express.Router()));
 
 app.listen(8060, () => {
-    console.log(`application listening on port : ${8060}`)
+    console.log(`application listening on port : ${8080}`)
 })

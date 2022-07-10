@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ittyni-api
+  labels:
+    app: ittyni-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ittyni-api
+  template:
+    metadata:
+      labels:
+        app: ittyni-api
+    spec:
+      containers:
+      - name: ittyni
+        image: khmammed/ittyni:api_dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8060
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ittyni-api-service
+  labels:
+    app: ittyni-api
+  namespace: default
+spec:
+  ports:
+  - port: 8060
+    protocol: TCP
+    targetPort: 8060
+  selector:
+    app: ittyni-api
