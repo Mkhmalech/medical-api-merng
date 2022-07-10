@@ -1,6 +1,8 @@
 FROM node:16-alpine3.14
 WORKDIR /api
 # copy build folder
-COPY ./build ./build
+COPY . .
+RUN npm uninstall bcrypt
+RUN npm install bcrypt
 # run application
 CMD ["node", "build/server.js"]
