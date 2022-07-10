@@ -1,6 +1,5 @@
 build
 node_modules
-src/config.ts
 src/user-medical-api
 
 #todo

@@ -9,7 +9,7 @@ export const WS = (app: express.Application) => {
     //initialize the WebSocket server instance
     expressWs(app);
 
-    app.ws('/ws', (ws: any, req: any) => {
+    // app.ws('/ws', (ws: any, req: any) => {
         // ws.on('message', (msg: any) => {
         //     var connection = req.accept('any-protocol', req.origin);
         //     clients.push(connection);
@@ -33,5 +33,5 @@ export const WS = (app: express.Application) => {
         // ws.on('close', () => {
         //     console.log('WebSocket was closed')
         // })
-    })
+    // })
 }
