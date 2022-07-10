@@ -18,6 +18,8 @@ jobs:
         run: rm node_modules/mongoose/index.d.ts
       - name: move mogoose typing file
         run: mv mongoose/index.txt node_modules/mongoose/index.d.ts
+      - name: Build Application
+        run: npm run tsc
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
