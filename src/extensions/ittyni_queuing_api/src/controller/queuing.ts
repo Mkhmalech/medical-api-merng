@@ -1,4 +1,4 @@
-import { Db } from "../../../../common/db"
+import { Db } from "../../../../gateway/db"
 import { LABO } from "../../../ittyni_labm_api/module/labo"
 import { QUEUING } from "../module/queuing";
 import jwt from "jsonwebtoken";

@@ -1,7 +1,5 @@
 import { TESTS } from "../module/labtests";
-import { userFunc } from "../../ittyni_user_api/src";
-import { DEPARTMENTS } from "../module/departments";
-import { Db } from "../../../common/db";
+import { Db } from "../../../gateway/db";
 const fs = require('fs');
 export class LabTests {
 
@@ -619,22 +617,4 @@ export class LabTests {
     return res ? "updated_successfully" : Error("not_updated")
   }
   // ====>>>>>> end of modify update
-
-  // === Lab departements
-  addDepartment = ({ depart, mnem, descript }: any, { user }: any) => {
-
-    const newDepartment = new DEPARTMENTS({
-      name: {
-        fr: depart
-      },
-      mnemonic: mnem && mnem,
-      description: {
-        fr: descript && descript
-      }
-    })
-
-    return newDepartment.save((e: any) => e ? Error("department_not_saved") : ("saved_successfully"))
-  }
-
-  fetchDepartments = async ({ user }: any) => await DEPARTMENTS.find();
 }

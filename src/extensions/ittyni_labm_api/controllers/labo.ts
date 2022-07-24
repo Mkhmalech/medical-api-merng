@@ -1,5 +1,5 @@
 import { LABO } from "../module/labo";
-import { Db } from "../../../common/db";
+import { Db } from "../../../gateway/db";
 
 import labdata from './laboData.json'
 

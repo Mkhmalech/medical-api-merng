@@ -1,5 +1,5 @@
 import { Schema, model, Document } from "mongoose";
-interface LABDEPARTMENT extends Document {
+interface DEPARTMENT extends Document {
     name: {
         fr: string
         en: string
@@ -22,7 +22,7 @@ const update: Schema = new Schema({
     updatedBy: String,
     updateAt: String,
 })
-const LabDepatmentSchema: Schema = new Schema({
+const DepatmentSchema: Schema = new Schema({
     name: {
         fr: { type: String, lowercase: true, trim: true },
         en: { type: String, lowercase: true, trim: true },
@@ -34,4 +34,4 @@ const LabDepatmentSchema: Schema = new Schema({
     },
     updates: [update]
 });
-export const DEPARTMENTS = model<LABDEPARTMENT>("DEPARTEMENTS", LabDepatmentSchema);
+export const DEPARTMENTS = model<DEPARTMENT>("DEPARTEMENTS", DepatmentSchema);

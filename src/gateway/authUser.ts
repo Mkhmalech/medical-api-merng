@@ -44,7 +44,7 @@ interface Req extends Request {
     accountName?: string
 }
 
-export const Auth = async (req: Req, res: Response, next: NextFunction) => {
+export const authUser = async (req: Req, res: Response, next: NextFunction) => {
 
     // instantiate user class
     const User = new Db(USER);
@@ -72,8 +72,8 @@ export const Auth = async (req: Req, res: Response, next: NextFunction) => {
                 req.machine = machine;
             }
         }
-    } catch (e) {
-        req.machine = { error: e }
+    } catch (error) {
+        req.machine = { error }
     }
 
     // get component data to serialize

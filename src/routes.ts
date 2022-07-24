@@ -10,23 +10,28 @@ import * as HandlerLABM from './extensions/ittyni_labm_api/index'
 /**
  * @NABM
  */
-import * as HandlerNABM from './extensions/ittyni_nabm_api/index'
+import * as HandlerTests from './extensions/ittyni_nabm_api/index'
 /**
  * @STAFF
  */
 import * as HandlerSTAFF from './extensions/ittyni_staff_api/index'
 /**
- * @STAFF
+ * @REFERRALS
  */
 import * as HandlerREFERRAL from './extensions/ittyni_referrals_api/index'
 /**
- * @STAFF
+ * @ORDERS
  */
 import * as HandlerORDERS from './extensions/ittyni_orders_api/index'
 /**
- * @STAFF
+ * @APPOINTMENTS
  */
 import * as HandlerAPPOINT from './extensions/ittyni_appointement_api/index'
+/**
+ * @NABM
+ */
+import * as HandlerNABM from './extensions/ittyni_nabm_service/index'
+
 import * as HandlerCabinet from './extensions/ittyni_cabinet_api'
 // import extensions handler
 import * as HandlerPHARMA from './extensions/ittyni_pharma_api'
@@ -46,6 +51,8 @@ import * as HandlerICD from './extensions/ittyni_icd_api'
 // component
 import * as HandlerComponent from './extensions/ittyni_module_api'
 // component
+import * as HandlerDepartment from './extensions/ittyni_department_service'
+// component
 import * as HandlerQU from './extensions/ittyni_queuing_api'
 
 const routes = ($: express.Router) => {
@@ -58,7 +65,11 @@ const routes = ($: express.Router) => {
         res.send("Hello From Server")
     });
 
-    $.all('/tests', HandlerNABM.LabTests)
+    $.all('/tests', HandlerTests.LabTests)
+    /********************************
+     * NABM SERVICE Api v0.1
+     ********************************/
+    $.all('/nabm', HandlerNABM.NABM)
 
     $.all('/users', HandlerUser.User);
 
@@ -66,16 +77,16 @@ const routes = ($: express.Router) => {
 
     // $.all('/search', HandlerSearch.Search)
 
-    $.all('/labos/staff', HandlerSTAFF.Staff);
+    $.all('/staff', HandlerSTAFF.Staff);
 
     // lab referrals module
-    $.all('/labos/referral', HandlerREFERRAL.LabReferrals);
+    $.all('/referral', HandlerREFERRAL.LabReferrals);
 
     // lab referrals module
-    $.all('/labos/order', HandlerORDERS.LabOrders);
+    $.all('/order', HandlerORDERS.LabOrders);
     
     // lab appointement module
-    $.all('/labos/appointement', HandlerAPPOINT.LabAppointement);
+    $.all('/appointement', HandlerAPPOINT.LabAppointement);
     /********************************
      * routes to cabinets
      ********************************/
@@ -86,7 +97,7 @@ const routes = ($: express.Router) => {
     /********************************
      * Account Manager Api v0.1
      ********************************/
-    $.all('/accountmanager', HandlerAM.AccountManger);
+    $.all('/account', HandlerAM.AccountManger);
 
     /********************************
      * Account Manager Api v0.1
@@ -118,9 +129,14 @@ const routes = ($: express.Router) => {
     $.all('/icd', HandlerICD.ICDManger);
     
     /********************************
-     * NGAP Manager Api v0.1
+     * COMPONENT Manager Api v0.1
      ********************************/
     $.all('/component', HandlerComponent.ComponentManger);
+
+    /********************************
+     * DEPARTMENT Manager Api v0.1
+     ********************************/
+    $.all('/department', HandlerDepartment.DepartmentManger);
 
     /********************************
      * NGAP Manager Api v0.1

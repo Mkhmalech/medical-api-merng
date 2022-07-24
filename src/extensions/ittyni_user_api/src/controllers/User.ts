@@ -2,10 +2,10 @@ import { USER } from "../module/users";
 import { LABO } from "../../../ittyni_labm_api/module/labo";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Db } from "../../../../common/db";
+import { Db } from "../../../../gateway/db";
 import { Roles } from "./roles";
 import { CABINET } from "../../../ittyni_cabinet_api/src/module/cabinets";
-import * as CUser from "../../../../common/supadmin";
+import * as CUser from "../../../../gateway/supadmin";
 import { componentResolver } from "../../../ittyni_module_api/src/gql/resolver";
 
 
