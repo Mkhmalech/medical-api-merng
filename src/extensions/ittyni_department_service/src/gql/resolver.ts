@@ -1,6 +1,9 @@
 import {default as depart} from '../controller/department'
 export const DepartmentResolver = {
-    departmentsList : depart.departmentsList
+    departmentsList : depart.departmentsList,
+    departmentDetailsByID : depart.departmentDetailsByID,
+    addDepartment : depart.addDepartment,
+    
 };
 
 // === Lab departements

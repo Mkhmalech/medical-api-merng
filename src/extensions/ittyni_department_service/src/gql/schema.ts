@@ -23,9 +23,10 @@ export const DepartmentSchema = buildSchema(`
 
     type DepartmentQuery {
         departmentsList : [Department]
+        departmentDetailsByID(${departmnetId}) : Department
     }
     type DepartmentMutation {
-        addDepartment : String
+        addDepartment(${nameFr},${mnemonic} ,${descriptionFr}) : String
     }
     schema {
         query : DepartmentQuery
