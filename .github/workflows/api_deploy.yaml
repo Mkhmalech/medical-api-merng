@@ -53,4 +53,4 @@ jobs:
           echo ${{ secrets.KUB_CONFIG}} | base64 --decode > ${HOME}/.kube/config
           cat ${HOME}/.kube/config
       - name : update ittyni production 
-        run : kubectl rollout restart deployment ittyni-api-prod
+        run : kubectl rollout restart deployment ittyni-dev-api
