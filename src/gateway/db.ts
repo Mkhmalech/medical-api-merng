@@ -90,7 +90,8 @@ export class Db {
             }
         ])
 
-        return (results)
+        if (results) return results
+        else return []
     }
     /**
      * find subdoc and return array of an property

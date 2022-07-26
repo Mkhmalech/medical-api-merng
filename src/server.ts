@@ -3,8 +3,8 @@ import routes from './routes';
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { uri } from "./config"
-import { Auth } from "./common/auth";
 import { WS } from "./ws";
+import { AuthAccount, authAdmin, authUser } from "./gateway";
 
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
@@ -29,7 +29,9 @@ app.use((req, res, next) => {
 });
 
 
-app.use(Auth);
+app.use('/*', authUser);
+app.use('/anbm', authAdmin);
+app.use('/account', AuthAccount);
 
 // WS(app);
 
@@ -37,5 +39,5 @@ app.use(Auth);
 app.use('/', routes(express.Router()));
 
 app.listen(8060, () => {
-    console.log(`application listening on port : ${8080}`)
+    console.log(`application listening on port : ${8060}`)
 })

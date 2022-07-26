@@ -1,4 +1,4 @@
-import { Db } from "../../../../common/db"
+import { Db } from "../../../../gateway/db"
 import { COMPONENTS } from "../module/component"
 
 export const create = async (args:any, {user}:any)=>{

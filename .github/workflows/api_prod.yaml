@@ -14,10 +14,12 @@ jobs:
         uses: actions/setup-node@v1
       - name: Install dependencies
         run: npm install
-      - name: Copy mogoose typing file
-        run: cp mongoose/index.d.ts node_modules/mongoose
-      - name: Build Production
-        run: npm start
+      - name: remove mongoose type file
+        run: rm node_modules/mongoose/index.d.ts
+      - name: move mogoose typing file
+        run: mv mongoose/index.txt node_modules/mongoose/index.d.ts
+      - name: Build Application
+        run: npm run tsc
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
@@ -51,4 +53,4 @@ jobs:
           echo ${{ secrets.KUB_CONFIG}} | base64 --decode > ${HOME}/.kube/config
           cat ${HOME}/.kube/config
       - name : update ittyni production 
-        run : kubectl rollout restart deployment ittyni-deployment
+        run : kubectl rollout restart deployment ittyni-api-prod

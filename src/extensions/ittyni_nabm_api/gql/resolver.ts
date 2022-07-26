@@ -43,8 +43,4 @@ export const LabTestsResolver = {
     modifyUpdateSpecimen : labTests.modifyUpdateSpecimen,
     modifyUpdateFinance : labTests.modifyUpdateFinance,
 
-    // laboratory departements 
-    addDepartment : labTests.addDepartment,
-    fetchDepartments : labTests.fetchDepartments,
-
 }
