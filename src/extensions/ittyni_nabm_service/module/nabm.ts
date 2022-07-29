@@ -4,12 +4,20 @@ import { Schema, model, Document } from "mongoose";
 
 // updates schema
 const Update = new Schema({
-  updatedAt: {type : String, default : new Date().toUTCString()},
+  updatedAt: { type: String, default: new Date().toUTCString() },
   updatedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
-  name: {type : String, required : true},
-  code: {type : String, required : true},
-  mnemonic : String,  
-  finance: [{type:Schema.Types.ObjectId, ref: "FINANCES"}],
+  name: String,
+  code: String,
+  mnemonic: String,
+  finance: [{
+    country: String,
+    currency: String,
+    description: String,
+    code: String,
+    symbol: String,
+    value: Number,
+    price: Number
+  }],
   description: {
     overview: { type: String },
     why: { type: String },
@@ -46,13 +54,13 @@ const Update = new Schema({
       temperature: { type: Number }
     }]
   },
-  methods : [{ type: Schema.Types.ObjectId, ref: 'ANALYTICS' }]
+  methods: [{ type: Schema.Types.ObjectId, ref: 'ANALYTICS' }]
 })
 interface INABMModel extends Document {
   reference?: any;
-  name: string;
+  name?: string;
   mnemonic?: string,
-  code: string
+  code?: string
   description?: any
   finance?: any[];
   departements?: any
@@ -69,10 +77,10 @@ interface INABMModel extends Document {
 
 
 const NABMSchema: Schema = new Schema({
-  name: {type : String, required : true},
-  code: {type : String, required : true},
-  mnemonic : String,  
-  finance: [{type:Schema.Types.ObjectId, ref: "FINANCES"}],
+  name: { type: String, required: true },
+  code: { type: String, required: true },
+  mnemonic: String,
+  finance: [{ type: Schema.Types.ObjectId, ref: "FINANCES" }],
   description: {
     overview: { type: String },
     why: { type: String },
@@ -115,7 +123,7 @@ const NABMSchema: Schema = new Schema({
       unit: { type: String, enum: ["minutes", "hours", "days"] }
     }
   },
-  methods : [{ type: Schema.Types.ObjectId, ref: 'ANALYTICS' }],
+  methods: [{ type: Schema.Types.ObjectId, ref: 'ANALYTICS' }],
   updates: [Update],
   views: Number
 });

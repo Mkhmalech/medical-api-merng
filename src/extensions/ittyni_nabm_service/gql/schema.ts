@@ -7,6 +7,7 @@ const CPT = `CPT : Int`
 const mnemonic = `mnemonic : String`
 const country = `country : String`
 const code = `code : String`
+const type = `type : String`
 const value = `value : Int`
 const price = `price : Int`
 const currency = `currency : String`
@@ -62,6 +63,7 @@ export const NabmSchema = buildSchema(`
     type nabmMutation {
         createProcedure(${name}!, ${code}!, ${mnemonic}) : String
         addMultipleProcedures : String
+        updateProcedureDetails(${procedureId}, ${code}, ${mnemonic}, ${type}) : Procedure
     }
     
     schema {
