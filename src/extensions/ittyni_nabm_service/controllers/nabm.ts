@@ -1,5 +1,4 @@
 import { NABM } from "../module/nabm";
-import { default as Biochimie } from './nabm_biochimie'
 export default {
   createProcedure: async ({ name, code, mnemonic }: any, req: any) => {
 
@@ -50,6 +49,24 @@ export default {
   },
 
   procedureDetailsById: async ({ _id }: any) =>
-    NABM.findOne({ _id: _id }).populate("departements", "name description mnemonic")
+    NABM.findOne({ _id: _id }).populate("departements", "name description mnemonic"),
 
+  updateProcedureDetails: ({ _id, code, mnemonic, type }: any, { user }: any) => {
+    return NABM.findOne({ _id: _id }, async (err: any, data: any) => {
+      if (err) return Error("NOT_SAVED");
+      if (!data) return Error("NO_FOUNDED");
+      data.updates.push({
+        mnemonic, [type]: true, updatedBy: user && user._id,
+        finance: [{
+          country: "morocco",
+          currency: "mad",
+          code: code,
+          symbol: "B"
+        }]
+      });
+    
+      let isSaved = await data.save();
+      return isSaved ? "SAVED" : Error("NOT_SAVED");
+    }).then(msg=>msg)
+  }
 }
