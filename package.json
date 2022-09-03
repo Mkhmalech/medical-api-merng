@@ -12,7 +12,7 @@
     "DEV": "nodemon -e ts -w ./src -x npm run watch:serve",
     "watch:serve": "npm run clean && tsc && node build/server.js",
     "PROD": "npm run clean && tsc && set ENV=PROD&&set PORT=8080",
-    "PROD:linux": "npm run cleam && tsc && ENV=PROD&&PORT=8080"
+    "PROD:linux": "npm run clean && tsc && ENV=PROD&&PORT=8080"
   },
   "keywords": [
     "express",
