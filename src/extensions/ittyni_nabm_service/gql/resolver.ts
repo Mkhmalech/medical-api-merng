@@ -6,5 +6,6 @@ export const NabmResolver = {
     addMultipleProcedures : nabm.addMultipleProcedures,
     procedureDetailsById : nabm.procedureDetailsById,
     updateProcedureDetails : nabm.updateProcedureDetails,
+    procedureUpdates : nabm.procedureUpdates,
 
 }
