@@ -5,4 +5,4 @@ COPY . .
 RUN npm uninstall bcrypt
 RUN npm install bcrypt
 # run application
-CMD ["node", "build/server.js"]
+CMD ["npm", "run", "PROD:linux"]
