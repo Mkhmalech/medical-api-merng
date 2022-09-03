@@ -41,5 +41,5 @@ console.log(API)
 app.use('/', routes(express.Router()));
 
 app.listen(PORT, () => {
-    console.log(`application listening on port : ${PORT}`)
+    console.log(`application listening on port : env: ${process.env.ENV} Port:${PORT}`)
 })
