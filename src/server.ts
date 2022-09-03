@@ -2,12 +2,14 @@ import express from "express";
 import routes from './routes';
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import { uri } from "./config"
-import { WS } from "./ws";
+import { DEV_API, PROD_API } from "./config"
+// import { WS } from "./ws";
 import { AuthAccount, authAdmin, authUser } from "./gateway";
 
-
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+// env variables
+const PORT = process.env.PORT || 8060;
+const API = process.env.ENV === "PROD"? PROD_API : DEV_API;
+mongoose.connect(API, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => { console.log('MongoDB connected...') })
     .catch((err: any) => console.log(err));
 
@@ -35,9 +37,9 @@ app.use('/account', AuthAccount);
 
 // WS(app);
 
-
+console.log(API)
 app.use('/', routes(express.Router()));
 
-app.listen(8080, () => {
-    console.log(`application listening on port : ${8080}`)
+app.listen(PORT, () => {
+    console.log(`application listening on port : ${PORT}`)
 })

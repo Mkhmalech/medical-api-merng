@@ -37,7 +37,7 @@ jobs:
           context: .
           file: dockerfileProd
           push: true
-          tags: khmammed/ittyni:api_prod
+          tags: khmammed/ittyni:api_dev
           labels: ${{ steps.meta.outputs.labels }}
 
   update_deployment_services:
