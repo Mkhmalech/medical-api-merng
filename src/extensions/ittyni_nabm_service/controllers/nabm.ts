@@ -70,7 +70,7 @@ export default {
     }).then(msg=>msg)
   },
   procedureUpdates: (args:any, req:any, context:any) =>{
-    console.log(context.fieldNodes[0].directives)
+    // console.log(context.fieldNodes[0].directives)
     console.log(req.body)
   }
     // NABM.find({}).populate('updates.updatedBy').select('updates').then(r=>r),
