@@ -49,50 +49,24 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     // instantiate user class
     const User = new Db(USER);
 
-    // extract auth
+    /************************************************************
+     * extract information about user account and the services **
+     ************************************************************/
     const { authorization, account, accounttype, component, machinetoken } = req.headers;
 
     const userAgent = req.headers['user-agent'];
 
     // get account name
+    const token = typeof authorization === 'string' && authorization.split(' ')[1];
     const accountId = typeof account === 'string' && account.split(' ')[1];
     const accountType = typeof accounttype === 'string' && accounttype.split(' ')[1];
     const componentId = typeof component === 'string' && component.split(' ')[1];
     // queuing system machine identification
     const machineToken = typeof machinetoken === 'string' && machinetoken.split(' ')[1];
-
-    try {
-        if (machineToken) {
-
-            const machine = jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
-
-            if (!machine) req.machine = { error: "TOKEN_NOT_VALID" }
-
-            else {
-                req.machine = machine;
-            }
-        }
-    } catch (error) {
-        req.machine = { error }
-    }
-
-    // get component data to serialize
-    if (componentId) {
-        req.component = {
-            _id: componentId
-        }
-    }
-    // get account data to serialize
-    if (accountId) {
-        req.account = {
-            _id: accountId,
-            type: accountType && accountType,
-        }
-    }
-    // get user data to serialze 
-    if (authorization) {
-
-        const token = authorization.split(' ')[1];
+    /*****************************************
+     * information about user connected ******
+     *****************************************/
+    if (token) {
 
         try {
 
@@ -136,6 +110,43 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     } else {
         req.message = 'NO_TOKEN_FOUNDED'
     }
+
+    /*****************************************
+     * information about service       *******
+     *****************************************/
+    console.log(`account : ${accountId}`)
+    console.log(`service : ${componentId}`)
+
+    try {
+        if (machineToken) {
+
+            const machine = jwt.verify(machineToken, 'iTTyniTokenApplicationByKHM@MEDv1.1');
+
+            if (!machine) req.machine = { error: "TOKEN_NOT_VALID" }
+
+            else {
+                req.machine = machine;
+            }
+        }
+    } catch (error) {
+        req.machine = { error }
+    }
+
+    // get component data to serialize
+    if (componentId) {
+        req.component = {
+            _id: componentId
+        }
+    }
+    // get account data to serialize
+    if (accountId) {
+        req.account = {
+            _id: accountId,
+            type: accountType && accountType,
+        }
+    }
+    // get user data to serialze 
+
 
     // continue
     next()
