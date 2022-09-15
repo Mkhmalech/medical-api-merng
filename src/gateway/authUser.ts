@@ -7,6 +7,7 @@ import { Supadmin } from "./supadmin";
 import { Db } from "./db";
 import { USER } from "../extensions/ittyni_user_api/index";
 import http from 'http'
+import { COMPONENTS } from "../extensions/ittyni_module_api/src/module/component";
 
 interface USER {
     _id: string
@@ -49,17 +50,37 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     // instantiate user class
     const User = new Db(USER);
 
-    // extract auth
+    /**
+     * collect information from request
+     * about account and service 
+     * and token 
+     */
     const { authorization, account, accounttype, component, machinetoken } = req.headers;
 
     const userAgent = req.headers['user-agent'];
 
     // get account name
-    const accountId = typeof account === 'string' && account.split(' ')[1];
+
     const accountType = typeof accounttype === 'string' && accounttype.split(' ')[1];
-    const componentId = typeof component === 'string' && component.split(' ')[1];
+
     // queuing system machine identification
     const machineToken = typeof machinetoken === 'string' && machinetoken.split(' ')[1];
+
+   
+
+    /**
+     * information about account enregistred
+     * 
+     */
+    const accountId = typeof account === 'string' && account.split(' ')[1];
+    console.log("account id : ", accountId)
+
+    /**
+     * get service data
+     */
+    const componentName = req.baseUrl.split('/')[1];
+    const componentId = await COMPONENTS.findOne({'name': componentName})
+    console.log("component id : ", componentId&&componentId._id)
 
     try {
         if (machineToken) {
@@ -76,7 +97,7 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
         req.machine = { error }
     }
 
-    // get component data to serialize
+    // get component data to serialize``
     if (componentId) {
         req.component = {
             _id: componentId
@@ -89,10 +110,15 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
             type: accountType && accountType,
         }
     }
-    // get user data to serialze 
-    if (authorization) {
-
-        const token = authorization.split(' ')[1];
+     /**
+     * information about token and user connected 
+     * get information about connected user and 
+     * statistic about location and pages visited 
+     * 
+     *
+     */
+    const token = authorization && authorization.split(' ')[1];
+    if (token) {
 
         try {
 
@@ -136,7 +162,22 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     } else {
         req.message = 'NO_TOKEN_FOUNDED'
     }
+    /**
+     * check permission to the service requested
+     * 
+     **/
+    
+    // first fill user information
 
-    // continue
+    // check if edit is from account 
+    
+    // if true get user permission 
+    // from account 
+
+
+    // else get permission from user 
+    // permissions
+
+    // then continue to service
     next()
 }

@@ -37,7 +37,6 @@ app.use('/account', AuthAccount);
 
 // WS(app);
 
-console.log(API)
 app.use('/', routes(express.Router()));
 
 app.listen(PORT, () => {
