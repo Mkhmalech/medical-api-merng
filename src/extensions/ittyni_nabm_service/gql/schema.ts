@@ -45,13 +45,21 @@ const department = `Departement {name: Name description:Description ${mnemonic} 
 
 
 export const NabmSchema = buildSchema(`
-    directive @supadmin(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+    directive @supadmin(if: Boolean!) on 
+    | QUERY
+    | MUTATION
+    | SUBSCRIPTION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | VARIABLE_DEFINITION
     type ${departmentName}
     type ${departmentDescription}
     type ${department}
     ${updatedBy}
     
-    type Procedure { 
+    type Procedure  { 
         ${name} ${code} ${mnemonic} ${procedureId}
         departements : [Departement]
         updates : [ProcedureUpdate]
@@ -62,7 +70,7 @@ export const NabmSchema = buildSchema(`
     }
 
     type nabmQuery {
-        proceduresList : [Procedure]
+        proceduresList : [Procedure]  
         procedureDetailsById(${procedureId}) : Procedure
         procedureUpdates: [Procedure] 
     }
