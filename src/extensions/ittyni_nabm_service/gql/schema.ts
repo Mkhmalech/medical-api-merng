@@ -72,7 +72,7 @@ export const NabmSchema = buildSchema(`
     type nabmQuery {
         proceduresList : [Procedure] 
         procedureDetailsById(${procedureId}) : Procedure
-        procedureUpdates: [Procedure] @supadmin(if: true) 
+        procedureUpdates: [Procedure] 
     }
    
     type nabmMutation {

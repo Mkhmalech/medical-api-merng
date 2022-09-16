@@ -50,6 +50,10 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     // instantiate user class
     const User = new Db(USER);
 
+    let connectedUser;
+
+    let connectedAccount;
+
     /************************************************************
      * extract information about user account and the services **
      ************************************************************/
@@ -78,7 +82,7 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
 
             else {
 
-                const connectedUser = await User.getDocById(_id);
+                connectedUser = await User.getDocById(_id);
 
                 req.user = {
 
@@ -117,10 +121,15 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
      *****************************************/
     const componentName = req.baseUrl.split('/')[1];
     const componentId = await COMPONENTS.findOne({ 'name': componentName })
-    console.log("component id : ", componentId && componentId._id)
+    
+    // if operation in the account 
+    // check variable accountId in request body
+    if(accountId){
+
+    }
 
    
-
+    //----->end of component infos
     try {
         if (machineToken) {
 
