@@ -38,10 +38,7 @@ interface Req extends Request {
     hasAuthorization?: (user: USER) => boolean
     message?: string
     roles?: any[]
-    permissions?: {
-        role: string
-        permissions: any[]
-    }
+    permissions?: any
     accountName?: string
 }
 
@@ -54,10 +51,12 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
 
     let connectedAccount;
 
+    let permissions;
+
     /************************************************************
      * extract information about user account and the services **
      ************************************************************/
-    const { authorization, account, accounttype, component, machinetoken } = req.headers;
+    const { authorization, account, accounttype, machinetoken } = req.headers;
 
     const userAgent = req.headers['user-agent'];
 
@@ -120,15 +119,22 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
      * information about service       *******
      *****************************************/
     const componentName = req.baseUrl.split('/')[1];
-    const componentId = await COMPONENTS.findOne({ 'name': componentName })
-    
-    // if operation in the account 
-    // check variable accountId in request body
-    if(accountId){
+    const component = await COMPONENTS.findOne({ 'name': componentName });
 
+    if (accountId) {
+        console.log(accountId)
+    } else {
+        permissions =
+            component
+            && connectedUser
+            && connectedUser.permissions
+            && connectedUser.permissions.find((p: any) => p.component.toString() === component._id.toString());
+        if (permissions) {
+            req.permissions = permissions;
+        }
     }
 
-   
+
     //----->end of component infos
     try {
         if (machineToken) {
@@ -143,20 +149,6 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
         }
     } catch (error) {
         req.machine = { error }
-    }
-
-    // get component data to serialize
-    if (componentId) {
-        req.component = {
-            _id: componentId
-        }
-    }
-    // get account data to serialize
-    if (accountId) {
-        req.account = {
-            _id: accountId,
-            type: accountType && accountType,
-        }
     }
 
 

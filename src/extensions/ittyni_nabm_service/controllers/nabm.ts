@@ -51,23 +51,26 @@ export default {
   procedureDetailsById: async ({ _id }: any) =>
     NABM.findOne({ _id: _id }).populate("departements", "name description mnemonic"),
 
-  updateProcedureDetails: ({ _id, code, mnemonic, type }: any, { user }: any) => {
-    return NABM.findOne({ _id: _id }, async (err: any, data: any) => {
-      if (err) return Error("NOT_SAVED");
-      if (!data) return Error("NO_FOUNDED");
-      data.updates.push({
-        mnemonic, [type]: true, updatedBy: user && user._id,
-        finance: [{
-          country: "morocco",
-          currency: "mad",
-          code: code,
-          symbol: "B"
-        }]
-      });
-    
-      let isSaved = await data.save();
-      return isSaved ? "SAVED" : Error("NOT_SAVED");
-    }).then(msg=>msg)
+  updateProcedureDetails: ({ _id, code, mnemonic, type }: any, { user, permissions }: any) => {
+    if(permissions&&permissions.canRead){
+      return NABM.findOne({ _id: _id }, async (err: any, data: any) => {
+        if (err) return Error("NOT_SAVED"); 
+        if (!data) return Error("NO_FOUNDED");
+        data.updates.push({
+          mnemonic, [type]: true, updatedBy: user && user._id,
+          finance: [{
+            country: "morocco",
+            currency: "mad",
+            code: code,
+            symbol: "B"
+          }]
+        });
+      
+        let isSaved = await data.save();
+        return isSaved ? "SAVED" : Error("NOT_SAVED");
+      }).then(msg=>msg)
+    }
+    else return Error("NO_PERMISSION")
   },
   procedureUpdates: (args:any, req:any, context:any) =>{
     // console.log(context.fieldNodes[0].directives)
