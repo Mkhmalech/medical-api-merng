@@ -22,7 +22,8 @@ export const ComponentSchema = buildSchema(`
     }
 
     type COMPONENTQ {
-        getAllComponents : [component]
+        getAllComponents : [component],
+        readActiveComponents : [component],
     }
     type COMPONENTM {
         createComponent(${componentName},${componentIco},${componentDescrpt}) : String
