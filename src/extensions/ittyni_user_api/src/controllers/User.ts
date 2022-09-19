@@ -483,6 +483,15 @@ class User extends Roles {
     }
     else return []
    }
+  /**
+   * user activate extension
+   * with id 
+   */
+  activateExtension = async (args: any, {user, message}: any)=>{
+    const cp = await USER.findOne({'permissions.component': args._id}).select('permissions');
+    if(cp) return Error('ALREADY_ACTIVATED');
+    
+  }
 }
 
 export const userFunc = new User();
