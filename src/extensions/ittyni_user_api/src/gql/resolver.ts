@@ -40,6 +40,7 @@ export const userResolver = {
   upgradeToUser: user.upgradeToUser,
   linkUserToAccount: user.linkUserToAccount,
   signupWithGoogle: user.signupWithGoogle,
+  readUserExtensions: user.readUserExtensions,
 
   // roles and permissions 
   addPermissions : user.addPermissions,

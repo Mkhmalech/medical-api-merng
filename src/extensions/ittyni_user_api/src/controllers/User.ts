@@ -461,6 +461,28 @@ class User extends Roles {
 
     return res.map((r:any)=>({name : r.labo.account.name}))
   }
+
+  /**
+   * load component of the user
+   * to be displayed in the 
+   * sidebar
+   */
+   readUserExtensions = async (args: any, {user, message}: any) =>{
+    // if(message) return Error(message);
+    const cp = await USER.findOne({_id: user._id})
+      .populate('permissions.component')
+      .select('permissions.component')
+
+    if(cp&&cp.permissions.length>0){
+      return cp.permissions.map(
+        (p:any)=>(
+          { 
+            name: p.component.name, 
+            _id: p.component._id
+          }))
+    }
+    else return []
+   }
 }
 
 export const userFunc = new User();

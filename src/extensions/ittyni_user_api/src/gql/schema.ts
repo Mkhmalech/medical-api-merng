@@ -162,6 +162,10 @@ export const UserSchema = buildSchema(`
         ConfirmPassword : String!
     }
 
+    type Extension {
+        _id : ID!
+        name : String!
+    }
 
     input inputLinkAccount { ${linkAccount} }
 
@@ -177,6 +181,8 @@ export const UserSchema = buildSchema(`
         listAllWithRole : [UserWithRole]
 
         subscribedAccounts : [Account]
+
+        readUserExtensions : [Extension]
     }
 
     type RootMutation {
