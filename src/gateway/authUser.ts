@@ -136,7 +136,6 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
         }
     }
 
-
     //----->end of component infos
     try {
         if (machineToken) {
