@@ -461,6 +461,37 @@ class User extends Roles {
 
     return res.map((r:any)=>({name : r.labo.account.name}))
   }
+
+  /**
+   * load component of the user
+   * to be displayed in the 
+   * sidebar
+   */
+   readUserExtensions = async (args: any, {user, message}: any) =>{
+    // if(message) return Error(message);
+    const cp = await USER.findOne({_id: user._id})
+      .populate('permissions.component')
+      .select('permissions.component')
+
+    if(cp&&cp.permissions.length>0){
+      return cp.permissions.map(
+        (p:any)=>(
+          { 
+            name: p.component.name, 
+            _id: p.component._id
+          }))
+    }
+    else return []
+   }
+  /**
+   * user activate extension
+   * with id 
+   */
+  activateExtension = async (args: any, {user, message}: any)=>{
+    const cp = await USER.findOne({'permissions.component': args._id}).select('permissions');
+    if(cp) return Error('ALREADY_ACTIVATED');
+    
+  }
 }
 
 export const userFunc = new User();

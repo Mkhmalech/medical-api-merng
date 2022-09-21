@@ -8,7 +8,8 @@ const permission = new Schema({
 interface IComponent {
     ico : string
     name : String,
-    description : String
+    description : String,
+    status : 'active' | 'inactive' | 'deleted'
 }
 
 const Component = new Schema({
@@ -17,7 +18,8 @@ const Component = new Schema({
     description : String,
     createdBy : { type: Schema.Types.ObjectId, ref: 'USER' },
     createdAt : String,
-    version : {type : String, default : '1.0.0'}
+    version : {type : String, default : '1.0.0'},
+    status : String
 })
 
 export const COMPONENTS = model<componentModel>('COMPONENTS', Component)
