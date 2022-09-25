@@ -43,9 +43,11 @@ const Update = new Schema({
     spectialTime: [String]
   },
   specimen: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'SAMPLES' }],
-    vial: [{ type: Schema.Types.ObjectId, ref: 'VIALS' }],
-    anticoagulant: [{ type: Schema.Types.ObjectId, ref: 'ANTICOAGULANTS' }],
+    // type: [{ type: Schema.Types.ObjectId, ref: 'SAMPLES' }],
+    // vial: [{ type: Schema.Types.ObjectId, ref: 'VIALS' }],
+    nature : [String],
+    tube: [String],
+    anticoagulant: [String],
     numberoftube: { type: Number },
     volumemin: { type: Number },
     location: { type: String },
@@ -107,7 +109,7 @@ const NABMSchema: Schema = new Schema({
   },
   specimen: {
     nature: { type: [String] },
-    tubecolor: { type: [String] },
+    tube: { type: [String] },
     anticoagulant: { type: [String] },
     numberoftube: { type: Number },
     volumemin: { type: Number },

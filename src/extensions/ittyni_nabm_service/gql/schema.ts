@@ -13,7 +13,7 @@ const price = `price : Int`
 const currency = `currency : String`
 const financeDesc = `description : String`
 const sampleType = `nature : [String]`
-const tubeColor = `tubecolor : [String]`
+const tubeColor = `tube : [String]`
 const anticoagulant = `anticoagulant : [String]`
 const tubeNumber = `numberoftube : Int`
 const volumeMin = `volumemin : Int`
@@ -40,28 +40,29 @@ const departmentDescriptionFr = `fr : String `
 const departmentDescription = `Description {fr : String}`
 const depDescriptionEn = `en : String `
 const department = `Departement {name: Name description:Description ${mnemonic} ${departmentId}}`
-// test sample
+// test samplespecimen
+const specimen = `Specimen {
+    ${sampleType}
+    ${tubeColor}
+    ${anticoagulant}
+    ${tubeNumber}
+    ${volumeMin}
+}`
 
 
 
 export const NabmSchema = buildSchema(`
-    directive @supadmin(if: Boolean!) on 
-    | QUERY
-    | MUTATION
-    | SUBSCRIPTION
-    | FIELD
-    | FRAGMENT_DEFINITION
-    | FRAGMENT_SPREAD
-    | INLINE_FRAGMENT
-    | VARIABLE_DEFINITION
+  
     type ${departmentName}
     type ${departmentDescription}
     type ${department}
+    type ${specimen}
     ${updatedBy}
     
     type Procedure  { 
         ${name} ${code} ${mnemonic} ${procedureId}
         departements : [Departement]
+        specimen: Specimen
         updates : [ProcedureUpdate]
     }
     type ProcedureUpdate {
