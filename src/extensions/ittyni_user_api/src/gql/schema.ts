@@ -199,6 +199,7 @@ export const UserSchema = buildSchema(`
         getUserDetails(id : String) : UserWithRole
         linkUserToAccount(${userId}, ${accountId}, ${accoutType} ) : String
         signupWithGoogle(email:String, fname:String, lname:String, picture:String) : GGUser
+        activateExtension(_id: ID!) : [Extension]
     }
     
     schema {

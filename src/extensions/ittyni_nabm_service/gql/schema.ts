@@ -2,22 +2,29 @@ import { buildSchema } from "graphql";
 
 // variables
 const procedureId = `_id: ID`
+const updatesId = `_id: ID`
 const name = `name : String`;
-const CPT = `CPT : Int`
 const mnemonic = `mnemonic : String`
-const country = `country : String`
-const code = `code : String`
 const type = `type : String`
+const unit = `unit: String`
+const formula=`formula: String`
+const component = `componentId: ID`
+// finance
+const country = `country : String`
+const symbol = `symbol : String`
+const code = `code : String`
 const value = `value : Int`
 const price = `price : Int`
 const currency = `currency : String`
 const financeDesc = `description : String`
+// preanalytics
 const sampleType = `nature : [String]`
-const tubeColor = `tubecolor : [String]`
+const tubeColor = `tube : [String]`
 const anticoagulant = `anticoagulant : [String]`
 const tubeNumber = `numberoftube : Int`
 const volumeMin = `volumemin : Int`
 const updatedAt = `updatedAt : String`
+// user updates
 const userId = `_id : ID `
 const fname = `firstName : String `
 const lname = `lastName : String `
@@ -28,8 +35,8 @@ const descOverview = `overview: String`
 const descWhy = `why : String `
 const descHow = `how : String `
 const descWhat = `what : String`
-const when = `when: String `
-const testDescription = `type Description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${when}}` 
+const descWhen = `when: String `
+const testDescription = `Description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${descWhen}}` 
 // lab departments variable
 const departmentId = `_id : ID`
 const departmentNameFr = `fr : String`
@@ -40,45 +47,67 @@ const departmentDescriptionFr = `fr : String `
 const departmentDescription = `Description {fr : String}`
 const depDescriptionEn = `en : String `
 const department = `Departement {name: Name description:Description ${mnemonic} ${departmentId}}`
-// test sample
+// test samplespecimen
+const specimen = `Specimen {
+    ${sampleType}
+    ${tubeColor}
+    ${anticoagulant}
+    ${tubeNumber}
+    ${volumeMin}
+}`
 
+// finance
+const finance = `Finance { ${country}, ${symbol}, ${code}, ${price}, ${currency} }`
 
 
 export const NabmSchema = buildSchema(`
-    directive @supadmin(if: Boolean!) on 
-    | QUERY
-    | MUTATION
-    | SUBSCRIPTION
-    | FIELD
-    | FRAGMENT_DEFINITION
-    | FRAGMENT_SPREAD
-    | INLINE_FRAGMENT
-    | VARIABLE_DEFINITION
+  
     type ${departmentName}
     type ${departmentDescription}
     type ${department}
+    type ${specimen}
     ${updatedBy}
-    
+    type ${finance}
     type Procedure  { 
-        ${name} ${code} ${mnemonic} ${procedureId}
+        ${name} ${code} ${mnemonic} 
+        ${procedureId} ${type} ${unit}
         departements : [Departement]
+        specimen: Specimen
+        finance: [Finance]
         updates : [ProcedureUpdate]
     }
     type ProcedureUpdate {
         ${name} ${code} ${mnemonic} ${procedureId} ${updatedAt}
+        departements : [Departement]
+        specimen: Specimen
+        finance: [Finance]
         updatedBy : User
     }
 
     type nabmQuery {
         proceduresList : [Procedure] 
         procedureDetailsById(${procedureId}) : Procedure
-        procedureUpdates: [Procedure] 
+        procedureUpdates(${procedureId}): [ProcedureUpdate]
+        nabmUpdateDetailsById(${updatesId}): ProcedureUpdate
+        userNabmList(limit: Int, skip: Int) : [Procedure]
     }
+
+    input _${finance}
+    input _${specimen}
+    input _${testDescription}
    
     type nabmMutation {
         createProcedure(${name}!, ${code}!, ${mnemonic}) : String
         addMultipleProcedures : String
-        updateProcedureDetails(${procedureId}, ${code}, ${mnemonic}, ${type}) : Procedure
+        updateProcedureDetails(
+            ${procedureId}!, ${mnemonic},
+            type: String, unit: String,
+            finance: _Finance,
+            specimen: _Specimen,
+            description: _Description
+            departements: [String],
+            components: [String]
+        ) : Procedure
     }
     
     schema {
