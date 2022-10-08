@@ -120,11 +120,10 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
      *****************************************/
     const componentName = req.baseUrl.split('/')[1];
     const component = await COMPONENTS.findOne({ 'name': componentName });
-
     // if component continue if not req.message "component_not_installed"
 
     if (accountId) {
-        console.log(accountId)
+        console.log("accountId", accountId)
     } else {
         permissions =
             component
@@ -151,8 +150,6 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     } catch (error) {
         req.machine = { error }
     }
-
-
 
     next()
 }
