@@ -50,12 +50,11 @@ export default {
     return "FINISHED"
   },
 
-  procedureDetailsById: async ({ _id }: any) =>
-    {
-      let r = await NABM.findOne({ _id: _id }).populate("departements", "_id name description mnemonic")
-        .populate("updates.updatedBy updates.departements");
-      return r;
-    },
+  procedureDetailsById: async ({ _id }: any) => {
+    let r = await NABM.findOne({ _id: _id }).populate("departements", "_id name description mnemonic")
+      .populate("updates.updatedBy updates.departements");
+    return r;
+  },
   /**
    * mutation methods
    */
@@ -108,29 +107,28 @@ export default {
     // }
 
     // else {
-      return NABM.findOne({ _id: args._id }, async (err: any, data: any) => {
-        if (err) return Error("NOT_SAVED");
-        if (!data) return Error("NO_FOUNDED");
-        filteredData.finance = [{ ...filteredData.finance }]
-        filteredData.updatedBy = user._id;
-        delete filteredData._id;
-        data.updates.push(filteredData);
+    return NABM.findOne({ _id: args._id }, async (err: any, data: any) => {
+      if (err) return Error("NOT_SAVED");
+      if (!data) return Error("NO_FOUNDED");
+      filteredData.finance = [{ ...filteredData.finance }]
+      filteredData.updatedBy = user._id;
+      delete filteredData._id;
+      data.updates.push(filteredData);
 
-        let isSaved = await data.save();
-        return isSaved ? "SAVED" : Error("NOT_SAVED");
-      }).then(msg => msg)
+      let isSaved = await data.save();
+      return isSaved ? "SAVED" : Error("NOT_SAVED");
+    }).then(msg => msg)
     // }
   },
   procedureUpdates: async (args: any, req: any, context: any) => {
-    // console.log(context.fieldNodes[0].directives)
-    let nabm = await NABM.findOne({_id: args._id}).populate('updates.departements updates.updatedBy updates.components');
-    return nabm? nabm.updates: Error('NO_TEST_FOUNDED')
+    let nabm = await NABM.findOne({ _id: args._id }).populate('updates.departements updates.updatedBy updates.components');
+    return nabm ? nabm.updates : Error('NO_TEST_FOUNDED')
   },
-  nabmUpdateDetailsById: async ({_id}:any, {user, permissions, message}: any)=>{
-    if(message) return Error(message);
-    if(permissions&&permissions.canRead){
-      let nabm = await NABM.findOne({'updates._id': _id}).select('updates')
-      return nabm?nabm.updates.find((u:any)=>u._id===_id): Error('NO_TEST_FOUNDED')
+  nabmUpdateDetailsById: async ({ _id }: any, { user, permissions, message }: any) => {
+    if (message) return Error(message);
+    if (permissions && permissions.canRead) {
+      let nabm = await NABM.findOne({ 'updates._id': _id }).select('updates')
+      return nabm ? nabm.updates.find((u: any) => u._id === _id) : Error('NO_TEST_FOUNDED')
     }
     else return Error('NO_PERMISSION')
   },
@@ -142,5 +140,55 @@ export default {
     else return Error("NO_PERMISSION")
   },
   // NABM.find({}).populate('updates.updatedBy').select('updates').then(r=>r),
+  mergeUpdatesWithNabm: async (args: any, req: any) => {
+    let merge:any = {};
+    let r = await NABM.findOne({'updates._id': args._id},{'updates.$': 1});
+    let update = r&&r.updates[0];
+    if(!!update.specimen.nature.length) merge = {...merge, specimen : {...merge.specimen, nature : update.specimen.nature}}; 
+    if(!!update.specimen.tube.length) merge = {...merge, specimen : {...merge.specimen, tube : update.specimen.tube}}; 
+    if(!!update.specimen.anticoagulant.length) merge = {...merge, specimen : {...merge.specimen, anticoagulant : update.specimen.anticoagulant}};
+    if(update.specimen.numberoftube) merge = {...merge, specimen : {...merge.specimen, numberoftube : update.specimen.numberoftube}};
+    if(update.specimen.volumemin) merge = {...merge, specimen : {...merge.specimen, volumemin : update.specimen.volumemin}};
+    if(!!update.departements.length) merge = {...merge, departements : update.departements };
+    if(!!update.finance.length) merge = {...merge, finance : update.finance };
+
+    NABM.findOne({'updates._id': args._id},(e:Error, r:any)=>{
+      if(e) return Error(e.message);
+      if(!r) return Error("NO_TEST_FOUNDED");
+      r.updates[r.updates.findIndex((p:any)=>p._id.toString()===args._id.toString())].status = 'merged'
+      Object.assign(r, merge);
+
+      return r.save();
+    })
+  },
+
+  upvoteUpdate: async(args:any, req:any)=>{
+
+  },
+
+  mergeNabmClassification: async () => {
+
+  },
+
+  mergeNabmReference: async (args: any, { user, permissions, message }: any) => { },
+  mergeNabmSample: async (args: any, { user, permissions, message }: any) => {
+    let specimen : any={};
+    if(!!args.nature.length) specimen.nature = args.nature; 
+    if(!!args.tube.length) specimen.tube = args.tube; 
+    if(!!args.anticoagulant.length) specimen.anticoagulant = args.anticoagulant; 
+    if(!args.numberoftube) specimen.numberoftube = args.numberoftube; 
+    if(!args.volumemin) specimen.volumemin = args.volumemin;
+
+    if(!!Object.keys(specimen).length){
+      NABM.findOne({_id: args._id},(e:Error, r:any)=>{
+        if(e) return Error(e.message);
+        if(!r) return Error("NO_NABM_FOUNDED");
+        r.specimen= specimen;
+
+        return r.save()
+      }).then((r:any)=>r)
+    }
+  },
+  mergeNabmFinance: async (args: any, { user, permissions, message }: any) => { }
 
 }

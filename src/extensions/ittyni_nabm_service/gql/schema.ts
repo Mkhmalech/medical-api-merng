@@ -2,7 +2,7 @@ import { buildSchema } from "graphql";
 
 // variables
 const procedureId = `_id: ID`
-const updatesId = `_id: ID`
+const updateId = `_id: ID`
 const name = `name : String`;
 const mnemonic = `mnemonic : String`
 const type = `type : String`
@@ -76,6 +76,7 @@ export const NabmSchema = buildSchema(`
         finance: [Finance]
         updates : [ProcedureUpdate]
     }
+
     type ProcedureUpdate {
         ${name} ${code} ${mnemonic} ${procedureId} ${updatedAt}
         departements : [Departement]
@@ -88,7 +89,7 @@ export const NabmSchema = buildSchema(`
         proceduresList : [Procedure] 
         procedureDetailsById(${procedureId}) : Procedure
         procedureUpdates(${procedureId}): [ProcedureUpdate]
-        nabmUpdateDetailsById(${updatesId}): ProcedureUpdate
+        nabmUpdateDetailsById(${updateId}): ProcedureUpdate
         userNabmList(limit: Int, skip: Int) : [Procedure]
     }
 
@@ -108,6 +109,7 @@ export const NabmSchema = buildSchema(`
             departements: [String],
             components: [String]
         ) : Procedure
+        mergeUpdatesWithNabm(${updateId}) : Procedure
     }
     
     schema {

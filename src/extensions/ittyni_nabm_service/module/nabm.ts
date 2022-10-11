@@ -6,6 +6,7 @@ import { Schema, model, Document } from "mongoose";
 const Update = new Schema({
   updatedAt: { type: String, default: ()=>new Date().toUTCString() },
   updatedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
+  status: {type: String, default: 'created'},
   name: { type: String },
   code: { type: String },
   mnemonic: String,
