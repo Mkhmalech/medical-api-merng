@@ -6,6 +6,7 @@ import { Schema, model, Document } from "mongoose";
 const Update = new Schema({
   updatedAt: { type: String, default: ()=>new Date().toUTCString() },
   updatedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
+  status: {type: String, default: 'created'},
   name: { type: String },
   code: { type: String },
   mnemonic: String,
@@ -29,6 +30,13 @@ const Update = new Schema({
   components: [{ type: Schema.Types.ObjectId, ref: 'NABMS' }],
   type: String,
   unit: String,
+  formula: [{
+    step: Number,
+    _id: { type: Schema.Types.ObjectId, ref: 'NABM' },
+    op: String,
+    isOp: Boolean,
+    isParam: Boolean
+  }],
   panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
   structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },
   preparation: {
@@ -108,12 +116,13 @@ const NABMSchema: Schema = new Schema({
   components: [{ type: Schema.Types.ObjectId, ref: 'NABM' }],
   type: String,
   unit: String,
-  calcul: [{
+  formula: [{
     step: Number,
     _id: { type: Schema.Types.ObjectId, ref: 'NABM' },
     op: String,
     isOp: Boolean,
-    isParam: Boolean
+    isParam: Boolean,
+    unit: String
   }],
   panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
   structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },

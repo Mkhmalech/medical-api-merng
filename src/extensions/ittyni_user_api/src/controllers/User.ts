@@ -470,15 +470,20 @@ class User extends Roles {
   readUserExtensions = async (args: any, { user, message }: any) => {
     if (message) return Error(message);
     const cp = await USER.findOne({ _id: user._id })
-      .populate('permissions.component')
-      .select('permissions.component')
+      .populate('permissions.component','_id name')
+      .select('permissions')
 
     if (cp && cp.permissions.length > 0) {
       return cp.permissions.map(
         (p: any) => (
           {
             name: p.component.name,
-            _id: p.component._id
+            _id: p.component._id,
+            canRead: p.canRead,
+            canCreate: p.canCreate,
+            canUpdate: p.canUpdate,
+            canDelete: p.canDelete,
+            canPublish: p.canPublish
           }))
     }
     else return []
