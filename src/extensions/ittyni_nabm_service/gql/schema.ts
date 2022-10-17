@@ -36,7 +36,7 @@ const descWhy = `why : String `
 const descHow = `how : String `
 const descWhat = `what : String`
 const descWhen = `when: String `
-const testDescription = `Description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${descWhen}}` 
+const nabmDescription = `NabmDescription {${descOverview} ${descWhy} ${descHow} ${descWhat} ${descWhen}}` 
 // lab departments variable
 const departmentId = `_id : ID`
 const departmentNameFr = `fr : String`
@@ -68,6 +68,7 @@ export const NabmSchema = buildSchema(`
     type ${specimen}
     ${updatedBy}
     type ${finance}
+    type ${nabmDescription}
     type Procedure  { 
         ${name} ${code} ${mnemonic} 
         ${procedureId} ${type} ${unit}
@@ -75,10 +76,13 @@ export const NabmSchema = buildSchema(`
         specimen: Specimen
         finance: [Finance]
         updates : [ProcedureUpdate]
+        description: NabmDescription
     }
 
     type ProcedureUpdate {
-        ${name} ${code} ${mnemonic} ${procedureId} ${updatedAt}
+        ${name} ${code} ${mnemonic} 
+        ${procedureId} ${updatedAt}
+        ${type} ${unit}
         departements : [Departement]
         specimen: Specimen
         finance: [Finance]
@@ -95,7 +99,7 @@ export const NabmSchema = buildSchema(`
 
     input _${finance}
     input _${specimen}
-    input _${testDescription}
+    input _${nabmDescription}
    
     type nabmMutation {
         createProcedure(${name}!, ${code}!, ${mnemonic}) : String
@@ -105,7 +109,7 @@ export const NabmSchema = buildSchema(`
             type: String, unit: String,
             finance: _Finance,
             specimen: _Specimen,
-            description: _Description
+            description: _NabmDescription
             departements: [String],
             components: [String]
         ) : Procedure

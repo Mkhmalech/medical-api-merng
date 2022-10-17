@@ -110,7 +110,7 @@ export default {
     return NABM.findOne({ _id: args._id }, async (err: any, data: any) => {
       if (err) return Error("NOT_SAVED");
       if (!data) return Error("NO_FOUNDED");
-      filteredData.finance = [{ ...filteredData.finance }]
+      if(filteredData.finance) filteredData.finance = [{...filteredData.finance}]
       filteredData.updatedBy = user._id;
       delete filteredData._id;
       data.updates.push(filteredData);
@@ -144,6 +144,11 @@ export default {
     let merge:any = {};
     let r = await NABM.findOne({'updates._id': args._id},{'updates.$': 1});
     let update = r&&r.updates[0];
+    if(update.mnemonic) merge.mnemonic = update.mnemonic;
+    if(update.unit) merge.unit = update.unit;
+    if(update.type) merge.type = update.type;
+    if(!!update.components) merge.components = update.components;
+    if(update.formula) merge.formula = update.formula;
     if(!!update.specimen.nature.length) merge = {...merge, specimen : {...merge.specimen, nature : update.specimen.nature}}; 
     if(!!update.specimen.tube.length) merge = {...merge, specimen : {...merge.specimen, tube : update.specimen.tube}}; 
     if(!!update.specimen.anticoagulant.length) merge = {...merge, specimen : {...merge.specimen, anticoagulant : update.specimen.anticoagulant}};

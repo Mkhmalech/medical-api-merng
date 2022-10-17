@@ -57,10 +57,10 @@ const UserWithRole = `
 /**
  * account
  */
- const accountId = `accountId:ID`
- const accoutType = `accountType: String`
- const accountName = `name: String`
- const Account = `type Account {${accountName}}`
+const accountId = `accountId:ID`
+const accoutType = `accountType: String`
+const accountName = `name: String`
+const Account = `type Account {${accountName}}`
 
 const linkAccount = `
     id : String
@@ -164,7 +164,12 @@ export const UserSchema = buildSchema(`
 
     type Extension {
         _id : ID!
-        name : String!
+        name : String!        
+        canRead : Boolean
+        canCreate : Boolean
+        canUpdate : Boolean
+        canDelete : Boolean
+        canPublish : Boolean
     }
 
     input inputLinkAccount { ${linkAccount} }
