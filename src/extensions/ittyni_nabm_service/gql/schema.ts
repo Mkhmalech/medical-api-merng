@@ -7,8 +7,16 @@ const name = `name : String`;
 const mnemonic = `mnemonic : String`
 const type = `type : String`
 const unit = `unit: String`
-const formula=`formula: String`
 const component = `componentId: ID`
+// test calculation
+const formula=`Formula { 
+    isOp: Boolean 
+    isParam: Boolean, 
+    ${procedureId}
+    op:String, 
+    step: Int, 
+    ${unit}
+}`
 // finance
 const country = `country : String`
 const symbol = `symbol : String`
@@ -69,9 +77,11 @@ export const NabmSchema = buildSchema(`
     ${updatedBy}
     type ${finance}
     type ${nabmDescription}
+    type ${formula}
     type Procedure  { 
         ${name} ${code} ${mnemonic} 
         ${procedureId} ${type} ${unit}
+        formula: [Formula]
         departements : [Departement]
         specimen: Specimen
         finance: [Finance]
@@ -82,7 +92,8 @@ export const NabmSchema = buildSchema(`
     type ProcedureUpdate {
         ${name} ${code} ${mnemonic} 
         ${procedureId} ${updatedAt}
-        ${type} ${unit}
+        ${type} ${unit} 
+        formula: [Formula]
         departements : [Departement]
         specimen: Specimen
         finance: [Finance]
@@ -100,12 +111,14 @@ export const NabmSchema = buildSchema(`
     input _${finance}
     input _${specimen}
     input _${nabmDescription}
+    input _${formula}
    
     type nabmMutation {
         createProcedure(${name}!, ${code}!, ${mnemonic}) : String
         addMultipleProcedures : String
         updateProcedureDetails(
             ${procedureId}!, ${mnemonic},
+            formula:[_Formula],
             type: String, unit: String,
             finance: _Finance,
             specimen: _Specimen,
