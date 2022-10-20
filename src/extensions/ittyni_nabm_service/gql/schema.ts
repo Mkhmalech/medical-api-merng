@@ -12,7 +12,7 @@ const component = `componentId: ID`
 const formula=`Formula { 
     isOp: Boolean 
     isParam: Boolean, 
-    ${procedureId}
+    nabm: ID
     op:String, 
     step: Int, 
     ${unit}
@@ -77,7 +77,14 @@ export const NabmSchema = buildSchema(`
     ${updatedBy}
     type ${finance}
     type ${nabmDescription}
-    type ${formula}
+    type Formula { 
+        isOp: Boolean 
+        isParam: Boolean, 
+        nabm: Procedure
+        op:String, 
+        step: Int, 
+        ${unit}
+    }
     type Procedure  { 
         ${name} ${code} ${mnemonic} 
         ${procedureId} ${type} ${unit}

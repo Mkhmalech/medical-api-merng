@@ -52,7 +52,7 @@ export default {
 
   procedureDetailsById: async ({ _id }: any) => {
     let r = await NABM.findOne({ _id: _id }).populate("departements", "_id name description mnemonic")
-      .populate("updates.updatedBy updates.departements");
+      .populate("updates.updatedBy updates.departements updates.formula.nabm");
     return r;
   },
   /**
