@@ -32,7 +32,7 @@ const Update = new Schema({
   unit: String,
   formula: [{
     step: Number,
-    _id: { type: Schema.Types.ObjectId, ref: 'NABM' },
+    nabm: { type: Schema.Types.ObjectId, ref: 'NABM' },
     op: String,
     isOp: Boolean,
     isParam: Boolean
@@ -118,7 +118,7 @@ const NABMSchema: Schema = new Schema({
   unit: String,
   formula: [{
     step: Number,
-    _id: { type: Schema.Types.ObjectId, ref: 'NABM' },
+    nabm: { type: Schema.Types.ObjectId, ref: 'NABM' },
     op: String,
     isOp: Boolean,
     isParam: Boolean,
