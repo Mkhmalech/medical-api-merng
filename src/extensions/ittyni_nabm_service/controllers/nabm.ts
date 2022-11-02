@@ -1,5 +1,6 @@
 import { NABM } from "../module/nabm";
 import { clearEmpties } from "./clearEmpties";
+
 export default {
   createProcedure: async ({ name, code, mnemonic }: any, req: any) => {
 
@@ -138,6 +139,27 @@ export default {
       return NABM.find({}).limit(limit).skip(skip).populate('departements updates.updatedBy');
     }
     else return Error("NO_PERMISSION")
+  },
+  userNabmListOnScroll :async ({ limit, skip }: any, {permissions, message, user}: any) => {
+   const result = await NABM.aggregate([{$match:{}}])
+    .sort({"name": 1})
+    .facet({
+      metadata : [
+        {$count : 'total'},
+        {$addFields : { 'showed': limit+skip}}
+      ],
+      data: [
+        {'$limit': limit+skip }, 
+        {'$skip': skip   }
+      ]
+    })
+    .project({
+      procedures : '$data',
+      total : {$first : "$metadata.total"},
+      rest : {$subtract: [{$first: "$metadata.total"}, {$first: "$metadata.showed"}]},
+      showed: {$first: "$metadata.showed"}
+    })
+   return(result[0])
   },
   // NABM.find({}).populate('updates.updatedBy').select('updates').then(r=>r),
   mergeUpdatesWithNabm: async (args: any, req: any) => {

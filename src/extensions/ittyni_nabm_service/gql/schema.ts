@@ -107,12 +107,19 @@ export const NabmSchema = buildSchema(`
         updatedBy : User
     }
 
+    type OnScrollNabmList {
+      procedures : [Procedure]
+      total : Int 
+      rest : Int
+      showed: Int
+    }
     type nabmQuery {
         proceduresList : [Procedure] 
         procedureDetailsById(${procedureId}) : Procedure
         procedureUpdates(${procedureId}): [ProcedureUpdate]
         nabmUpdateDetailsById(${updateId}): ProcedureUpdate
         userNabmList(limit: Int, skip: Int) : [Procedure]
+        userNabmListOnScroll(limit: Int, skip: Int) : OnScrollNabmList
     }
 
     input _${finance}

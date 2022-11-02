@@ -7,7 +7,7 @@
   "scripts": {
     "tsc": "tsc",
     "clean": "rm -rf build",
-    "start:withoutClean" : "tsc && node build/server.js",
+    "start:withoutClean": "tsc && node build/server.js",
     "start": "npm run clean && tsc && node build/server.js",
     "start:server": "npm run clean && tsc && pm2 start --name api node build/server.js",
     "DEV": "nodemon -e ts -w ./src -x npm run watch:serve",
