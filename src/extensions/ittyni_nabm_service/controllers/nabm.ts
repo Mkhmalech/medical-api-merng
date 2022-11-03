@@ -141,26 +141,17 @@ export default {
     else return Error("NO_PERMISSION")
   },
   userNabmListOnScroll :async ({ limit, skip }: any, {permissions, message, user}: any) => {
-   const result = await NABM.aggregate([{$match:{}}])
-    .sort({"name": 1})
-    .facet({
-      metadata : [
-        {$count : 'total'},
-        {$addFields : { 'showed': limit+skip}}
-      ],
-      data: [
-        {'$limit': limit+skip }, 
-        {'$skip': skip   }
-      ]
-    })
-    .project({
-      procedures : '$data',
-      total : {$first : "$metadata.total"},
-      rest : {$subtract: [{$first: "$metadata.total"}, {$first: "$metadata.showed"}]},
-      showed: {$first: "$metadata.showed"}
-    })
-   return(result[0])
-  },
+    const result =  await NABM.find({}).populate('departements updates.updatedBy')
+          .sort({'name': 1}).limit(limit+skip).skip(skip);
+    const totalDocs = await NABM.countDocuments({});
+    return {
+      procedures: result,
+      total : totalDocs,
+      rest : totalDocs - limit,
+      showed : limit + skip
+    }
+
+    },
   // NABM.find({}).populate('updates.updatedBy').select('updates').then(r=>r),
   mergeUpdatesWithNabm: async (args: any, req: any) => {
     let merge:any = {};
