@@ -50,6 +50,8 @@ export const LaboResolver = {
   },
   LaboListAll: labo.LaboListAll,
 
+  LaboListOnScroll : labo.LaboListOnScroll,
+
   LaboListByCity: labo.LaboListByCity,
 
   LaboListTwentyByCity: labo.LaboListTwentyByCity,

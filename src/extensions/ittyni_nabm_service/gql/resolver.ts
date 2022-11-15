@@ -10,5 +10,6 @@ export const NabmResolver = {
     userNabmList : nabm.userNabmList,
     nabmUpdateDetailsById : nabm.nabmUpdateDetailsById,
     mergeUpdatesWithNabm : nabm.mergeUpdatesWithNabm,
+    userNabmListOnScroll :  nabm.userNabmListOnScroll
 
 }

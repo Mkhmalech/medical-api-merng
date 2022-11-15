@@ -75,9 +75,16 @@ export const LaboSchema = buildSchema(`
 
     ${LaboTeamQuery}
 
+    type LaboListOnScroll {
+      labos : [LaboInfo]
+      showed : Int
+      rest : Int 
+      total : Int
+    }
     type LaboQuery {
         catalog : LaboCatalog
         LaboListAll : [LaboInfo]
+        LaboListOnScroll(limit: Int, skip: Int) : LaboListOnScroll
         LaboListByCity(city : String) : [LaboInfo]
         LaboListTwentyByCity(city : String) : [LaboInfo]
         LaboDetails(name : String) : LaboInfo

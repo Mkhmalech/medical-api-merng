@@ -1,5 +1,6 @@
 import { NABM } from "../module/nabm";
 import { clearEmpties } from "./clearEmpties";
+
 export default {
   createProcedure: async ({ name, code, mnemonic }: any, req: any) => {
 
@@ -139,6 +140,18 @@ export default {
     }
     else return Error("NO_PERMISSION")
   },
+  userNabmListOnScroll :async ({ limit, skip }: any, {permissions, message, user}: any) => {
+    const result =  await NABM.find({}).populate('departements updates.updatedBy')
+          .sort({'name': 1}).limit(limit+skip).skip(skip);
+    const totalDocs = await NABM.countDocuments({});
+    return {
+      procedures: result,
+      total : totalDocs,
+      rest : totalDocs - limit,
+      showed : limit + skip
+    }
+
+    },
   // NABM.find({}).populate('updates.updatedBy').select('updates').then(r=>r),
   mergeUpdatesWithNabm: async (args: any, req: any) => {
     let merge:any = {};
