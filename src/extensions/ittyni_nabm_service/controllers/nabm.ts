@@ -108,7 +108,6 @@ export default {
     // }
 
     // else {
-      console.log(filteredData)
     return NABM.findOne({ _id: args._id }, async (err: any, data: any) => {
       if (err) return Error("NOT_SAVED");
       if (!data) return Error("NO_FOUNDED");
