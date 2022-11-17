@@ -22,7 +22,7 @@ const country = `country : String`
 const symbol = `symbol : String`
 const code = `code : String`
 const value = `value : Int`
-const price = `price : Int`
+const price = `price : String`
 const currency = `currency : String`
 const financeDesc = `description : String`
 // preanalytics

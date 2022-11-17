@@ -100,8 +100,7 @@ const NABMSchema: Schema = new Schema({
     country: String,
     code: String,
     symbol: String,
-    value: Number,
-    price: Number,
+    price: String,
     currency: String,
     description: String
    }],
