@@ -22,7 +22,7 @@ const country = `country : String`
 const symbol = `symbol : String`
 const code = `code : String`
 const value = `value : Int`
-const price = `price : Int`
+const price = `price : String`
 const currency = `currency : String`
 const financeDesc = `description : String`
 // preanalytics
@@ -37,6 +37,7 @@ const userId = `_id : ID `
 const fname = `firstName : String `
 const lname = `lastName : String `
 const picture = `picture : String `
+const status = `status:String`
 const updatedBy=`type User {${userId} ${fname} ${lname} ${picture}}`
 // test descriptio
 const descOverview = `overview: String`
@@ -100,6 +101,7 @@ export const NabmSchema = buildSchema(`
         ${name} ${code} ${mnemonic} 
         ${procedureId} ${updatedAt}
         ${type} ${unit} 
+        ${status}
         formula: [Formula]
         departements : [Departement]
         specimen: Specimen
