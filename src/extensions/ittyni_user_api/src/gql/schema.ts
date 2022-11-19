@@ -10,7 +10,7 @@ const lname = "lastname : String"
 const gender = `gender: String`
 const firstname = "firstName : String"
 const lastname = "lastName : String"
-const email = "email : String!"
+const email = "email : String"
 const picture = "picture : String"
 const username = "username : String"
 const dayofbirth = `dob: String`
@@ -239,8 +239,8 @@ export const UserSchema = buildSchema(`
         signupWithGoogle(email:String, fname:String, lname:String, picture:String) : GGUser
         activateExtension(_id: ID!) : [Extension]
 
-        user_updateProfileInformation(iPersonal: _USER_PROFILE_PERSONAL): String
-        user_updateProfileContact(iContact: _USER_PROFILE_CONTACT, iLocation: _LOCATION): String
+        user_updateProfileInformation(_id: ID!, iPersonal: _USER_PROFILE_PERSONAL): String
+        user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT, iLocation: _LOCATION): String
     }
     
     schema {
