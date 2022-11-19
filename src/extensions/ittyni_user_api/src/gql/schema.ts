@@ -7,9 +7,38 @@ const id = "_id : ID"
 // user schema variables 
 const fname = "firstname : String"
 const lname = "lastname : String"
+const gender = `gender: String`
+const firstname = "firstName : String"
+const lastname = "lastName : String"
 const email = "email : String!"
 const picture = "picture : String"
 const username = "username : String"
+const dayofbirth = `dob: String`
+const cityofbirth = `pob: String`
+const cne = `cne: String`
+const inp = `inp: String`
+const address = `address: String`
+const city = `city: String`
+const subdivision = `subdivision: String`
+const division = `division: String`
+const region = `region: String`
+const country = `country: String`
+const latitude = `latitude: String`
+const longitude = `longitude: String`
+const location = `LOCATION{
+    ${latitude} ${longitude}
+}`
+
+// user personal information
+const user_profile_personal = `USER_PROFILE_PERSONAL {
+    ${gender} ${firstname} ${lastname} ${email} ${picture} ${username} ${dayofbirth} ${cityofbirth} ${cne} ${inp}
+}`
+// user profile contact 
+const user_profile_contact = `USER_PROFILE_CONTACT {
+    ${address} ${city} ${subdivision} ${division} ${region} ${country}
+}`
+
+
 
 // user updates
 const userId = "userId: ID"
@@ -60,7 +89,7 @@ const UserWithRole = `
 const accountId = `accountId:ID`
 const accoutType = `accountType: String`
 const accountName = `name: String`
-const Account = `type Account {${accountName}}`
+const Account = `type Account {${accountName} ${id} }`
 
 const linkAccount = `
     id : String
@@ -176,6 +205,10 @@ export const UserSchema = buildSchema(`
 
     ${roleAndPermissions}
 
+    input _${user_profile_personal}
+    input _${user_profile_contact}
+    input _${location}
+
     type RootQuery {
         userProfile(token : String ) : User
         verifyToken( token : String!) : ReturnedUser
@@ -205,6 +238,9 @@ export const UserSchema = buildSchema(`
         linkUserToAccount(${userId}, ${accountId}, ${accoutType} ) : String
         signupWithGoogle(email:String, fname:String, lname:String, picture:String) : GGUser
         activateExtension(_id: ID!) : [Extension]
+
+        user_updateProfileInformation(iPersonal: _USER_PROFILE_PERSONAL): String
+        user_updateProfileContact(iContact: _USER_PROFILE_CONTACT, iLocation: _LOCATION): String
     }
     
     schema {
