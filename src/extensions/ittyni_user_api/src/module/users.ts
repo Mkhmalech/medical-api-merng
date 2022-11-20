@@ -76,40 +76,32 @@ const UserSchema: Schema = new Schema({
 
   inp: String,
 
-  contact: {
-    tele: [{
+  tele: [{
+    type: String,
+    value: String,
+    status: {
       type: String,
-      value: String,
-      status : {
-        type: String , 
-        enum : ["created", "verified", "deleted", "suspended"],
-        default: "created"
-      }
-    }],
-
-    address: {
-      region: {
-        type: String,
-      },
-
-      city: {
-        type: String,
-      },
-
-      area: {
-        type: Schema.Types.ObjectId,
-        ref : "area"
-      },
-
-      street: {
-        type: String,
-      },
-    },
-
-    location : {
-      latitude : String,
-      longitude : String
+      enum: ["created", "verified", "deleted", "suspended"],
+      default: "created"
     }
+  }],
+
+  city: {
+    type: String,
+  },
+
+  area: {
+    type: Schema.Types.ObjectId,
+    ref: "area"
+  },
+
+  street: {
+    type: String,
+  },
+
+  location: {
+    latitude: String,
+    longitude: String
   },
 
   signedbygg: Boolean,

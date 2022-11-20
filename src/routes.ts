@@ -54,6 +54,8 @@ import * as HandlerComponent from './extensions/ittyni_module_api'
 import * as HandlerDepartment from './extensions/ittyni_department_service'
 // component
 import * as HandlerQU from './extensions/ittyni_queuing_api'
+// component
+import * as HandlerArea from './extensions/ittyni_areas_service'
 
 const routes = ($: express.Router) => {
 
@@ -113,6 +115,7 @@ const routes = ($: express.Router) => {
      * Pharma Manager Api v0.1
      ********************************/
     $.all('/pharma', HandlerPHARMA.PharmaManger);
+
     /********************************
      * NGAP Manager Api v0.1
      ********************************/
@@ -142,6 +145,11 @@ const routes = ($: express.Router) => {
      * NGAP Manager Api v0.1
      ********************************/
     $.all('/queuing', HandlerQU.QueuingManger);
+
+    /********************************
+     * Area Manager Api v0.1
+     ********************************/
+    $.all('/area', HandlerArea.AreaManger);
     
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(

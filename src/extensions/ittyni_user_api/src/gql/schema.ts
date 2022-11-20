@@ -17,7 +17,7 @@ const dayofbirth = `dob: String`
 const cityofbirth = `pob: String`
 const cne = `cne: String`
 const inp = `inp: String`
-const address = `address: String`
+const street = `street: String`
 const city = `city: String`
 const subdivision = `subdivision: String`
 const division = `division: String`
@@ -25,9 +25,11 @@ const region = `region: String`
 const country = `country: String`
 const latitude = `latitude: String`
 const longitude = `longitude: String`
-const location = `LOCATION{
-    ${latitude} ${longitude}
-}`
+const status =`status:String`
+const value = `value:String`
+const type = `type:String`
+const location = `LOCATION{${latitude} ${longitude}}`
+const tele = `tele{${status} ${value} ${type}}`
 
 // user personal information
 const user_profile_personal = `USER_PROFILE_PERSONAL {
@@ -35,7 +37,7 @@ const user_profile_personal = `USER_PROFILE_PERSONAL {
 }`
 // user profile contact 
 const user_profile_contact = `USER_PROFILE_CONTACT {
-    ${address} ${city} ${subdivision} ${division} ${region} ${country}
+    ${street} ${city} ${subdivision} ${division} ${region} ${country}
 }`
 
 
@@ -208,6 +210,7 @@ export const UserSchema = buildSchema(`
     input _${user_profile_personal}
     input _${user_profile_contact}
     input _${location}
+    input _${tele}
 
     type RootQuery {
         userProfile(token : String ) : User
@@ -241,6 +244,7 @@ export const UserSchema = buildSchema(`
 
         user_updateProfileInformation(_id: ID!, iPersonal: _USER_PROFILE_PERSONAL): String
         user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT, iLocation: _LOCATION): String
+        user_updateProfileTele(_id: ID!, iTele: _tele) : String
     }
     
     schema {
