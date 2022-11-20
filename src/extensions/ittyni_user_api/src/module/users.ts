@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 import { AccountSchema } from "./account";
 
 interface IUserModel extends Document {
@@ -6,18 +6,22 @@ interface IUserModel extends Document {
   email: UserEmail;
   password: UserPassword;
   createdAt: UserCreatedAt;
-  signedbygg : boolean;
-  picture? : string
-  firstName? : string
-  lastName? : string
+  signedbygg: boolean;
+  picture?: string
+  firstName?: string
+  lastName?: string
+  dob?: string
+  pob?: string
+  cne?: string
+  inp?: string
   accounts: any[];
   sessions: any
   // role of main application
   role: {
-    name ?: string,
+    name?: string,
     addedBy?: string,
     createdAt?: string,
-    update ?: any[]
+    update?: any[]
   };
   // permissions of main application
   permissions: any[];
@@ -40,9 +44,9 @@ export const Permission: Schema = new Schema({
   addedAt: { type: String, default: new Date().toUTCString() },
 });
 const Session: Schema = new Schema({
-  at : String,
-  device : String,
-  location : String
+  at: String,
+  device: String,
+  location: String
 });
 
 const UserSchema: Schema = new Schema({
@@ -58,24 +62,68 @@ const UserSchema: Schema = new Schema({
 
   code: Number,
 
-  picture : String,
+  picture: String,
 
-  firstName : String,
+  firstName: String,
 
-  lastName : String,
+  lastName: String,
 
-  signedbygg : Boolean,
+  dob: String,
+
+  pob: { type: Schema.Types.ObjectId, ref: "Cities" },
+
+  cne: String,
+
+  inp: String,
+
+  contact: {
+    tele: [{
+      type: String,
+      value: String,
+      status : {
+        type: String , 
+        enum : ["created", "verified", "deleted", "suspended"],
+        default: "created"
+      }
+    }],
+
+    address: {
+      region: {
+        type: String,
+      },
+
+      city: {
+        type: String,
+      },
+
+      area: {
+        type: Schema.Types.ObjectId,
+        ref : "area"
+      },
+
+      street: {
+        type: String,
+      },
+    },
+
+    location : {
+      latitude : String,
+      longitude : String
+    }
+  },
+
+  signedbygg: Boolean,
 
   accounts: [AccountSchema],
 
   role: {
-    name : String,
+    name: String,
     addedBy: String,
     createdAt: String,
-    update : [Role]
+    update: [Role]
   },
 
-  status : String,
+  status: String,
 
   addedBy: String,
 
@@ -83,7 +131,7 @@ const UserSchema: Schema = new Schema({
 
   createdAt: { type: String, default: new Date().toUTCString() },
 
-  sessions : [Session]
+  sessions: [Session]
 });
 
 export const USER = model<IUserModel>("USER", UserSchema);

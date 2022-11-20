@@ -1,8 +1,9 @@
-export const updateProfilInformation = (args: any, {user, permission, message} : any) =>{
+import { USER } from "../module/users"
 
-    console.log(args)
+export const updateProfilInformation = async ({_id, iPersonal}: any, {user, permission, message} : any) =>{
+    const result = await USER.findOneAndUpdate({_id}, {...iPersonal })
 
-    return "USER_PROFILE_PERSONAL_UPDATED"
+    return result ? "USER_PROFILE_PERSONAL_UPDATED" : null 
 }
 
 export const updateProfileContact = (args: any, {user, permission, message}: any) =>{
