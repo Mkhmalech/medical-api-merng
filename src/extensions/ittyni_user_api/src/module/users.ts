@@ -76,27 +76,34 @@ const UserSchema: Schema = new Schema({
 
   inp: String,
 
-  tele: [{
-    type: String,
-    value: String,
-    status: {
+  contact : {
+
+    tele: [{
       type: String,
-      enum: ["created", "verified", "deleted", "suspended"],
-      default: "created"
+      value: String,
+      status: {
+        type: String,
+        enum: ["created", "verified", "deleted", "suspended"],
+        default: "created"
+      }
+    }],
+
+    city: {
+      type: String,
+    },
+  
+    address: {
+      type: String,
+    },
+  
+    country : {
+      type : String,
+    },
+
+    area: {
+      type: Schema.Types.ObjectId,
+      ref: "area"
     }
-  }],
-
-  city: {
-    type: String,
-  },
-
-  area: {
-    type: Schema.Types.ObjectId,
-    ref: "area"
-  },
-
-  street: {
-    type: String,
   },
 
   location: {
