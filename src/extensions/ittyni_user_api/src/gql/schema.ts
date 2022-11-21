@@ -17,7 +17,7 @@ const dayofbirth = `dob: String`
 const cityofbirth = `pob: String`
 const cne = `cne: String`
 const inp = `inp: String`
-const street = `street: String`
+const address = `address: String`
 const city = `city: String`
 const subdivision = `subdivision: String`
 const division = `division: String`
@@ -33,11 +33,11 @@ const tele = `tele{${status} ${value} ${type}}`
 
 // user personal information
 const user_profile_personal = `USER_PROFILE_PERSONAL {
-    ${gender} ${firstname} ${lastname} ${email} ${picture} ${username} ${dayofbirth} ${cityofbirth} ${cne} ${inp}
+    ${gender} ${firstname} ${lastname} ${username} ${dayofbirth} ${cityofbirth} ${cne} ${inp}
 }`
 // user profile contact 
 const user_profile_contact = `USER_PROFILE_CONTACT {
-    ${street} ${city} ${subdivision} ${division} ${region} ${country}
+    ${address} ${city} ${country}
 }`
 
 
