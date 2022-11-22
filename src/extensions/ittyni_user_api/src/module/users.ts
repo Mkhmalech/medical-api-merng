@@ -11,6 +11,7 @@ interface IUserModel extends Document {
   gender?: string
   firstName?: string
   lastName?: string
+  username?: string
   dob?: string
   pob?: string
   cne?: string
@@ -71,9 +72,11 @@ const UserSchema: Schema = new Schema({
 
   lastName: String,
 
+  username: {type: String},
+
   dob: String,
 
-  pob: { type: Schema.Types.ObjectId, ref: "Cities" },
+  pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
 
   cne: String,
 

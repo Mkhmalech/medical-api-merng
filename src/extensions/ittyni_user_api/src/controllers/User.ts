@@ -450,7 +450,7 @@ class User extends Roles {
   verifyFrontToken = (args: any, { user, message }: any) => {
     if (message) return Error(message)
 
-    return user;
+    return USER.findOne({_id: user._id});
   }
   /**
    * ittyni front token verification

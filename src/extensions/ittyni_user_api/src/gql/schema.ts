@@ -157,12 +157,14 @@ export const UserSchema = buildSchema(`
 
     type FrontUser {
         ${id},
-         email  : String,
-         picture : String,
-         firstName : String,
-         lastName : String
-         role : RoleName
-         accounts : [UserAccountName]
+        email  : String,
+        picture : String,
+        ${gender} ${firstname} 
+        ${lastname} ${username} 
+        ${dayofbirth} ${cityofbirth} 
+        ${cne} ${inp}
+        role : RoleName
+        accounts : [UserAccountName]
     }
 
     type User {
