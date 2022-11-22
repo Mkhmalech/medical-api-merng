@@ -12,8 +12,6 @@ export const updateProfilInformation = async ({_id, iPersonal}: any, {user, perm
 export const updateProfileContact = async ({_id, iContact}: any, {user, permission, message}: any) =>{
     let contact = utils.removeUndefinedFromObject(iContact)
 
-    console.log(contact);
-
     const result = await USER.findOneAndUpdate({_id}, {contact})
     return result ? "USER_PROFILE_CONTACT_UPDATED" : null
 }
@@ -27,8 +25,7 @@ export const updateProfileLocation = async({_id, iLocation}: any, {user, permiss
 
 export const updateProfileContactTele = async ({_id, iTele}: any, {user, permission, message}: any ) =>{
     let tele = utils.removeUndefinedFromObject(iTele)
-    console.log("iTele: ",iTele)
-    console.log(tele)
+
     const result = await USER.findOneAndUpdate({_id}, {"$push": {"contact.tele" : tele } });
 
     return result ?  "USER_PROFILE_CONTATCT_UPDATED" : null
