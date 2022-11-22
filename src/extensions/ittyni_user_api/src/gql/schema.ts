@@ -243,7 +243,8 @@ export const UserSchema = buildSchema(`
         activateExtension(_id: ID!) : [Extension]
 
         user_updateProfileInformation(_id: ID!, iPersonal: _USER_PROFILE_PERSONAL): String
-        user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT, iLocation: _LOCATION): String
+        user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT): String
+        user_updateProfileLocation(_id: ID!, iLocation: _LOCATION): String
         user_updateProfileTele(_id: ID!, iTele: _tele) : String
     }
     
