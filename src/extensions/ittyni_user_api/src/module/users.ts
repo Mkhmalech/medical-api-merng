@@ -8,6 +8,7 @@ interface IUserModel extends Document {
   createdAt: UserCreatedAt;
   signedbygg: boolean;
   picture?: string
+  gender?: string
   firstName?: string
   lastName?: string
   dob?: string
@@ -59,6 +60,8 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+
+  gender: {type : String},
 
   code: Number,
 

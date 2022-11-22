@@ -102,6 +102,8 @@ export const UserSchema = buildSchema(`
 
     ${Account}
 
+    type ${user_profile_personal}
+
     type RoleName {
         name : String
     }
@@ -150,6 +152,7 @@ export const UserSchema = buildSchema(`
         role : RoleName
         status : String
         accounts : [UserAccountName]
+        personal : USER_PROFILE_PERSONAL
     }
 
     type FrontUser {
