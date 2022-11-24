@@ -28,12 +28,20 @@ export const updateProfileLocation = async ({ _id, iLocation }: any, { user, per
 
 export const updateProfileContactTele = async ({ _id, iTele }: any, { user, permission, message }: any) => {
     let tele = utils.removeUndefinedFromObject(iTele)
-    if (!tele.value||!tele.type) {
+    if (!tele.value || !tele.type) {
         return null;
     }
     else {
-        const result = await USER.findOneAndUpdate({ _id, "contact.tele.type" : tele.type }, { "$set": { "contact.tele.$": tele } }, {upsert: true});
-        return result ? "USER_PROFILE_CONTATCT_UPDATED" : null
-    }    
+        const isExists = await USER.countDocuments({ _id, "tele.type": tele.type });
+        if (isExists <= 0) {
+            const result = await USER.findOneAndUpdate({ _id }, { "$push": { "tele": tele } });
+            return result ? "USER_PROFILE_CONTATCT_UPDATED" : null
+        }
+        else {
+            const result = await USER.findOneAndUpdate({ _id, "tele.type": tele.type }, { "$set": { "tele.$.value": tele.value } });
+            return result ? "USER_PROFILE_CONTATCT_UPDATED" : null
+        }
+
+    }
 }
 

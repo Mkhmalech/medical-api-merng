@@ -82,18 +82,17 @@ const UserSchema: Schema = new Schema({
 
   inp: String,
 
+  tele: [{
+    type: {type : String},
+    value: {type : String},
+    status: {
+      type: String,
+      enum: ["created", "verified", "deleted", "suspended"],
+      default: "created"
+    }
+  }],
+
   contact : {
-
-    tele: [{
-      type: {type : String},
-      value: {type : String},
-      status: {
-        type: String,
-        enum: ["created", "verified", "deleted", "suspended"],
-        default: "created"
-      }
-    }],
-
     city: {
       type: String,
     },

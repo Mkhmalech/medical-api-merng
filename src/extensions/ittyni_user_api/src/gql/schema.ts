@@ -103,6 +103,9 @@ export const UserSchema = buildSchema(`
     ${Account}
 
     type ${user_profile_personal}
+    type ${user_profile_contact}
+    type ${location}
+    type ${tele}
 
     type RoleName {
         name : String
@@ -165,6 +168,8 @@ export const UserSchema = buildSchema(`
         ${cne} ${inp}
         role : RoleName
         accounts : [UserAccountName]
+        contact : USER_PROFILE_CONTACT
+        tele : [tele]
     }
 
     type User {
