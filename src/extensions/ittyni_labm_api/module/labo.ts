@@ -99,6 +99,22 @@ const LaboSchema = new Schema({
     },
   },
   /**
+   * founder
+   */
+  founder : {type : Schema.Types.ObjectId, ref : 'USER'},
+  
+  /**
+   * location
+   */
+  location: {
+    latitude: {type : String},
+    longitude : { type : String }
+  },
+  /**
+   * number of reviews
+   */
+  reviews: Number,
+  /**
    * number of views
    */
   views: Number,

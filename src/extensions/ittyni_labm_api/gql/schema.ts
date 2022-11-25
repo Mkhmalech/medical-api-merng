@@ -30,6 +30,12 @@ const Address = `
         city : String
     }
 `
+/**
+ * location
+ */
+const latitude=`latitude: String`
+const longitude=`longitude: String`
+const location =`Location{${latitude} ${longitude}}`
 const Contact = `
     ${Tele}
     ${Address}
@@ -43,10 +49,13 @@ const Labo = `
     ${Account}
     ${Contact}
 
+    type ${location}
+
     type LaboInfo {
         _id : ID
         account : Account
         contact : Contact
+        location: Location
         views : Int
     }
     type Labo {
@@ -92,6 +101,9 @@ export const LaboSchema = buildSchema(`
         searchLaboByName(query : String) : [LaboInfo]
         team : LaboTeamQuery
         LaboFetchComponents(${accountId}) : [Component]
+
+
+        readLabmDetailsById(_id: ID!): LaboInfo
     }
 
     type laboMutation {
