@@ -36,10 +36,11 @@ const province = `province :String`
 const commune = `commune :String`
 const street = `street :String`
 const city = `city :String`
+const country = `country :String`
 const Address = `Address {
         ${region}  ${province}
         ${commune}  ${street}
-        ${city}
+        ${city} ${country}
     }
 `
 // extension
@@ -66,6 +67,8 @@ const Contact = `Contact {
 const Types = `
 
     type ${Tele}
+
+    type ${Email}
 
     type ${Address}
 
