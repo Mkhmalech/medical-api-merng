@@ -2,8 +2,9 @@ import { buildSchema } from 'graphql';
 import { Setting, LaboCatalog, LaboTeam, LaboTeamQuery } from './schema/index'
 // global
 const id = `_id : ID`
-const name = 'name:String'
+
 // account fragment
+const name = 'name:String'
 const ice = `ice:String`
 const rc = `rc:String`
 const code = `code:String`

@@ -15,7 +15,8 @@ export const updateLabmIdentification = async ({_id, account}: any, {user, messa
 }
 export const updateLabmContact = async ({_id, contact}: any, {user, message, permissions}: any)=>{
 
-    console.log(contact)
+    const teleCount = await LABO.countDocuments({_id, "contact.tele.type": contact.tele.type});
+    const emailCont = await LABO.countDocuments({_id, "contact.email.type": contact.email.type})
     
     return null;
     // const result = await LABO.findOneAndUpdate({_id});
