@@ -75,5 +75,8 @@ export const LaboResolver = {
 
   LaboFetchComponents : labo.LaboFetchComponents,
 
-  readLabmDetailsById : labm.readLabmDetailsById
+  readLabmDetailsById : labm.readLabmDetailsById,
+  update_labmIdentification : labm.updateLabmIdentification,
+  update_labmContact : labm.updateLabmContact,
+  update_labmClassification : labm.updateLabmClassification,
 };

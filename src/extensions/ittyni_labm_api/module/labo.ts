@@ -66,16 +66,24 @@ const LaboSchema = new Schema({
     },
     code: {
       type: Number,
-    }
+    },
+    ice : {type : String},
+    rc : {type: String},
+    inp: {type : String},
+    yearofcreation : {type: String}
   },
 
   contact: {
-    tele: {
-      fix: [String],
-
-      fax: [String],
-    },
-
+    tele: [{
+      type : { type : String},
+      value : { type : String },
+      owner : { type : String } 
+    }],
+    email : [{
+      type : { type : String},
+      value : { type : String },
+      owner : { type : String } 
+    }],
     address: {
       region: {
         type: String,
@@ -102,7 +110,7 @@ const LaboSchema = new Schema({
    * founder
    */
   founder : {type : Schema.Types.ObjectId, ref : 'USER'},
-  
+
   /**
    * location
    */
