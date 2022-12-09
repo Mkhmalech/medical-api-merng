@@ -79,4 +79,6 @@ export const LaboResolver = {
   update_labmIdentification : labm.updateLabmIdentification,
   update_labmContact : labm.updateLabmContact,
   update_labmClassification : labm.updateLabmClassification,
+  update_labmLocation : labm.updateLabmLocation,
+  update_labmDetailsById : labm.updateLabmDetailsById,
 };

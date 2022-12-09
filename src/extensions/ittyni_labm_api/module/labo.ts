@@ -63,26 +63,30 @@ const LaboSchema = new Schema({
   account: {
     name: {
       type: String,
+      unique : true
     },
     code: {
       type: Number,
+      unique : true
     },
-    ice : {type : String},
-    rc : {type: String},
-    inp: {type : String},
+    ice : {type : String, unique : true},
+    rc : {type: String, unique : true},
+    inp: {type : String, unique : true},
     yearofcreation : {type: String}
   },
 
   contact: {
     tele: [{
-      type : { type : String},
+      type : { type : String, unique : true},
       value : { type : String },
-      owner : { type : String } 
+      owner : { type : String },
+      description : { type: String}
     }],
     email : [{
       type : { type : String},
       value : { type : String },
-      owner : { type : String } 
+      owner : { type : String },
+      description : {type : String}
     }],
     address: {
       region: {
@@ -203,6 +207,16 @@ const LaboSchema = new Schema({
    * queuing system
   */
   queuings: [{ type: Schema.Types.ObjectId, ref: "QUEUING" }],
+  
+  /**
+   * sessions connection
+   */
+  sesions: [],
+
+  /**
+   * updates 
+   */
+  updates: []
 
 });
 

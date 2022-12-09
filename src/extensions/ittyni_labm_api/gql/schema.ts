@@ -22,14 +22,16 @@ const fax = `fax:[String]`
 const type = `type:String`
 const value = `value:String`
 const owner = `owner:String`
+const description = `description:String`
 const Tele = `Tele {
     ${fix} ${fax}        
     ${type} ${value}        
-    ${owner}      
+    ${owner} ${description}
 }`
 // email fragment
 const Email = `Email{
-    ${type} ${value} ${owner}  
+    ${type} ${value} ${owner}
+    ${description}
 }`
 // address fragment
 const region = `region :String`
@@ -79,11 +81,19 @@ const Types = `
 
     type ${location}
 
+
+    type LaboUpdate {
+        _id : ID
+        account : Account
+        contact : Contact
+        location: Location
+    }
     type LaboInfo {
         _id : ID
         account : Account
         contact : Contact
         location: Location
+        updates : [LaboUpdate]
         views : Int
     }
     type Labo {
@@ -108,6 +118,7 @@ const Inputs = `
         email: _Email
         address: _Address
     }
+    input _${location}
 `
 
 export const LaboSchema = buildSchema(`
@@ -165,6 +176,10 @@ export const LaboSchema = buildSchema(`
 
         update_labmIdentification(${id}!, account: _Account): String
         update_labmContact(${id}!, contact: _Contact): String
+        update_labmLocation(${id}!, location: _Location) : String
+        update_labmDetailsById(${id}!, contact: _Contact, 
+            account: _Account, location:_Location
+        ): String
     }
 
     schema {
