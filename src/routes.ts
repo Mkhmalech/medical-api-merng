@@ -56,6 +56,8 @@ import * as HandlerDepartment from './extensions/ittyni_department_service'
 import * as HandlerQU from './extensions/ittyni_queuing_api'
 // component
 import * as HandlerArea from './extensions/ittyni_areas_service'
+// laboratory packs
+import * as HandlerPacks from './extensions/ittyni_pack_service'
 
 const routes = ($: express.Router) => {
 
@@ -151,11 +153,16 @@ const routes = ($: express.Router) => {
      ********************************/
     $.all('/area', HandlerArea.AreaManger);
     
+    /********************************
+     * Area Manager Api v0.1
+     ********************************/
+    $.all('/pack', HandlerPacks.PackManger);
+    
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(
         req : express.Request,
         res : express.Response,
-        next : express.NextFunction)=>
+        next : express.NextFunction) =>
     {
         
     });

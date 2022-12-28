@@ -6,7 +6,6 @@ export const readLabmDetailsById = async ({_id}: any, {user, message, permission
     
     return result;
 }
-
 export const updateLabmIdentification = async ({_id, account}: any, {user, message, permissions}: any)=>{
 
     const result = await LABO.findOneAndUpdate({_id},{"$push":{updates: account}});
