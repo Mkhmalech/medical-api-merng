@@ -54,6 +54,33 @@ export class Labo {
     const labos: any = this.Labo.getAllDocs();
     return labos;
   };
+  // list labo on scroll
+  LaboListOnScroll = async ({limit, skip}: any, {permissions, message, user}: any)=>{
+    const lablist = await LABO.aggregate([
+      {$match: {}},
+      {$sort: {'account.name': 1}},
+      {$facet: {
+        "data": [{$limit : limit+skip}, {$skip: skip}],
+        "metadata": [
+          {$count: 'total'},
+          {$addFields: { showed: limit+skip }}
+        ]
+      }},
+      {$project: {
+        labos: '$data',
+        showed: {$first : '$metadata.showed'},
+        total: {$first : '$metadata.total'},
+        rest : {
+          $subtract : [
+            {$first : '$metadata.total'},
+            {$first : '$metadata.showed'}
+          ]
+        }
+      }}
+    ])
+
+    return lablist[0]
+  }
   // Labo Info
   LaboListTwentyByCity = async ({ city }: any) => {
     const labos: any = await LABO.find({ 'contact.address.city': city })

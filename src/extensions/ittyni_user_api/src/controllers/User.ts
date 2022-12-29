@@ -216,7 +216,7 @@ class User extends Roles {
   addPermissions = async (args: any, { user }: any) => {
     const r = await user.supadmin(user, (_id: any) => {
       const updateComp = new Db(USER);
-      updateComp.updateSubDocs({'_id' : args.userId}, { arrayFilters :[{ 'i.lab': args.accountId }], new: true},
+      updateComp.updateSubDocs({ '_id': args.userId }, { arrayFilters: [{ 'i.lab': args.accountId }], new: true },
         {
           "accounts.$[i].permissions": {
             component: args.componentId,
@@ -232,7 +232,7 @@ class User extends Roles {
 
     })
 
-    return r? "SAVED_SUCCESSFULLY" : "NOT_SAVED"
+    return r ? "SAVED_SUCCESSFULLY" : "NOT_SAVED"
   }
   /**
    * 
@@ -447,19 +447,86 @@ class User extends Roles {
   /**
    * ittyni front token verification
    */
-  verifyFrontToken = (args: any, {user, message}:any) => {
-    if(message) return Error(message)
-    
-    return user;
+  verifyFrontToken = (args: any, { user, message }: any) => {
+    if (message) return Error(message)
+
+    return USER.findOne({_id: user._id});
   }
   /**
    * ittyni front token verification
    */
-  subscribedAccounts = async (args: any, {user, message}:any) => {
-    if(message) return Error(message)
+  subscribedAccounts = async (args: any, { user, message }: any) => {
+    if (message) return Error(message)
     const res = await new Db(USER).getSubDocWithPop(user._id, "accounts", "accounts.labo")
 
-    return res.map((r:any)=>({name : r.labo.account.name}))
+    return res.map((r: any) => ({ name: r.labo.account.name }))
+  }
+
+  /**
+   * load component of the user
+   * to be displayed in the 
+   * sidebar
+   */
+  readUserExtensions = async (args: any, { user, message }: any) => {
+    if (message) return Error(message);
+    const cp = await USER.findOne({ _id: user._id })
+      .populate('permissions.component','_id name')
+      .select('permissions')
+
+    if (cp && cp.permissions.length > 0) {
+      return cp.permissions.map(
+        (p: any) => (
+          {
+            name: p.component.name,
+            _id: p.component._id,
+            canRead: p.canRead,
+            canCreate: p.canCreate,
+            canUpdate: p.canUpdate,
+            canDelete: p.canDelete,
+            canPublish: p.canPublish
+          }))
+    }
+    else return []
+  }
+  /**
+   * user activate extension
+   * with id 
+   */
+  activateExtension = async (args: any, { user, message }: any) => {
+    const r = await USER.findById(user._id, (e: Error, r: any) => {
+      if (e) return Error(e.message);
+      if (!r) return Error('NOT_CONNECTED');
+      let i = r.permissions.findIndex((c: any) => c.component.toString() === args._id.toString());
+      if (i === -1) {
+        r.permissions.push({
+          component: args._id,
+          canRead: true,
+          canCreate: false,
+          canUpdate: false,
+          canDelete: false,
+          canPublish: false,
+          addedBy: user._id,
+        })
+
+        r.save();
+      }
+      else return Error('ALREADY_ACTIVATED');
+    });
+    if (r) {
+      const cp = await USER.findOne({ _id: user._id })
+        .populate('permissions.component')
+        .select('permissions.component')
+
+      if (cp && cp.permissions.length > 0) {
+        return cp.permissions.map(
+          (p: any) => (
+            {
+              name: p.component.name,
+              _id: p.component._id
+            }))
+      }
+    } else return Error("NOT_SAVED")
+
   }
 }
 

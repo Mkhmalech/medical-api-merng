@@ -7,5 +7,9 @@ export const NabmResolver = {
     procedureDetailsById : nabm.procedureDetailsById,
     updateProcedureDetails : nabm.updateProcedureDetails,
     procedureUpdates : nabm.procedureUpdates,
+    userNabmList : nabm.userNabmList,
+    nabmUpdateDetailsById : nabm.nabmUpdateDetailsById,
+    mergeUpdatesWithNabm : nabm.mergeUpdatesWithNabm,
+    userNabmListOnScroll :  nabm.userNabmListOnScroll
 
 }
