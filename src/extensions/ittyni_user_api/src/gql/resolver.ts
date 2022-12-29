@@ -1,7 +1,10 @@
 import User from "../controllers/User";
 import Account from "../controllers/account";
+import * as USER from '../controllers/userControl'
 
 const user = new User();
+
+
 
 interface myUser {
   email: string;
@@ -46,4 +49,13 @@ export const userResolver = {
   // roles and permissions 
   addPermissions : user.addPermissions,
 
+
+
+  /*************************************************
+   * ******* User account operations *************** 
+   * ***********************************************
+   */
+  user_updateProfileInformation : USER.updateProfilInformation,
+  user_updateProfileContact : USER.updateProfileContact,
+  user_updateProfileTele : USER.updateProfileContactTele
 };

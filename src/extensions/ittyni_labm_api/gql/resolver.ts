@@ -1,4 +1,5 @@
 import { Labo } from "../controllers/labo";
+import * as labm from '../controllers/labmController'
 
 const labo = new Labo();
 
@@ -73,4 +74,11 @@ export const LaboResolver = {
   activateModules : labo.activateModules,
 
   LaboFetchComponents : labo.LaboFetchComponents,
+
+  readLabmDetailsById : labm.readLabmDetailsById,
+  update_labmIdentification : labm.updateLabmIdentification,
+  update_labmContact : labm.updateLabmContact,
+  update_labmClassification : labm.updateLabmClassification,
+  update_labmLocation : labm.updateLabmLocation,
+  update_labmDetailsById : labm.updateLabmDetailsById,
 };
