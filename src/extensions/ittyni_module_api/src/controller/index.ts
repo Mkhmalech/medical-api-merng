@@ -28,3 +28,8 @@ export const getAll = (args:any, {user}:any)=>{
 
     return component.getAllDocs();
 }
+export const readActiveComponents = (args:any, {user, permissions, message}:any)=>{
+    // if (message) return Error(message);
+
+    return COMPONENTS.find({status: 'active'});
+}

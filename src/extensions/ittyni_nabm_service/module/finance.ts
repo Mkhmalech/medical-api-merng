@@ -3,8 +3,7 @@ interface FINANCE extends Document {
     country: string
     code: string
     symbol: string
-    value: number
-    price: number
+    price: string
     currency: string
     description: string
 }
