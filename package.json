@@ -14,7 +14,7 @@
     "watch:serve": "npm run clean && tsc && node build/server.js",
     "PROD:win": "npm run clean && tsc && set ENV=PROD&&set PORT=8080&& node build/server.js",
     "PROD:linux": "npm run clean && tsc && export ENV=PROD&& export PORT=8080&& node build/server.js",
-    "doc": "ENV=PROD&& PORT=8080&& node build/server.js"
+    "doc": "ENV=PROD PORT=8080 node build/server.js"
   },
   "keywords": [
     "express",
