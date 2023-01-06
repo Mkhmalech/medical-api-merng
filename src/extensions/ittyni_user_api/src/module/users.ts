@@ -18,6 +18,7 @@ interface IUserModel extends Document {
   inp?: string
   accounts: any[];
   sessions: any
+  tele : any[]
   // role of main application
   role: {
     name?: string,
@@ -83,7 +84,7 @@ const UserSchema: Schema = new Schema({
   inp: String,
 
   tele: [{
-    type: {type : String},
+    type: {type : String, default: "mobile"},
     value: {type : String},
     status: {
       type: String,

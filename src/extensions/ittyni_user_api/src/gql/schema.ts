@@ -256,6 +256,7 @@ export const UserSchema = buildSchema(`
         user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT): String
         user_updateProfileLocation(_id: ID!, iLocation: _LOCATION): String
         user_updateProfileTele(_id: ID!, iTele: _tele) : String
+        user_addSpace(${id},tele: String, role: String): String
     }
     
     schema {

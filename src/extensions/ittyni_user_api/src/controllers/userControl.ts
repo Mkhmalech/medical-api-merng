@@ -1,7 +1,7 @@
 import { USER } from "../module/users"
 import { default as utils } from '../../../../common/utils'
 
-export const updateProfilInformation = async ({ _id, iPersonal }: any, { user, permission, message }: any) => {
+export const updateProfilInformation: any = async ({ _id, iPersonal }: any, { user, permission, message }: any) => {
     let personalData = utils.removeUndefinedFromObject(iPersonal);
 
     const result = await USER.findOneAndUpdate({ _id }, { ...personalData })
@@ -43,5 +43,28 @@ export const updateProfileContactTele = async ({ _id, iTele }: any, { user, perm
         }
 
     }
+}
+
+export const userAddSpace = async (args: any, { user, permission, message }: any) => {
+    let result = await USER.findById(user._id).exec((err, data) => {
+        if(err) return "ACCOUNT_NOT_SAVED"
+        if(data){
+            let account = {
+                labo: args._id,
+                role: {
+                    name: args.role
+                },
+                enabledBy: user._id
+            }
+            data&&data.tele.push({
+                    value: args.tele
+            })
+            data&&data.accounts.push({...account})
+
+            data.save();
+        }
+    })
+
+    return "ACCOUNT_ACTIVATED_SUCCESSFULLY"
 }
 
