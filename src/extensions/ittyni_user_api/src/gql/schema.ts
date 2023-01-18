@@ -142,7 +142,7 @@ export const UserSchema = buildSchema(`
       permissions: [ UserRoleAndPermissions ]          
     }
     type UserAccountName {
-        labo : ID
+        labo : UserSubscribedAccounts
         cabinet : ID
         pharma : ID
         role : RoleName
@@ -156,6 +156,15 @@ export const UserSchema = buildSchema(`
         status : String
         accounts : [UserAccountName]
         personal : USER_PROFILE_PERSONAL
+    }
+
+    type LabAccount {
+        name: String
+    }
+
+    type UserSubscribedAccounts {
+        _id : ID
+        account : LabAccount
     }
 
     type FrontUser {

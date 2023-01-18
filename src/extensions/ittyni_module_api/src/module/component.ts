@@ -19,7 +19,8 @@ const Component = new Schema({
     createdBy : { type: Schema.Types.ObjectId, ref: 'USER' },
     createdAt : String,
     version : {type : String, default : '1.0.0'},
-    status : String
+    status : String,
+    space: {type : String, enum : ["admin", "user", "account"]}
 })
 
 export const COMPONENTS = model<componentModel>('COMPONENTS', Component)

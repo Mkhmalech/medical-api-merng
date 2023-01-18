@@ -27,6 +27,10 @@ export const getAll = (args:any, {user}:any)=>{
     const component = new Db(COMPONENTS);
 
     return component.getAllDocs();
+
+}
+export const readActiveExtensionsBySpace = async (args: any, {user, permission, message}:any)=>{
+  return COMPONENTS.find({$and : [{status: "active"}, {space: args.space}]})
 }
 export const readActiveComponents = (args:any, {user, permissions, message}:any)=>{
     // if (message) return Error(message);
