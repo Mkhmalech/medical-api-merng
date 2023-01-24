@@ -178,7 +178,7 @@ const cleanData = (obj: any) => {
  * list patient of cabinet
  */
 export const listCabinetPatients = async (args: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).select('patients')
+    const res = await CABINET.findById(args._id).select('patients')
         .populate('patients.patientId').then((cab) => {
             let patients: any[] = [];
             if (cab) {
@@ -409,6 +409,34 @@ export const setPatientToWaiting = async ({ num }: any, { user }: any) => {
         
     return res
 }
+
+// list labo on scroll
+export const CabinetListOnScroll = async ({limit, skip}: any, {permissions, message, user}: any)=>{
+    const cabinets = await CABINET.aggregate([
+      {$match: {}},
+      {$sort: {'account.name': 1}},
+      {$facet: {
+        "data": [{$limit : limit+skip}, {$skip: skip}],
+        "metadata": [
+          {$count: 'total'},
+          {$addFields: { showed: limit+skip }}
+        ]
+      }},
+      {$project: {
+        cabinets: '$data',
+        showed: {$first : '$metadata.showed'},
+        total: {$first : '$metadata.total'},
+        rest : {
+          $subtract : [
+            {$first : '$metadata.total'},
+            {$first : '$metadata.showed'}
+          ]
+        }
+      }}
+    ])
+
+    return cabinets[0]
+  }
 
 export const createCabinetsSiteMap = async () => {
     // let sitmap: string = '';

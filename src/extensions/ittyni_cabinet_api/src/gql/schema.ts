@@ -112,15 +112,22 @@ export const CabinetSchema = buildSchema(`
         visitType : String
         status : [WaitingStatus]
     }
+    type CabinetOnScroll {
+        cabinets : [Cabinet]
+        showed : Int
+        rest : Int 
+        total : Int
+    }
     type RootQuery {
         findCabinet: String
         listAllCabinets: [Cabinet]
-        listCabinetPatients : [Patient]
+        listCabinetPatients(_id: ID!) : [Patient]
         cabinetPatientDetails(id : String) : Patient
         cabinetFindPatient(query : String) : [Patient]
         listCabinetsCities : [CabinetByCity]
         listCabinetsTwntyByCity(city : String) : [Cabinet]
         listCabinetsAllByCity(city : String) : [Cabinet]
+        CabinetListOnScroll(limit: Int!, skip: Int!) : CabinetOnScroll
         listCabinetDetailsById(id : String) : Cabinet
         listWaitingPatients : [WaitingRoom]
     }

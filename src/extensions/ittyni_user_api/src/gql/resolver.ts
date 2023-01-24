@@ -58,5 +58,6 @@ export const userResolver = {
   user_updateProfileInformation : USER.updateProfilInformation,
   user_updateProfileContact : USER.updateProfileContact,
   user_updateProfileTele : USER.updateProfileContactTele,
-  user_addSpace : USER.userAddSpace
+  user_addSpace : USER.userAddLabSpace,
+  user_addCabinetSpace : USER.userAddCabinetSpace,
 };

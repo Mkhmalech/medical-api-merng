@@ -44,8 +44,8 @@ export const updateProfileContactTele = async ({ _id, iTele }: any, { user, perm
 
     }
 }
-
-export const userAddSpace = async (args: any, { user, permission, message }: any) => {
+/** add labo to user space */
+export const userAddLabSpace = async (args: any, { user, permission, message }: any) => {
     let result = await USER.findById(user._id, async (err:Error, data: any) => {
         if(err) return "ACCOUNT_NOT_SAVED"
         if(data){
@@ -54,6 +54,37 @@ export const userAddSpace = async (args: any, { user, permission, message }: any
             else {
                 let account = {
                     labo: args._id,
+                    role: {
+                        name: args.role
+                    },
+                    enabledBy: user._id
+                }
+                data&&data.tele.push({
+                        value: args.tele
+                })
+                data&&data.accounts.push({...account})
+    
+                let isSaved = await data.save();
+
+                return isSaved? "ACCOUNT_ACTIVATED_SUCCESSFULLY": "NOT_SAVED" 
+            }
+        }
+    })
+
+
+    if(result) return "ACCOUNT_ACTIVATED_SUCCESSFULLY"
+    else return "ACCOUNT_NOT_ACTIVATED"
+}
+/** add cabinet to user space */
+export const userAddCabinetSpace = async (args: any, { user, permission, message }: any) => {
+    let result = await USER.findById(user._id, async (err:Error, data: any) => {
+        if(err) return "ACCOUNT_NOT_SAVED"
+        if(data){
+            let i = data.accounts.findIndex((acc: any)=>acc.cabinet.toString() === args._id.toString());
+            if(i>=0) return "ACCOUNT_ALREADY_EXISTS"
+            else {
+                let account = {
+                    cabinet: args._id,
                     role: {
                         name: args.role
                     },
