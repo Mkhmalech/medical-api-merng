@@ -2,5 +2,9 @@
     "yaml.schemas": {
         "file:///c%3A/Users/mohammed/.vscode/extensions/atlassian.atlascode-2.10.12/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
         "https://json.schemastore.org/yamllint.json": "file:///d%3A/iTTyni.com/environement/medical-api-merng/manifests/api-dev.yml"
+    },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "mkhmalech",
+        "projectKey": "Mkhmalech_front-ittyni"
     }
 }
