@@ -20,7 +20,10 @@ const Component = new Schema({
     createdAt : String,
     version : {type : String, default : '1.0.0'},
     status : String,
-    space: {type : String, enum : ["admin", "user", "account"]}
+    space: {
+      type : String, 
+      enum : ["admin", "user", "cabinet", "labm", "pharmacy"]
+    }
 })
 
 export const COMPONENTS = model<componentModel>('COMPONENTS', Component)

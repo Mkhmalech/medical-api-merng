@@ -143,8 +143,8 @@ export const UserSchema = buildSchema(`
     }
     type UserAccountName {
         labo : UserSubscribedAccounts
-        cabinet : ID
-        pharma : ID
+        cabinet : UserSubscribedAccounts
+        pharma : UserSubscribedAccounts
         role : RoleName
         permissions : [ UserRoleAndPermissions ]
     }
@@ -158,13 +158,14 @@ export const UserSchema = buildSchema(`
         personal : USER_PROFILE_PERSONAL
     }
 
-    type LabAccount {
+    type SubscribedAccount {
+        _id: ID
         name: String
     }
 
     type UserSubscribedAccounts {
         _id : ID
-        account : LabAccount
+        account : SubscribedAccount
     }
 
     type FrontUser {

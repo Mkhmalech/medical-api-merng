@@ -65,7 +65,6 @@ export const userAddLabSpace = async (args: any, { user, permission, message }: 
                 data&&data.accounts.push({...account})
     
                 let isSaved = await data.save();
-
                 return isSaved? "ACCOUNT_ACTIVATED_SUCCESSFULLY": "NOT_SAVED" 
             }
         }
