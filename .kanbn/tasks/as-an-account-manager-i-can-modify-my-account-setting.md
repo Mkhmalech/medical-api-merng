@@ -1,9 +1,10 @@
 ---
 created: 2023-01-26T18:20:12.273Z
-updated: 2023-01-26T18:20:12.271Z
+updated: 2023-01-27T09:37:42.098Z
 assigned: ""
 progress: 0
-tags: []
+tags:
+  - store
 ---
 
 # as an ACCOUNT MANAGER I can modify my account setting
