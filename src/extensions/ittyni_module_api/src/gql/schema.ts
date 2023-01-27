@@ -2,7 +2,7 @@ import { buildSchema } from "graphql";
 // global
 const id = `_id : ID`
 // schema variables
-const componentName = `name : String`
+const componentName = `name : String!`
 const componentIco = `ico : String`
 const componentDescrpt = `description : String`
 const createdBy = `createdBy : ID`
