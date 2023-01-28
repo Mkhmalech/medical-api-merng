@@ -8,6 +8,7 @@ const componentDescrpt = `description : String`
 const createdBy = `createdBy : ID`
 const createdAt = `createdAt : String`
 const version = `version : String`
+const space = `space: String!`
 
 export const ComponentSchema = buildSchema(`
     
@@ -27,7 +28,7 @@ export const ComponentSchema = buildSchema(`
         readActiveExtensionsBySpace(space : String) : [component]
     }
     type COMPONENTM {
-        createComponent(${componentName},${componentIco},${componentDescrpt}) : String
+        createComponent(${componentName},${componentIco},${componentDescrpt},${space}) : String
         removeComponentById(${id}) : String
     }
     schema {

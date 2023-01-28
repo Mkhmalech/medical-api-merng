@@ -7,7 +7,7 @@ export const create = async (args:any, {user}:any)=>{
     
     const res :any = await component.checkExisting({'name' : args.name});
 
-    if(!res) return component.createNewDoc({...args, createdAt : new Date().toUTCString(), createdBy : user._id });
+    if(!res) return component.createNewDoc({...args, createdAt : new Date().toUTCString(), createdBy : user._id, status: "active" });
     
     if(res) return res;
 }

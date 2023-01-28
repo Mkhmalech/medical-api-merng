@@ -118,6 +118,15 @@ export const CabinetSchema = buildSchema(`
         rest : Int 
         total : Int
     }
+    type Extension {
+        _id : ID!
+        name : String!        
+        canRead : Boolean
+        canCreate : Boolean
+        canUpdate : Boolean
+        canDelete : Boolean
+        canPublish : Boolean
+    }
     type RootQuery {
         findCabinet: String
         listAllCabinets: [Cabinet]
@@ -150,6 +159,7 @@ export const CabinetSchema = buildSchema(`
         setPatientToFinished(num : Int): WaitingRoom
         setPatientToWaiting(num : Int): String
         createCabinetsSiteMap : String
+        activateExtensionOnCabinet(_id: ID!, componentId: ID!): [Extension]
     }
     schema {
         query : RootQuery

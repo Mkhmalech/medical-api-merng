@@ -248,6 +248,51 @@ export const cabinetAddLabOrder = async (args: any, { user }: any) => {
 }
 
 /**
+ * Extensions
+ */
+export const activateExtensionOnCabinet = async (args: any, { user, message }: any) => {
+    const r = await CABINET.findById(args._id, (e: Error, r: any) => {
+      if (e) return Error(e.message);
+      if (!r) return Error('NOT_CONNECTED');
+      let i = r.extensions.findIndex((c: any) => c.componentId&&(c.componentId.toString() === args.componentId.toString()));
+      if (i === -1) {
+        r.extensions.push({
+          componentId: args.componentId,
+          canRead: true,
+          canCreate: true,
+          canUpdate: true,
+          canDelete: true,
+          canPublish: true,
+          addedBy: user._id,
+        })
+
+        r.save();
+      }
+      else return Error('ALREADY_ACTIVATED');
+    });
+    if (r) {
+      const cp = await CABINET.findOne({ _id: args._id })
+      .populate('extensions.componentId')
+      .select('extensions.componentId')
+
+      if (cp && cp.extensions.length > 0) {
+        return cp.extensions.map(
+          (p: any) => {
+            if(p.componentId){
+                return(
+                    {
+                      name: p.componentId.name,
+                      _id: p.componentId._id
+                    }
+                )
+            }
+          })
+      }
+    } else return Error("NOT_SAVED")
+
+  }
+
+/**
  * Waiting Room
 */
 
