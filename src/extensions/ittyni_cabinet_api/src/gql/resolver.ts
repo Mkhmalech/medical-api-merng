@@ -28,8 +28,9 @@ export const cabinetResolver = {
     setPatientToViewed: Cabinet.setPatientToViewed,
     setPatientToFinished: Cabinet.setPatientToFinished,
     setPatientToWaiting: Cabinet.setPatientToWaiting,
-    /**extensions */
+    /**extensions operation*/
     activateExtensionOnCabinet: Cabinet.activateExtensionOnCabinet,
+    readCabinetExtensions: Cabinet.readCabinetExtensions,
 
     /**create data on table */
     createNewCabinet: Cabinet.createNewCabinet,

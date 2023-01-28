@@ -1,5 +1,6 @@
 import { buildSchema } from "graphql";
-
+// id
+const _id = `_id: ID`
 // cabinet varaibles
 const cabinetName = `name : String`
 const cabinetType = `type : String`
@@ -127,6 +128,10 @@ export const CabinetSchema = buildSchema(`
         canDelete : Boolean
         canPublish : Boolean
     }
+    type CabinetExtension {
+        ${_id}
+        extensions : [Extension]
+    }
     type RootQuery {
         findCabinet: String
         listAllCabinets: [Cabinet]
@@ -139,6 +144,8 @@ export const CabinetSchema = buildSchema(`
         CabinetListOnScroll(limit: Int!, skip: Int!) : CabinetOnScroll
         listCabinetDetailsById(id : String) : Cabinet
         listWaitingPatients : [WaitingRoom]
+
+        readCabinetExtensions(${_id}!): CabinetExtension
     }
     type RootMutation {
         createNewCabinet(name : String) : String

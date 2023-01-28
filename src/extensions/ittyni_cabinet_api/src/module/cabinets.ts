@@ -5,12 +5,13 @@ import { Schema, model, Document, SchemaTypes } from "mongoose";
  */
 const extensionSchema = new Schema({
     componentId: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
-    addedBy: {type: Schema.Types.ObjectId, ref: "USERS"},
-    createdAt : {type: String , default: new Date().toLocaleString()},
-    create: Boolean,
-    read: Boolean,
-    update: Boolean,
-    delete: Boolean
+    addedBy: { type: Schema.Types.ObjectId, ref: "USERS" },
+    createdAt: { type: String, default: new Date().toUTCString() },
+    canRead: Boolean,
+    canCreate: Boolean,
+    canUpdate: Boolean,
+    canDelete: Boolean,
+    canPublish: Boolean
 })
 /**
  * payement

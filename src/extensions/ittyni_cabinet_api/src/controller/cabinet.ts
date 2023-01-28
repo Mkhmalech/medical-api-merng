@@ -1,4 +1,3 @@
-import { ICD } from "../../../ittyni_icd_api/src/module/icd";
 import { PATIENT } from "../../../ittyni_patient_api/src/module/patient";
 import { TESTS } from "../../../ittyni_nabm_api/module/labtests";
 import { CABINET } from "../module/cabinets"
@@ -292,6 +291,10 @@ export const activateExtensionOnCabinet = async (args: any, { user, message }: a
 
   }
 
+export const readCabinetExtensions = async (args: any, {user, message, permissions}: any)=>{
+    const cbnt = await CABINET.findById(args._id).populate("extensions.componentId").select("extensions");
+    console.log(cbnt)
+}
 /**
  * Waiting Room
 */
