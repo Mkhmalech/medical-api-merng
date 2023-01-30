@@ -119,9 +119,22 @@ export const CabinetSchema = buildSchema(`
         rest : Int 
         total : Int
     }
+    
     type Extension {
         _id : ID!
-        name : String!        
+        name : String!     
+        canRead : Boolean
+        canCreate : Boolean
+        canUpdate : Boolean
+        canDelete : Boolean
+        canPublish : Boolean
+    }
+    type Component {
+        _id : ID!
+        name : String!  
+    }
+    type ExtensionWithComponent {
+        componentId : Component   
         canRead : Boolean
         canCreate : Boolean
         canUpdate : Boolean
@@ -130,7 +143,7 @@ export const CabinetSchema = buildSchema(`
     }
     type CabinetExtension {
         ${_id}
-        extensions : [Extension]
+        extensions : [ExtensionWithComponent]
     }
     type RootQuery {
         findCabinet: String

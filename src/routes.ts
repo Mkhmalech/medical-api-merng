@@ -92,69 +92,68 @@ const routes = ($: express.Router) => {
     // lab appointement module
     $.all('/appointement', HandlerAPPOINT.LabAppointement);
     /********************************
-     * routes to cabinets
+     * Cabinets Webserver Api v0.1
      ********************************/
     $.all('/cabinets', HandlerCabinet.Cabinet);
-    // cabinet order
     $.all('/cabinets/order', HandlerORDERS.LabOrders);
 
     /********************************
-     * Account Manager Api v0.1
+     * Account Webserver Api v0.1
      ********************************/
     $.all('/account', HandlerAM.AccountManger);
 
     /********************************
-     * Account Manager Api v0.1
+     * Account Webserver Api v0.1
      ********************************/
     $.all('/patient', HandlerPR.Patient);
 
     /********************************
-     * Medicine Manager Api v0.1
+     * Medicine Webserver Api v0.1
      ********************************/
     $.all('/medicine', HandlerMedicine.Medicine);
     
     /********************************
-     * Pharma Manager Api v0.1
+     * Pharma Webserver Api v0.1
      ********************************/
     $.all('/pharma', HandlerPHARMA.PharmaManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/ngap', HandlerNGAP.NGAPManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/ccam', HandlerCCAM.CCAMManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/icd', HandlerICD.ICDManger);
     
     /********************************
-     * COMPONENT Manager Api v0.1
+     * COMPONENT Webserver Api v0.1
      ********************************/
     $.all('/component', HandlerComponent.ComponentManger);
 
     /********************************
-     * DEPARTMENT Manager Api v0.1
+     * DEPARTMENT Webserver Api v0.1
      ********************************/
     $.all('/department', HandlerDepartment.DepartmentManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/queuing', HandlerQU.QueuingManger);
 
     /********************************
-     * Area Manager Api v0.1
+     * Area Webserver Api v0.1
      ********************************/
     $.all('/area', HandlerArea.AreaManger);
     
     /********************************
-     * Area Manager Api v0.1
+     * Area Webserver Api v0.1
      ********************************/
     $.all('/pack', HandlerPacks.PackManger);
     

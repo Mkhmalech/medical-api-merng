@@ -292,8 +292,7 @@ export const activateExtensionOnCabinet = async (args: any, { user, message }: a
   }
 
 export const readCabinetExtensions = async (args: any, {user, message, permissions}: any)=>{
-    const cbnt = await CABINET.findById(args._id).populate("extensions.componentId").select("extensions");
-    console.log(cbnt)
+    return CABINET.findById(args._id).populate("extensions.componentId").select("extensions");
 }
 /**
  * Waiting Room
