@@ -1,4 +1,4 @@
-import { Schema, model, Document, SchemaTypes } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
 /**
  * cabinet extensions

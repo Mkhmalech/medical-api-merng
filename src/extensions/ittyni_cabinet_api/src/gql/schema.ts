@@ -150,7 +150,7 @@ export const CabinetSchema = buildSchema(`
         listAllCabinets: [Cabinet]
         listCabinetPatients(_id: ID!) : [Patient]
         cabinetPatientDetails(id : String) : Patient
-        cabinetFindPatient(query : String) : [Patient]
+        cabinetFindPatient(query : String, accountId: String) : [Patient]
         listCabinetsCities : [CabinetByCity]
         listCabinetsTwntyByCity(city : String) : [Cabinet]
         listCabinetsAllByCity(city : String) : [Cabinet]

@@ -208,8 +208,8 @@ export const cabinetPatientDetails = async ({ id }: any, { user }: any) => {
 /**
  * fetch patient's details of cabinet
  */
-export const cabinetFindPatient = async ({ query }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).select('patients')
+export const cabinetFindPatient = async ({ query, accountId }: any, { user }: any) => {
+    const res = await CABINET.findById(accountId).select('patients')
         .populate('patients.patientId').then((cab) => {
             let q = query;
             q = new RegExp(q, 'ig');
