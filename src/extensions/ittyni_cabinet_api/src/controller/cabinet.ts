@@ -299,26 +299,29 @@ export const readCabinetExtensions = async (args: any, {user, message, permissio
 */
 
 // get waiting room 
-export const listWaitingPatients = async ({ id }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const listWaitingPatients = async ({ id }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id)
+        .populate("waitingRoom.patient waitingRoom.icd")
+        .select("waitingRoom")
         .then((cab: any) => {
             if (cab) {
-                const todayWaiting = cab.waitingRoom.filter((r: any) => new Date(r.arrivedAt).toDateString() == new Date().toDateString())
+                const todayWaiting = cab.waitingRoom.filter((r: any) => 
+                    new Date(r.arrivedAt).toDateString() == new Date().toDateString()
+                ).sort((a:any, b:any)=>a.number>b.number? -1 : 1);
 
                 return (todayWaiting)
             } else return Error("no_cabinet_founded")
         })
-
     return res
 }
 // add patient to waiting room
-export const addPatientToWaitingRoom = async ({ id, motif, visitType }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).then(async (cab: any) => {
+export const addPatientToWaitingRoom = async ({ _id, motif, visitType, accountId }: any, { user }: any) => {
+    const res = await CABINET.findById(accountId).then(async (cab: any) => {
         if (cab) {
             let newArrived: any = {
-                patient: id,
-                arrivedAt: new Date().toISOString(),
-                status: [{ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "waiting" }]
+                patient: _id,
+                arrivedAt: new Date().toUTCString(),
+                status: [{ updatedAt: new Date().toUTCString(), updatedBy: user._id, now: "waiting" }]
             };
 
             const todayWaiting = cab.waitingRoom.filter((r: any) => new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -357,8 +360,8 @@ export const addPatientToWaitingRoom = async ({ id, motif, visitType }: any, { u
 }
 
 // update status of waiting patient
-export const updatePatientToViewed = async ({ id }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const updatePatientToViewed = async ({ id }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.patient._id == id);
@@ -377,8 +380,8 @@ export const updatePatientToViewed = async ({ id }: any, { user }: any) => {
     return res
 }
 // update status of waiting patient
-export const updatePatientToFinished = async ({ id }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const updatePatientToFinished = async ({ id }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.patient._id == id);
@@ -397,8 +400,8 @@ export const updatePatientToFinished = async ({ id }: any, { user }: any) => {
     return res
 }
 // set patient to consulting status
-export const setPatientToViewed = async ({ num }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const setPatientToViewed = async ({ num }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -417,8 +420,8 @@ export const setPatientToViewed = async ({ num }: any, { user }: any) => {
     return res
 }
 // update status of waiting patient
-export const setPatientToFinished = async ({ num }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const setPatientToFinished = async ({ num }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -437,8 +440,8 @@ export const setPatientToFinished = async ({ num }: any, { user }: any) => {
     return res
 }
 // update status of waiting patient
-export const setPatientToWaiting = async ({ num }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const setPatientToWaiting = async ({ num }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());

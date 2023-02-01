@@ -31,7 +31,7 @@ interface Req extends Request {
     user?: USER
     account?: {
         _id: string
-        type: string | boolean
+        type?: string | boolean
     },
     component?: any,
     machine?: any
@@ -123,7 +123,7 @@ export const authUser = async (req: Req, res: Response, next: NextFunction) => {
     // if component continue if not req.message "component_not_installed"
 
     if (accountId) {
-        console.log("accountId", accountId)
+        req.account = {_id: accountId}
     } else {
         permissions =
             component

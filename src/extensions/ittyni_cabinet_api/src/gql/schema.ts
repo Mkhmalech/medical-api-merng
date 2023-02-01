@@ -169,10 +169,12 @@ export const CabinetSchema = buildSchema(`
             ${email}, ${region}, ${street}, ${city},${gender}
         ): String
         cabinetAddLabOrder(
-            id : String, panel : [String], laboId : String
+            _id : String, panel : [String], laboId : String
         ) : String
         addMultipleCabinets : String
-        addPatientToWaitingRoom(id : ID, motif : String, visitType : String): String
+        addPatientToWaitingRoom(
+          _id : ID, motif : String, 
+          visitType : String, accountId: String): String
         updatePatientToViewed(id : ID): [WaitingRoom]
         updatePatientToFinished(id : ID): [WaitingRoom]
         setPatientToViewed(num : Int): WaitingRoom
