@@ -94,7 +94,7 @@ export const addNewPatient = async (args: any, { user }: any) => {
 }
 
 const cleanData = (obj: any)=> {
-    for (var propName in obj) {
+    for (let propName in obj) {
       if (obj[propName] === null || obj[propName] === undefined || obj[propName].length <= 2) {
         delete obj[propName];
       }
