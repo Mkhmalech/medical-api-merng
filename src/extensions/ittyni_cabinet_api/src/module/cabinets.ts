@@ -37,7 +37,9 @@ const waitingPatient = new Schema({
  * patient of cabinet
  */
 const patient = new Schema({
-    patientId: { type: Schema.Types.ObjectId, ref: 'PATIENT' }
+    patientId: { type: Schema.Types.ObjectId, ref: 'PATIENT' },
+    createdAt: { type: String, default: new Date().toUTCString()},
+    createdBy: { type: Schema.Types.ObjectId, ref: 'USERS'}
 })
 interface ICabinetModel extends Document {
     account: {
