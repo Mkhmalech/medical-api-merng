@@ -37,7 +37,7 @@ const Role: Schema = new Schema({
 });
 
 const UserUpdate: Schema = new Schema({
-  addedBy : {type: Schma.Types.ObjectId, ref: "USER"},
+  addedBy : {type: Schema.Types.ObjectId, ref: "USER"},
   loggedWith : {type: String},
   createdAt : {type: String, default: new Date().toUTCString()},
   cabinetId : {type: Schema.Types.ObjectId, ref: "CABINET"}
