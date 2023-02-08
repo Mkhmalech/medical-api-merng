@@ -18,6 +18,7 @@ interface IUserModel extends Document {
   inp?: string
   accounts: any[];
   sessions: any
+  tele : any[]
   // role of main application
   role: {
     name?: string,
@@ -34,6 +35,13 @@ const Role: Schema = new Schema({
   updatedBy: String,
   updateddAt: String,
 });
+
+const UserUpdate: Schema = new Schema({
+  addedBy : {type: Schma.Types.ObjectId, ref: "USER"},
+  loggedWith : {type: String},
+  createdAt : {type: String, default: new Date().toUTCString()},
+  cabinetId : {type: Schema.Types.ObjectId, ref: "CABINET"}
+})
 
 export const Permission: Schema = new Schema({
   component: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
@@ -83,7 +91,7 @@ const UserSchema: Schema = new Schema({
   inp: String,
 
   tele: [{
-    type: {type : String},
+    type: {type : String, default: "mobile"},
     value: {type : String},
     status: {
       type: String,
@@ -130,6 +138,8 @@ const UserSchema: Schema = new Schema({
   status: String,
 
   addedBy: String,
+
+  updates : [UserUpdate],
 
   permissions: [Permission],
 

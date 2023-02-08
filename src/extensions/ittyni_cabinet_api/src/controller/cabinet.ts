@@ -1,5 +1,4 @@
-import { ICD } from "../../../ittyni_icd_api/src/module/icd";
-import { PATIENT } from "../../../ittyni_patient_api/src/module/patient";
+import { EHR } from "../../../ittyni_ehr_api";
 import { TESTS } from "../../../ittyni_nabm_api/module/labtests";
 import { CABINET } from "../module/cabinets"
 import { cabCity } from './cabinetCity'
@@ -119,51 +118,53 @@ export const cabinetSearchTest = async ({ test }: any, { user }: any) => {
  */
 export const addNewPatientToCabinet = async (args: any, { user }: any) => {
     // remove emty or null data
-    const patient = cleanData(args);
+    // const patient = cleanData(args);
+    
+    console.log(args)
 
-    if (!patient.civility) return Error("no_civility_founded")
-    if (!patient.firstname) return Error("no_firstname_founded")
-    if (!patient.lastname) return Error("no_lastname_founded")
-    if (!patient.dob) return Error("no_date_of_birth_founded")
-    if (!patient.city) return Error("no_city_founded")
-    // search if existing Patient
-    if (patient.IDNum) {
-        const existingPatient = await PATIENT.findOne({ "ID.IDNum": args.IDNum });
-        if (existingPatient) return Error("Patient_Already_exist")
-    }
-    const newPatient = new PATIENT({
-        civility: patient.civility,
-        firstname: patient.firstname,
-        lastname: patient.lastname,
-        dob: patient.dob,
-        gender: args.gender,
-        ID: { IDType: patient.IDType, IDNum: patient.IDNum },
-        contact: {
-            tele: { mobile: patient.tele },
-            email: patient.email,
-            address: { region: patient.region, street: patient.street, city: patient.city }
-        }
-    });
+    // if (!patient.civility) return Error("no_civility_founded")
+    // if (!patient.firstname) return Error("no_firstname_founded")
+    // if (!patient.lastname) return Error("no_lastname_founded")
+    // if (!patient.dob) return Error("no_date_of_birth_founded")
+    // if (!patient.city) return Error("no_city_founded")
+    // // search if existing Patient
+    // if (patient.IDNum) {
+    //     const existingPatient = await EHR.findOne({ "ID.IDNum": args.IDNum });
+    //     if (existingPatient) return Error("Patient_Already_exist")
+    // }
+    // const newPatient = new EHR({
+    //     civility: patient.civility,
+    //     firstname: patient.firstname,
+    //     lastname: patient.lastname,
+    //     dob: patient.dob,
+    //     gender: args.gender,
+    //     ID: { IDType: patient.IDType, IDNum: patient.IDNum },
+    //     contact: {
+    //         tele: { mobile: patient.tele },
+    //         email: patient.email,
+    //         address: { region: patient.region, street: patient.street, city: patient.city }
+    //     }
+    // });
 
-    newPatient.permissions.push({ cabinetId: user.accountId });
-    newPatient.update.push({ updatedAt: new Date().toLocaleDateString(), updatedBy: user._id })
+    // newPatient.permissions.push({ cabinetId: user.accountId });
+    // newPatient.update.push({ updatedAt: new Date().toLocaleDateString(), updatedBy: user._id })
 
-    const savedPatient = await newPatient.save();
+    // const savedPatient = await newPatient.save();
 
-    if (!savedPatient) return Error("Patient_Not_Saved");
-    else {
-        const res = await CABINET.findById(user.accountId)
-            .then((cabinet: any) => {
-                if (cabinet) {
-                    cabinet.patients.push({ patientId: savedPatient._id });
-                    return cabinet.save();
-                } else return new Error("no_account_founded");
-            })
+    // if (!savedPatient) return Error("Patient_Not_Saved");
+    // else {
+    //     const res = await CABINET.findById(user.accountId)
+    //         .then((cabinet: any) => {
+    //             if (cabinet) {
+    //                 cabinet.patients.push({ patientId: savedPatient._id });
+    //                 return cabinet.save();
+    //             } else return new Error("no_account_founded");
+    //         })
 
-        if (res) return "patient_saved_successfully"
+    //     if (res) return "patient_saved_successfully"
 
-        else return new Error("patient_not_saved")
-    }
+    //     else return new Error("patient_not_saved")
+    // }
 }
 
 const cleanData = (obj: any) => {
@@ -178,7 +179,7 @@ const cleanData = (obj: any) => {
  * list patient of cabinet
  */
 export const listCabinetPatients = async (args: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).select('patients')
+    const res = await CABINET.findById(args._id).select('patients')
         .populate('patients.patientId').then((cab) => {
             let patients: any[] = [];
             if (cab) {
@@ -209,9 +210,9 @@ export const cabinetPatientDetails = async ({ id }: any, { user }: any) => {
 /**
  * fetch patient's details of cabinet
  */
-export const cabinetFindPatient = async ({ query }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).select('patients')
-        .populate('patients.patientId').then((cab) => {
+export const cabinetFindPatient = async ({ query, accountId }: any, { user }: any) => {
+    const res = await CABINET.findById(accountId).select('patients')
+        .populate('ehr.patientId').then((cab) => {
             let q = query;
             q = new RegExp(q, 'ig');
             let patient: any = [];
@@ -248,30 +249,81 @@ export const cabinetAddLabOrder = async (args: any, { user }: any) => {
 }
 
 /**
+ * Extensions
+ */
+export const activateExtensionOnCabinet = async (args: any, { user, message }: any) => {
+    const r = await CABINET.findById(args._id, (e: Error, r: any) => {
+      if (e) return Error(e.message);
+      if (!r) return Error('NOT_CONNECTED');
+      let i = r.extensions.findIndex((c: any) => c.componentId&&(c.componentId.toString() === args.componentId.toString()));
+      if (i === -1) {
+        r.extensions.push({
+          componentId: args.componentId,
+          canRead: true,
+          canCreate: true,
+          canUpdate: true,
+          canDelete: true,
+          canPublish: true,
+          addedBy: user._id,
+        })
+
+        r.save();
+      }
+      else return Error('ALREADY_ACTIVATED');
+    });
+    if (r) {
+      const cp = await CABINET.findOne({ _id: args._id })
+      .populate('extensions.componentId')
+      .select('extensions.componentId')
+
+      if (cp && cp.extensions.length > 0) {
+        return cp.extensions.map(
+          (p: any) => {
+            if(p.componentId){
+                return(
+                    {
+                      name: p.componentId.name,
+                      _id: p.componentId._id
+                    }
+                )
+            }
+          })
+      }
+    } else return Error("NOT_SAVED")
+
+  }
+
+export const readCabinetExtensions = async (args: any, {user, message, permissions}: any)=>{
+    return CABINET.findById(args._id).populate("extensions.componentId").select("extensions");
+}
+/**
  * Waiting Room
 */
 
 // get waiting room 
-export const listWaitingPatients = async ({ id }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const listWaitingPatients = async ({ id }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id)
+        .populate("waitingRoom.patient waitingRoom.icd")
+        .select("waitingRoom")
         .then((cab: any) => {
             if (cab) {
-                const todayWaiting = cab.waitingRoom.filter((r: any) => new Date(r.arrivedAt).toDateString() == new Date().toDateString())
+                const todayWaiting = cab.waitingRoom.filter((r: any) => 
+                    new Date(r.arrivedAt).toDateString() == new Date().toDateString()
+                ).sort((a:any, b:any)=>a.number>b.number? -1 : 1);
 
                 return (todayWaiting)
             } else return Error("no_cabinet_founded")
         })
-
     return res
 }
 // add patient to waiting room
-export const addPatientToWaitingRoom = async ({ id, motif, visitType }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).then(async (cab: any) => {
+export const addPatientToWaitingRoom = async ({ _id, motif, visitType, accountId }: any, { user }: any) => {
+    const res = await CABINET.findById(accountId).then(async (cab: any) => {
         if (cab) {
             let newArrived: any = {
-                patient: id,
-                arrivedAt: new Date().toISOString(),
-                status: [{ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "waiting" }]
+                patient: _id,
+                arrivedAt: new Date().toUTCString(),
+                status: [{ updatedAt: new Date().toUTCString(), updatedBy: user._id, now: "waiting" }]
             };
 
             const todayWaiting = cab.waitingRoom.filter((r: any) => new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -310,8 +362,8 @@ export const addPatientToWaitingRoom = async ({ id, motif, visitType }: any, { u
 }
 
 // update status of waiting patient
-export const updatePatientToViewed = async ({ id }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const updatePatientToViewed = async ({ id }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.patient._id == id);
@@ -330,8 +382,8 @@ export const updatePatientToViewed = async ({ id }: any, { user }: any) => {
     return res
 }
 // update status of waiting patient
-export const updatePatientToFinished = async ({ id }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const updatePatientToFinished = async ({ id }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.patient._id == id);
@@ -350,8 +402,8 @@ export const updatePatientToFinished = async ({ id }: any, { user }: any) => {
     return res
 }
 // set patient to consulting status
-export const setPatientToViewed = async ({ num }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const setPatientToViewed = async ({ num }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -370,8 +422,8 @@ export const setPatientToViewed = async ({ num }: any, { user }: any) => {
     return res
 }
 // update status of waiting patient
-export const setPatientToFinished = async ({ num }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const setPatientToFinished = async ({ num }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -390,8 +442,8 @@ export const setPatientToFinished = async ({ num }: any, { user }: any) => {
     return res
 }
 // update status of waiting patient
-export const setPatientToWaiting = async ({ num }: any, { user }: any) => {
-    const res = await CABINET.findById(user.accountId).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
+export const setPatientToWaiting = async ({ num }: any, { user, account }: any) => {
+    const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
@@ -409,6 +461,34 @@ export const setPatientToWaiting = async ({ num }: any, { user }: any) => {
         
     return res
 }
+
+// list labo on scroll
+export const CabinetListOnScroll = async ({limit, skip}: any, {permissions, message, user}: any)=>{
+    const cabinets = await CABINET.aggregate([
+      {$match: {}},
+      {$sort: {'account.name': 1}},
+      {$facet: {
+        "data": [{$limit : limit+skip}, {$skip: skip}],
+        "metadata": [
+          {$count: 'total'},
+          {$addFields: { showed: limit+skip }}
+        ]
+      }},
+      {$project: {
+        cabinets: '$data',
+        showed: {$first : '$metadata.showed'},
+        total: {$first : '$metadata.total'},
+        rest : {
+          $subtract : [
+            {$first : '$metadata.total'},
+            {$first : '$metadata.showed'}
+          ]
+        }
+      }}
+    ])
+
+    return cabinets[0]
+  }
 
 export const createCabinetsSiteMap = async () => {
     // let sitmap: string = '';

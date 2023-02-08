@@ -41,6 +41,11 @@ const user_profile_contact = `USER_PROFILE_CONTACT {
 }`
 
 
+export const newUser_inputs = `input _NewUser {
+    personal: _USER_PROFILE_PERSONAL
+    contact : _USER_PROFILE_CONTACT
+}`
+
 
 // user updates
 const userId = "userId: ID"
@@ -245,7 +250,7 @@ export const UserSchema = buildSchema(`
         
         createNewUser(userInput : UserSignUp) : UserSession 
         upgradeToUser(userInput : UserSignUp) : UserSession 
-        addNewUser(addedby : ID, email : String, password: String, role: String, status: String) : String 
+        addNewUser() : String 
         login(userInput: UserInput) : UserAuth!
         getUserDetails(id : String) : UserWithRole
         linkUserToAccount(${userId}, ${accountId}, ${accoutType} ) : String
