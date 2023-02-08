@@ -1,24 +1,39 @@
 import * as Cabinet from '../controller/cabinet'
 export const cabinetResolver = {
-    createNewCabinet: Cabinet.createNewCabinet,
+    // queries
+    
     listAllCabinets: Cabinet.listAllCabinets,
     cabinetSearchTest: Cabinet.cabinetSearchTest,
-    addNewPatientToCabinet: Cabinet.addNewPatientToCabinet,
     listCabinetPatients: Cabinet.listCabinetPatients,
     cabinetPatientDetails: Cabinet.cabinetPatientDetails,
     cabinetFindPatient: Cabinet.cabinetFindPatient,
     cabinetAddLabOrder: Cabinet.cabinetAddLabOrder,
-    addMultipleCabinets: Cabinet.addMultipleCabinets,
     listCabinetsCities: Cabinet.listCabinetsCities,
     listCabinetsTwntyByCity: Cabinet.listCabinetsTwntyByCity,
     listCabinetsAllByCity: Cabinet.listCabinetsAllByCity,
-    listCabinetDetailsById: Cabinet.listCabinetDetailsById,
-    addPatientToWaitingRoom: Cabinet.addPatientToWaitingRoom,
     listWaitingPatients: Cabinet.listWaitingPatients,
+    listCabinetDetailsById: Cabinet.listCabinetDetailsById,
+    CabinetListOnScroll: Cabinet.CabinetListOnScroll,
+    
+    // mutations
+
+    /**update data */
     updatePatientToViewed: Cabinet.updatePatientToViewed,
     updatePatientToFinished: Cabinet.updatePatientToFinished,
+    
+    /**create data on cabinets */
+    addMultipleCabinets: Cabinet.addMultipleCabinets,
+    addNewPatientToCabinet: Cabinet.addNewPatientToCabinet,
+    addPatientToWaitingRoom: Cabinet.addPatientToWaitingRoom,
     setPatientToViewed: Cabinet.setPatientToViewed,
     setPatientToFinished: Cabinet.setPatientToFinished,
     setPatientToWaiting: Cabinet.setPatientToWaiting,
+    /**extensions operation*/
+    activateExtensionOnCabinet: Cabinet.activateExtensionOnCabinet,
+    readCabinetExtensions: Cabinet.readCabinetExtensions,
+
+    /**create data on table */
+    createNewCabinet: Cabinet.createNewCabinet,
     createCabinetsSiteMap: Cabinet.createCabinetsSiteMap,
+    
 };

@@ -2,12 +2,13 @@ import { buildSchema } from "graphql";
 // global
 const id = `_id : ID`
 // schema variables
-const componentName = `name : String`
+const componentName = `name : String!`
 const componentIco = `ico : String`
 const componentDescrpt = `description : String`
 const createdBy = `createdBy : ID`
 const createdAt = `createdAt : String`
 const version = `version : String`
+const space = `space: String!`
 
 export const ComponentSchema = buildSchema(`
     
@@ -24,9 +25,10 @@ export const ComponentSchema = buildSchema(`
     type COMPONENTQ {
         getAllComponents : [component],
         readActiveComponents : [component],
+        readActiveExtensionsBySpace(space : String) : [component]
     }
     type COMPONENTM {
-        createComponent(${componentName},${componentIco},${componentDescrpt}) : String
+        createComponent(${componentName},${componentIco},${componentDescrpt},${space}) : String
         removeComponentById(${id}) : String
     }
     schema {

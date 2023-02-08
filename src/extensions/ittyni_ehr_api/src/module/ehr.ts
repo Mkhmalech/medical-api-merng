@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 
-type PatientModel = IPatient & Document;
+type EHRModel = IEHR & Document;
 
 /**
  * payement
@@ -14,16 +14,16 @@ const permission = new Schema({
     cabinetId : { type: Schema.Types.ObjectId, ref: 'CABINET' },
     laboId : { type: Schema.Types.ObjectId, ref: 'LABO' },
 })
-interface IPatient {
-    civility : String
+interface IEHR {
+    civility : string
     firstname: string,
     lastname: string,
     gender: string,
     tele?: string,
     dob : any,
     ID : {
-        IDType : String
-        IDNum : String
+        IDType : string
+        IDNum : string
     }
     contact? : {
         tele : [{
@@ -50,7 +50,7 @@ interface IPatient {
     permissions : any[]
 }
 
-const patient = new Schema({
+const ehr = new Schema({
     civility : String,
     firstname: String,
     lastname: String,
@@ -97,4 +97,4 @@ const patient = new Schema({
     payements : [payement]
 })
 
-export const PATIENT = model<PatientModel>('PATIENT', patient)
+export const EHR = model<EHRModel>('EHR', ehr)

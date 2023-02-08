@@ -1,11 +1,11 @@
 import { Schema } from "mongoose";
 export const Permission: Schema = new Schema({
     component: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
-    canRead: Boolean,
-    canCreate: Boolean,
-    canUpdate: Boolean,
-    canDelete: Boolean,
-    canPublish: Boolean,
+    canRead: {type: Boolean, default: true},
+    canCreate: {type: Boolean, defautl : false},
+    canUpdate: {type: Boolean, defautl : false},
+    canDelete: {type: Boolean, defautl : false},
+    canPublish: {type: Boolean, defautl : false},
     addedBy: { type: Schema.Types.ObjectId, ref: "USER" },
     addedAt: { type: String, default: new Date().toUTCString() },
 });

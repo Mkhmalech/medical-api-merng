@@ -147,9 +147,9 @@ export const UserSchema = buildSchema(`
       permissions: [ UserRoleAndPermissions ]          
     }
     type UserAccountName {
-        labo : ID
-        cabinet : ID
-        pharma : ID
+        labo : UserSubscribedAccounts
+        cabinet : UserSubscribedAccounts
+        pharma : UserSubscribedAccounts
         role : RoleName
         permissions : [ UserRoleAndPermissions ]
     }
@@ -161,6 +161,16 @@ export const UserSchema = buildSchema(`
         status : String
         accounts : [UserAccountName]
         personal : USER_PROFILE_PERSONAL
+    }
+
+    type SubscribedAccount {
+        _id: ID
+        name: String
+    }
+
+    type UserSubscribedAccounts {
+        _id : ID
+        account : SubscribedAccount
     }
 
     type FrontUser {
@@ -261,6 +271,8 @@ export const UserSchema = buildSchema(`
         user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT): String
         user_updateProfileLocation(_id: ID!, iLocation: _LOCATION): String
         user_updateProfileTele(_id: ID!, iTele: _tele) : String
+        user_addLabSpace(${id},tele: String, role: String): String
+        user_addCabinetSpace(${id},tele: String, role: String): String
     }
     
     schema {

@@ -13,25 +13,25 @@ const email = `email : String`
 const region = `region : String`
 const street = `street : String`
 const city = `city : String`
-export const PatientSchema = buildSchema(`
+export const EHRSchema = buildSchema(`
 
-    type PatientQuery {
-        searchPatient : String
+    type EHRQuery {
+        searchEHR : String
     }
-    type PatientMut {
-        addNewPatientToAccount(
+    type EHRMut {
+        addNewEHRToAccount(
             ${civility}, ${firstname}!, ${lastname}!,
             ${tele}, ${DOB}!, ${IDType}, ${IDNum}, ${gender},
             ${email}, ${region}, ${street}, ${city},
         ): String
-        addNewPatient(
+        addNewEHR(
             ${civility}, ${firstname}!, ${lastname}!,
             ${tele}, ${DOB}!, ${IDType}, ${IDNum}, ${gender},
             ${email}, ${region}, ${street}, ${city},
         ): String
     }
     schema {
-        query : PatientQuery
-        mutation : PatientMut
+        query : EHRQuery
+        mutation : EHRMut
     }
 `)

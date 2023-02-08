@@ -1,5 +1,6 @@
 import { buildSchema } from "graphql";
-
+// id
+const _id = `_id: ID`
 // cabinet varaibles
 const cabinetName = `name : String`
 const cabinetType = `type : String`
@@ -112,17 +113,52 @@ export const CabinetSchema = buildSchema(`
         visitType : String
         status : [WaitingStatus]
     }
+    type CabinetOnScroll {
+        cabinets : [Cabinet]
+        showed : Int
+        rest : Int 
+        total : Int
+    }
+    
+    type Extension {
+        _id : ID!
+        name : String!     
+        canRead : Boolean
+        canCreate : Boolean
+        canUpdate : Boolean
+        canDelete : Boolean
+        canPublish : Boolean
+    }
+    type Component {
+        _id : ID!
+        name : String!  
+    }
+    type ExtensionWithComponent {
+        componentId : Component   
+        canRead : Boolean
+        canCreate : Boolean
+        canUpdate : Boolean
+        canDelete : Boolean
+        canPublish : Boolean
+    }
+    type CabinetExtension {
+        ${_id}
+        extensions : [ExtensionWithComponent]
+    }
     type RootQuery {
         findCabinet: String
         listAllCabinets: [Cabinet]
-        listCabinetPatients : [Patient]
+        listCabinetPatients(_id: ID!) : [Patient]
         cabinetPatientDetails(id : String) : Patient
-        cabinetFindPatient(query : String) : [Patient]
+        cabinetFindPatient(query : String, accountId: String) : [Patient]
         listCabinetsCities : [CabinetByCity]
         listCabinetsTwntyByCity(city : String) : [Cabinet]
         listCabinetsAllByCity(city : String) : [Cabinet]
+        CabinetListOnScroll(limit: Int!, skip: Int!) : CabinetOnScroll
         listCabinetDetailsById(id : String) : Cabinet
         listWaitingPatients : [WaitingRoom]
+
+        readCabinetExtensions(${_id}!): CabinetExtension
     }
     type RootMutation {
         createNewCabinet(name : String) : String
@@ -133,16 +169,19 @@ export const CabinetSchema = buildSchema(`
             ${email}, ${region}, ${street}, ${city},${gender}
         ): String
         cabinetAddLabOrder(
-            id : String, panel : [String], laboId : String
+            _id : String, panel : [String], laboId : String
         ) : String
         addMultipleCabinets : String
-        addPatientToWaitingRoom(id : ID, motif : String, visitType : String): String
+        addPatientToWaitingRoom(
+          _id : ID, motif : String, 
+          visitType : String, accountId: String): String
         updatePatientToViewed(id : ID): [WaitingRoom]
         updatePatientToFinished(id : ID): [WaitingRoom]
         setPatientToViewed(num : Int): WaitingRoom
         setPatientToFinished(num : Int): WaitingRoom
         setPatientToWaiting(num : Int): String
         createCabinetsSiteMap : String
+        activateExtensionOnCabinet(_id: ID!, componentId: ID!): [Extension]
     }
     schema {
         query : RootQuery

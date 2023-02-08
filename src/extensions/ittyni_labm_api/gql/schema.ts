@@ -157,6 +157,7 @@ export const LaboSchema = buildSchema(`
 
 
         readLabmDetailsById(_id: ID!): LaboInfo
+        readLabmExtensions(_id: ID!): LaboInfo
     }
 
     type laboMutation {

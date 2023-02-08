@@ -1,4 +1,4 @@
-import { PATIENT } from "../../ittyni_patient_api/src/module/patient";
+import { EHR } from "../../ittyni_ehr_api";
 import { PAYEMENT } from "../../ittyni_payement_api/src/module/payement";
 import { CABINET } from "../../ittyni_cabinet_api/src/module/cabinets";
 import { ORDER } from '../module/orders'
@@ -101,7 +101,7 @@ export const insertCabinetOrder = async ({ order, patientId, payement }: any, { 
                 })
             } else {
                 // track payement in patient
-                PATIENT.findById(patientId).then((pat:any)=>{
+                EHR.findById(patientId).then((pat:any)=>{
                     if(pat){
                         pat.payements.push({
                             payementId: paying._id,
@@ -154,8 +154,8 @@ export const referredOrdersDetails = async (args: any, { user }: any) => {
         .then(async (order: any) => {
             if (order) {
                 patient = await CABINET.findById(user.accountId).then((cabinet: any) => {
-                    return cabinet.patients.find((p: any) => p._id.toString() === order.patient.toString())
-                }) || await PATIENT.findById(order.patient)
+                    return cabinet.patients.find((p: any) => p._id.toString() === order.EHR.toString())
+                }) || await EHR.findById(order.patient)
             }
             return order;
         });
