@@ -1,5 +1,5 @@
-import * as PR from '../controller/patient'
-export const PatientResolver = {
-    addNewPatientToAccount : PR.addNewPatientToAccount,
-    addNewPatient : PR.addNewPatient
+import * as EHR from '../controller/ehrController'
+export const EHRResolver = {
+    addNewPatientToAccount : EHR.addNewPatientToAccount,
+    addNewPatient : EHR.addNewPatient
 };

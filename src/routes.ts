@@ -41,7 +41,7 @@ import * as HandlerMedicine from './extensions/ittyni_medicine_api'
 // import extensions handler
 import * as HandlerAM from './extensions/ittyni_account_api'
 // import extensions handler
-import * as HandlerPR from './extensions/ittyni_patient_api'
+import * as EHR from './extensions/ittyni_ehr_api'
 // import extensions handler
 import * as HandlerNGAP from './extensions/ittyni_ngap_api'
 // import extensions handler
@@ -105,7 +105,7 @@ const routes = ($: express.Router) => {
     /********************************
      * Account Webserver Api v0.1
      ********************************/
-    $.all('/patient', HandlerPR.Patient);
+    $.all('/ehr', EHR.EHRHandler);
 
     /********************************
      * Medicine Webserver Api v0.1

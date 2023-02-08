@@ -1,4 +1,4 @@
-import { PATIENT } from "../../../ittyni_patient_api/src/module/patient";
+import { EHR } from "../../../ittyni_ehr_api";
 import { TESTS } from "../../../ittyni_nabm_api/module/labtests";
 import { CABINET } from "../module/cabinets"
 import { cabCity } from './cabinetCity'
@@ -127,10 +127,10 @@ export const addNewPatientToCabinet = async (args: any, { user }: any) => {
     if (!patient.city) return Error("no_city_founded")
     // search if existing Patient
     if (patient.IDNum) {
-        const existingPatient = await PATIENT.findOne({ "ID.IDNum": args.IDNum });
+        const existingPatient = await EHR.findOne({ "ID.IDNum": args.IDNum });
         if (existingPatient) return Error("Patient_Already_exist")
     }
-    const newPatient = new PATIENT({
+    const newPatient = new EHR({
         civility: patient.civility,
         firstname: patient.firstname,
         lastname: patient.lastname,
@@ -210,7 +210,7 @@ export const cabinetPatientDetails = async ({ id }: any, { user }: any) => {
  */
 export const cabinetFindPatient = async ({ query, accountId }: any, { user }: any) => {
     const res = await CABINET.findById(accountId).select('patients')
-        .populate('patients.patientId').then((cab) => {
+        .populate('ehr.patientId').then((cab) => {
             let q = query;
             q = new RegExp(q, 'ig');
             let patient: any = [];

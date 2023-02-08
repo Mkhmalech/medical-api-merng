@@ -1,14 +1,14 @@
 import { CABINET } from "../../../ittyni_cabinet_api/src/module/cabinets"
-import { PATIENT } from "../module/patient"
+import { EHR } from "../.."
 
 export const addNewPatientToAccount = async (args: any, { user }: any) => {
     // if user enter ID of patient 
     // save to patient collection
     if (args.IDNum) {
-        const pat = await PATIENT.findOne({ "ID.IDNum": args.IDNum });
+        const pat = await EHR.findOne({ "ID.IDNum": args.IDNum });
         if (pat) return new Error("patient_already_exist");
         else {
-            let newPatient = new PATIENT({
+            let newPatient = new EHR({
                 civility: args.civility,
                 firstname: args.firstname,
                 lastname: args.lastname,
