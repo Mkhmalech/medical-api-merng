@@ -116,55 +116,8 @@ export const cabinetSearchTest = async ({ test }: any, { user }: any) => {
 /**
  * add patient to cabinet
  */
-export const addNewPatientToCabinet = async (args: any, { user }: any) => {
-    // remove emty or null data
-    // const patient = cleanData(args);
-    
+export const addNewUser = async (args: any, { user }: any) => {
     console.log(args)
-
-    // if (!patient.civility) return Error("no_civility_founded")
-    // if (!patient.firstname) return Error("no_firstname_founded")
-    // if (!patient.lastname) return Error("no_lastname_founded")
-    // if (!patient.dob) return Error("no_date_of_birth_founded")
-    // if (!patient.city) return Error("no_city_founded")
-    // // search if existing Patient
-    // if (patient.IDNum) {
-    //     const existingPatient = await EHR.findOne({ "ID.IDNum": args.IDNum });
-    //     if (existingPatient) return Error("Patient_Already_exist")
-    // }
-    // const newPatient = new EHR({
-    //     civility: patient.civility,
-    //     firstname: patient.firstname,
-    //     lastname: patient.lastname,
-    //     dob: patient.dob,
-    //     gender: args.gender,
-    //     ID: { IDType: patient.IDType, IDNum: patient.IDNum },
-    //     contact: {
-    //         tele: { mobile: patient.tele },
-    //         email: patient.email,
-    //         address: { region: patient.region, street: patient.street, city: patient.city }
-    //     }
-    // });
-
-    // newPatient.permissions.push({ cabinetId: user.accountId });
-    // newPatient.update.push({ updatedAt: new Date().toLocaleDateString(), updatedBy: user._id })
-
-    // const savedPatient = await newPatient.save();
-
-    // if (!savedPatient) return Error("Patient_Not_Saved");
-    // else {
-    //     const res = await CABINET.findById(user.accountId)
-    //         .then((cabinet: any) => {
-    //             if (cabinet) {
-    //                 cabinet.patients.push({ patientId: savedPatient._id });
-    //                 return cabinet.save();
-    //             } else return new Error("no_account_founded");
-    //         })
-
-    //     if (res) return "patient_saved_successfully"
-
-    //     else return new Error("patient_not_saved")
-    // }
 }
 
 const cleanData = (obj: any) => {

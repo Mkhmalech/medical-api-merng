@@ -1,4 +1,6 @@
 import { buildSchema } from "graphql";
+import { _USER_INSURANCE, _USER_PROFILE_CONTACT, _USER_PROFILE_PERSONAL, _USER_PROFILE_PROFESSIONAL, _USER_TELE } from "../../../ittyni_user_api/src";
+
 // id
 const _id = `_id: ID`
 // cabinet varaibles
@@ -145,6 +147,13 @@ export const CabinetSchema = buildSchema(`
         ${_id}
         extensions : [ExtensionWithComponent]
     }
+
+    ${_USER_PROFILE_PERSONAL}
+    ${_USER_PROFILE_CONTACT}
+    ${_USER_TELE}
+    ${_USER_PROFILE_PROFESSIONAL}
+    ${_USER_INSURANCE}
+
     type RootQuery {
         findCabinet: String
         listAllCabinets: [Cabinet]
@@ -163,10 +172,12 @@ export const CabinetSchema = buildSchema(`
     type RootMutation {
         createNewCabinet(name : String) : String
         cabinetSearchTest(test : String) : [OrderTest]
-        addNewPatientToCabinet(
-            ${civility}, ${firstname}!, ${lastname}!,
-            ${mobile}, ${DOB}, ${IDType}, ${IDNum},
-            ${email}, ${region}, ${street}, ${city},${gender}
+        addNewUser(
+            personal: _USER_PROFILE_PERSONAL,
+            contact: _USER_PROFILE_CONTACT,
+            tele : _USER_TELE,
+            professional : _USER_PROFILE_PROFESSIONAL,
+            insurance: _USER_INSURANCE
         ): String
         cabinetAddLabOrder(
             _id : String, panel : [String], laboId : String

@@ -23,7 +23,7 @@ export const cabinetResolver = {
     
     /**create data on cabinets */
     addMultipleCabinets: Cabinet.addMultipleCabinets,
-    addNewPatientToCabinet: Cabinet.addNewPatientToCabinet,
+    addNewUser: Cabinet.addNewUser,
     addPatientToWaitingRoom: Cabinet.addPatientToWaitingRoom,
     setPatientToViewed: Cabinet.setPatientToViewed,
     setPatientToFinished: Cabinet.setPatientToFinished,
