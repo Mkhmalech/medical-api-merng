@@ -1,1 +1,5 @@
-export * from './src'
+export * from './src/controllers/User'
+export * from './src/gql/handler'
+export * from './src/gql/resolver'
+export * from './src/gql/schema'
+export * from './src/module/users'

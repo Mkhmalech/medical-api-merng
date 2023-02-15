@@ -3,6 +3,7 @@ import { TESTS } from "../../../ittyni_nabm_api/module/labtests";
 import { CABINET } from "../module/cabinets"
 import { cabCity } from './cabinetCity'
 import { Types } from "mongoose";
+import { USER } from "../../../ittyni_user_api";
 const fs = require('fs');
 
 /**
@@ -82,7 +83,7 @@ export const listCabinetsAllByCity = async ({ city }: any) => {
  * 
  */
 export const listCabinetDetailsById = async ({ id }: any) => {
-    const res = await CABINET.findByIdAndUpdate(id,{$inc : {'views' : 1}}).select("account contact views");
+    const res = await CABINET.findByIdAndUpdate(id, { $inc: { 'views': 1 } }).select("account contact views");
     if (!res) return "no_result_founded";
     return res
 };
@@ -116,8 +117,22 @@ export const cabinetSearchTest = async ({ test }: any, { user }: any) => {
 /**
  * add patient to cabinet
  */
-export const addNewUser = async (args: any, { user }: any) => {
-    console.log(args)
+export const addNewUser = async (
+    { personal, contact, tele, professional, insurance }: any,
+    { user }: any) => {
+    const isExist = await USER.findOne({
+        $or: [
+            { "email": { $eq: contact.email, $exists: true } },
+            { "cne": { $eq: personal.cne, $exists: true } },
+            { "tele.value": { $eq: tele.value, $exists: true } }
+        ]
+    });
+
+
+    if (isExist) console.log(true);
+    else console.log(false)
+
+
 }
 
 const cleanData = (obj: any) => {
@@ -206,47 +221,47 @@ export const cabinetAddLabOrder = async (args: any, { user }: any) => {
  */
 export const activateExtensionOnCabinet = async (args: any, { user, message }: any) => {
     const r = await CABINET.findById(args._id, (e: Error, r: any) => {
-      if (e) return Error(e.message);
-      if (!r) return Error('NOT_CONNECTED');
-      let i = r.extensions.findIndex((c: any) => c.componentId&&(c.componentId.toString() === args.componentId.toString()));
-      if (i === -1) {
-        r.extensions.push({
-          componentId: args.componentId,
-          canRead: true,
-          canCreate: true,
-          canUpdate: true,
-          canDelete: true,
-          canPublish: true,
-          addedBy: user._id,
-        })
+        if (e) return Error(e.message);
+        if (!r) return Error('NOT_CONNECTED');
+        let i = r.extensions.findIndex((c: any) => c.componentId && (c.componentId.toString() === args.componentId.toString()));
+        if (i === -1) {
+            r.extensions.push({
+                componentId: args.componentId,
+                canRead: true,
+                canCreate: true,
+                canUpdate: true,
+                canDelete: true,
+                canPublish: true,
+                addedBy: user._id,
+            })
 
-        r.save();
-      }
-      else return Error('ALREADY_ACTIVATED');
+            r.save();
+        }
+        else return Error('ALREADY_ACTIVATED');
     });
     if (r) {
-      const cp = await CABINET.findOne({ _id: args._id })
-      .populate('extensions.componentId')
-      .select('extensions.componentId')
+        const cp = await CABINET.findOne({ _id: args._id })
+            .populate('extensions.componentId')
+            .select('extensions.componentId')
 
-      if (cp && cp.extensions.length > 0) {
-        return cp.extensions.map(
-          (p: any) => {
-            if(p.componentId){
-                return(
-                    {
-                      name: p.componentId.name,
-                      _id: p.componentId._id
+        if (cp && cp.extensions.length > 0) {
+            return cp.extensions.map(
+                (p: any) => {
+                    if (p.componentId) {
+                        return (
+                            {
+                                name: p.componentId.name,
+                                _id: p.componentId._id
+                            }
+                        )
                     }
-                )
-            }
-          })
-      }
+                })
+        }
     } else return Error("NOT_SAVED")
 
-  }
+}
 
-export const readCabinetExtensions = async (args: any, {user, message, permissions}: any)=>{
+export const readCabinetExtensions = async (args: any, { user, message, permissions }: any) => {
     return CABINET.findById(args._id).populate("extensions.componentId").select("extensions");
 }
 /**
@@ -260,9 +275,9 @@ export const listWaitingPatients = async ({ id }: any, { user, account }: any) =
         .select("waitingRoom")
         .then((cab: any) => {
             if (cab) {
-                const todayWaiting = cab.waitingRoom.filter((r: any) => 
+                const todayWaiting = cab.waitingRoom.filter((r: any) =>
                     new Date(r.arrivedAt).toDateString() == new Date().toDateString()
-                ).sort((a:any, b:any)=>a.number>b.number? -1 : 1);
+                ).sort((a: any, b: any) => a.number > b.number ? -1 : 1);
 
                 return (todayWaiting)
             } else return Error("no_cabinet_founded")
@@ -292,12 +307,12 @@ export const addPatientToWaitingRoom = async ({ _id, motif, visitType, accountId
             else newArrived.number = 1;
 
             // set motif if exist in icd
-            if (motif.length > 2 && motif!="undefined") {
-                if(Types.ObjectId.isValid(motif)) newArrived.icd = motif;
+            if (motif.length > 2 && motif != "undefined") {
+                if (Types.ObjectId.isValid(motif)) newArrived.icd = motif;
                 else newArrived.motif = motif;
             }
 
-            if(visitType.length > 0 && visitType!="undefined") newArrived.visitType = visitType;
+            if (visitType.length > 0 && visitType != "undefined") newArrived.visitType = visitType;
 
             cab.waitingRoom.push(newArrived);
 
@@ -321,17 +336,17 @@ export const updatePatientToViewed = async ({ id }: any, { user, account }: any)
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.patient._id == id);
                 cab.waitingRoom[i].viewedAt = new Date().toISOString();
-                cab.waitingRoom[i].status.push({updatedAt: new Date().toISOString(), updatedBy: user._id, now: "consult" });
+                cab.waitingRoom[i].status.push({ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "consult" });
 
                 const newCab = await cab.save();
 
-                if(newCab) return (newCab.waitingRoom)
+                if (newCab) return (newCab.waitingRoom)
 
                 else return Error("status_not_saved");
 
             } else return Error("no_cabinet_founded")
         })
-        
+
     return res
 }
 // update status of waiting patient
@@ -341,17 +356,17 @@ export const updatePatientToFinished = async ({ id }: any, { user, account }: an
             if (cab) {
                 const i = cab.waitingRoom.findIndex((r: any) => r.patient._id == id);
                 cab.waitingRoom[i].finishedAt = new Date().toISOString();
-                cab.waitingRoom[i].status.push({updatedAt: new Date().toISOString(), updatedBy: user._id, now: "finished" });
+                cab.waitingRoom[i].status.push({ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "finished" });
 
                 const newCab = await cab.save();
 
-                if(newCab) return (newCab.waitingRoom)
+                if (newCab) return (newCab.waitingRoom)
 
                 else return Error("status_not_saved");
 
             } else return Error("no_cabinet_founded")
         })
-        
+
     return res
 }
 // set patient to consulting status
@@ -359,19 +374,19 @@ export const setPatientToViewed = async ({ num }: any, { user, account }: any) =
     const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
-                const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
+                const i = cab.waitingRoom.findIndex((r: any) => r.number == num && new Date(r.arrivedAt).toDateString() == new Date().toDateString());
                 cab.waitingRoom[i].viewedAt = new Date().toISOString();
-                cab.waitingRoom[i].status.push({updatedAt: new Date().toISOString(), updatedBy: user._id, now: "consult", before: "waiting" });
+                cab.waitingRoom[i].status.push({ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "consult", before: "waiting" });
 
                 const newCab = await cab.save();
 
-                if(newCab) return cab.waitingRoom[i]
+                if (newCab) return cab.waitingRoom[i]
 
                 else return Error("status_not_saved");
 
             } else return Error("no_cabinet_founded")
         })
-        
+
     return res
 }
 // update status of waiting patient
@@ -379,19 +394,19 @@ export const setPatientToFinished = async ({ num }: any, { user, account }: any)
     const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
-                const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
+                const i = cab.waitingRoom.findIndex((r: any) => r.number == num && new Date(r.arrivedAt).toDateString() == new Date().toDateString());
                 cab.waitingRoom[i].finishedAt = new Date().toISOString();
-                cab.waitingRoom[i].status.push({updatedAt: new Date().toISOString(), updatedBy: user._id, now: "finished", before:"consult" });
+                cab.waitingRoom[i].status.push({ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "finished", before: "consult" });
 
                 const newCab = await cab.save();
 
-                if(newCab) return cab.waitingRoom[i]
+                if (newCab) return cab.waitingRoom[i]
 
                 else return Error("status_not_saved");
 
             } else return Error("no_cabinet_founded")
         })
-        
+
     return res
 }
 // update status of waiting patient
@@ -399,49 +414,53 @@ export const setPatientToWaiting = async ({ num }: any, { user, account }: any) 
     const res = await CABINET.findById(account._id).populate("waitingRoom.patient waitingRoom.icd").select("waitingRoom")
         .then(async (cab: any) => {
             if (cab) {
-                const i = cab.waitingRoom.findIndex((r: any) => r.number == num&&new Date(r.arrivedAt).toDateString() == new Date().toDateString());
+                const i = cab.waitingRoom.findIndex((r: any) => r.number == num && new Date(r.arrivedAt).toDateString() == new Date().toDateString());
                 cab.waitingRoom[i].finishedAt = new Date().toISOString();
-                cab.waitingRoom[i].status.push({updatedAt: new Date().toISOString(), updatedBy: user._id, now: "waiting", before:"consult" });
+                cab.waitingRoom[i].status.push({ updatedAt: new Date().toISOString(), updatedBy: user._id, now: "waiting", before: "consult" });
 
                 const newCab = await cab.save();
 
-                if(newCab) return ("status_updated_successfully")
+                if (newCab) return ("status_updated_successfully")
 
                 else return Error("status_not_saved");
 
             } else return Error("no_cabinet_founded")
         })
-        
+
     return res
 }
 
 // list labo on scroll
-export const CabinetListOnScroll = async ({limit, skip}: any, {permissions, message, user}: any)=>{
+export const CabinetListOnScroll = async ({ limit, skip }: any, { permissions, message, user }: any) => {
     const cabinets = await CABINET.aggregate([
-      {$match: {}},
-      {$sort: {'account.name': 1}},
-      {$facet: {
-        "data": [{$limit : limit+skip}, {$skip: skip}],
-        "metadata": [
-          {$count: 'total'},
-          {$addFields: { showed: limit+skip }}
-        ]
-      }},
-      {$project: {
-        cabinets: '$data',
-        showed: {$first : '$metadata.showed'},
-        total: {$first : '$metadata.total'},
-        rest : {
-          $subtract : [
-            {$first : '$metadata.total'},
-            {$first : '$metadata.showed'}
-          ]
+        { $match: {} },
+        { $sort: { 'account.name': 1 } },
+        {
+            $facet: {
+                "data": [{ $limit: limit + skip }, { $skip: skip }],
+                "metadata": [
+                    { $count: 'total' },
+                    { $addFields: { showed: limit + skip } }
+                ]
+            }
+        },
+        {
+            $project: {
+                cabinets: '$data',
+                showed: { $first: '$metadata.showed' },
+                total: { $first: '$metadata.total' },
+                rest: {
+                    $subtract: [
+                        { $first: '$metadata.total' },
+                        { $first: '$metadata.showed' }
+                    ]
+                }
+            }
         }
-      }}
     ])
 
     return cabinets[0]
-  }
+}
 
 export const createCabinetsSiteMap = async () => {
     // let sitmap: string = '';

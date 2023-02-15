@@ -44,7 +44,8 @@ const user_profile_personal = `USER_PROFILE_PERSONAL {
 }`
 // user profile contact 
 const user_profile_contact = `USER_PROFILE_CONTACT {
-    ${address} ${city} ${country}
+    ${email} ${address} 
+    ${city} ${country}
 }`
 // user professional profile
 const user_profile_professional = `USER_PROFILE_PROFESSIONAL {

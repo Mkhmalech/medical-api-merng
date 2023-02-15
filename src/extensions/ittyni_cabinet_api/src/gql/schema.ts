@@ -1,5 +1,8 @@
 import { buildSchema } from "graphql";
-import { _USER_INSURANCE, _USER_PROFILE_CONTACT, _USER_PROFILE_PERSONAL, _USER_PROFILE_PROFESSIONAL, _USER_TELE } from "../../../ittyni_user_api/src";
+import { 
+    _USER_INSURANCE, _USER_PROFILE_CONTACT, 
+    _USER_PROFILE_PERSONAL, _USER_PROFILE_PROFESSIONAL, 
+    _USER_TELE } from "../../../ittyni_user_api";
 
 // id
 const _id = `_id: ID`

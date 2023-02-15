@@ -296,7 +296,7 @@ class User extends Roles {
   };
 
   getUserProfile = async ({ token }: any) => {
-    let decodeToken: DecodeToken | any = jwt.decode(token);
+    let decodeToken: any = jwt.decode(token);
 
     if (decodeToken) {
       const { email } = decodeToken;

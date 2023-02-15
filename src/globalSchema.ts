@@ -1,33 +1,42 @@
 // globals
-const STATUS = `STATUS:String`
-const VALUE = `VALUE:String`
-const TYPE = `TYPE:String`
+export const _id = `_id: ID`
+export const STATUS = `status:String`
+export const VALUE = `value:String`
+export const TYPE = `type:String`
+export const NAME = `name: String`
+export const TOTAL = `total: Int`
+export const RURAL = `rural: Int`
+export const URBAIN = `urbain: Int`
+
+
+// date time
+export const YEAR = `year: Int`
 
 // personal
-const CIVILITY = `CIVILITY: String`
-const GENDER = `GENDER: String`
-const FIRSTNAME = "FIRSTNAME : String"
-const LASTNAME = "LASTNAME : String"
-const EMAIL = "EMAIL : String"
-const PICTURE = "PICTURE : String"
-const USERNAME = "USERNAME : String"
-const DAY_OF_BIRTH = `DOB: String`
-const CITY_OF_BIRTH = `POB: String`
-const CNE = `CNE: String`
+export const CIVILITY = `civility: String`
+export const GENDER = `gender: String`
+export const FIRSTNAME = "firstname : String"
+export const LASTNAME = "lastname : String"
+export const EMAIL = "email : String"
+export const PICTURE = "picture : String"
+export const USERNAME = "username : String"
+export const DAY_OF_BIRTH = `dob: String`
+export const CITY_OF_BIRTH = `pob: String`
+export const CNE = `cne: String`
 
 // contact 
-const ADDRESS = `ADDRESS: String`
-const CITY = `CITY: String`
-const SUBDIVISION = `SUBDIVISION: String`
-const DIVISION = `DIVISION: String`
-const REGION = `REGION: String`
-const COUNTRY = `COUNTRY: String`
-const ZIPCODE = `ZIPCODE: String`
+export const ADDRESS = `address: String`
+export const CITY = `city: String`
+export const SUBDIVISION = `subdivision: String`
+export const DIVISION = `division: String`
+export const REGION = `region: String`
+export const COUNTRY = `country: String`
+export const ZIPCODE = `zipcode: String`
 
 // location
-const LATITUDE = `LATITUDE: String`
-const LONGITUDE = `LONGITUDE: String`
-const LOCATION = `LOCATION{${LATITUDE} ${LONGITUDE}}`
+export const LATITUDE = `latitude: String`
+export const LONGITUDE = `longitude: String`
+export const LOCATION = `location{${LATITUDE} ${LONGITUDE}}`
 
 // professional 
-const INP = `INP: String`
+export const INP = `inp: String`

@@ -150,7 +150,7 @@ const routes = ($: express.Router) => {
     /********************************
      * Area Webserver Api v0.1
      ********************************/
-    $.all('/area', HandlerArea.AreaManger);
+    $.all('/zipcode', HandlerArea.AreaManger);
     
     /********************************
      * Area Webserver Api v0.1

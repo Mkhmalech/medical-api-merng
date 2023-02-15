@@ -3,9 +3,9 @@ import { AccountSchema } from "./account";
 
 interface IUserModel extends Document {
   status?: string;
-  email: UserEmail;
-  password: UserPassword;
-  createdAt: UserCreatedAt;
+  email: string;
+  password: string;
+  createdAt: string;
   signedbygg: boolean;
   picture?: string
   gender?: string
@@ -74,21 +74,21 @@ const UserSchema: Schema = new Schema({
 
   code: Number,
 
-  picture: String,
+  picture: {type: String},
 
-  firstName: String,
+  firstName: {type: String},
 
-  lastName: String,
+  lastName: {type: String},
 
   username: {type: String},
 
-  dob: String,
+  dob: {type: String},
 
   pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
 
-  cne: String,
+  cne: {type: String},
 
-  inp: String,
+  inp: {type: String},
 
   tele: [{
     type: {type : String, default: "mobile"},
