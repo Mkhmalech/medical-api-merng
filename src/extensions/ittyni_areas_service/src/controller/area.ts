@@ -71,3 +71,7 @@ export const write_areaUnit = async ({unit}:any, {user}: any)=>{
         return "NO_AREA_FOUND"
     }
 }
+
+export const read_areasOfRegion = ({region}: any, {user}: any) =>{
+  return AREA.find({region}).sort('name');
+}

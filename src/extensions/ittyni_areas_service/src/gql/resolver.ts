@@ -7,6 +7,7 @@ export const areaResolver = {
     read_regionAreas: Area.read_regionAreas,
     read_areaByName: Area.read_areaByName,
     read_areaByType: Area.read_areaByType,
+    read_areasOfRegion: Area.read_areasOfRegion,
 
     // write 
     write_areaUnit: Area.write_areaUnit,

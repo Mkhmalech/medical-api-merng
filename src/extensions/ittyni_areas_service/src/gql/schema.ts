@@ -32,6 +32,7 @@ export const AreaSchema = buildSchema(`
         read_regionAreas(${REGION}) : [Area]
         read_areaByName(${NAME}) : [Area]
         read_areaByType(${TYPE}) : [Area]
+        read_areasOfRegion(${REGION}): [Area]
     }
 
     type AreaMutation {
