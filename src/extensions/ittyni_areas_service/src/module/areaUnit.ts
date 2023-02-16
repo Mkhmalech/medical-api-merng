@@ -6,8 +6,9 @@ type areaModel = IAreaUnit & Document;
 interface IAreaUnit{
     name : string
     type : string
+    zipcode: string
     population?: any
-    country : any
+    area : any
 }
 
 const areaUnit = new Schema({

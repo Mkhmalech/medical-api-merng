@@ -23,6 +23,7 @@ export const AreaSchema = buildSchema(`
 
     type ${POPULATION}
     type ${AREA}
+    type ${AreaUnit}
 
     input _${AreaUnit}
 
@@ -33,6 +34,7 @@ export const AreaSchema = buildSchema(`
         read_areaByName(${NAME}) : [Area]
         read_areaByType(${TYPE}) : [Area]
         read_areasOfRegion(${REGION}): [Area]
+        read_zipcodesOfArea(areaId: ID!): [AreaUnit]
     }
 
     type AreaMutation {

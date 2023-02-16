@@ -28,50 +28,68 @@ export const saveAllPrivincesAndPrefecture = async (args: any) => {
     // }
 }
 
-export const read_areaParents=({country}: any)=>{
-    return AREA.find({country}).sort('region').distinct('region')
+export const read_areaParents = ({ country }: any) => {
+    return AREA.find({ country }).sort('region').distinct('region')
 }
 
-export const read_areas = ({country}:any, {user}:any)=>{
+export const read_areas = ({ country }: any, { user }: any) => {
 
-    return AREA.find({country: country});
+    return AREA.find({ country: country });
 }
 
-export const read_countryAreas = ({country}:any, {user}:any)=>{
+export const read_countryAreas = ({ country }: any, { user }: any) => {
 
-    return AREA.find({country: country});
+    return AREA.find({ country: country });
 }
-export const read_regionAreas = ({region}:any, {user}:any)=>{
+export const read_regionAreas = ({ region }: any, { user }: any) => {
 
-    return AREA.find({region});
+    return AREA.find({ region });
 }
-export const read_areaByName = ({name}:any, {user}:any)=>{
+export const read_areaByName = ({ name }: any, { user }: any) => {
 
-    return AREA.find({name});
+    return AREA.find({ name });
 }
-export const read_areaByType = ({type}:any, {user}:any)=>{
+export const read_areaByType = ({ type }: any, { user }: any) => {
 
-    return AREA.find({type});
+    return AREA.find({ type });
 }
 
-export const write_areaUnit = async ({unit}:any, {user}: any)=>{
+export const read_areasOfRegion = ({ region }: any, { user }: any) => {
+    return AREA.find({ region }).sort('name');
+}
+
+export const read_zipcodesOfArea = ({areaId}: any, {user}: any) =>{
+    return AREAUNIT.find({area : areaId}).sort('name')
+}
+// write data functions
+export const write_areaUnit = async ({ unit }: any, { user }: any) => {
 
     const area = await AREA.findById(unit.areaId);
 
-    if(area){
+    if (area) {
+
+        const isExist = await AREAUNIT.find({ zipcode: unit.zipcode });
+
+  
+        if (!!isExist.length) return new Error("ZIPCODE_ALREADY_EXIST");
+
+
         const newUnit = new AREAUNIT({
             name: unit.name,
             type: unit.type,
             area: unit.areaId,
             zipcode: unit.zipcode
-        })
+        });
 
         newUnit.save();
+
+        return "ZIPCODE_SAVED_SUCCESSFULLY"
+
+
     } else {
         return "NO_AREA_FOUND"
     }
 }
 
-export const read_areasOfRegion = ({region}: any, {user}: any) =>{
-  return AREA.find({region}).sort('name');
-}
+
+
