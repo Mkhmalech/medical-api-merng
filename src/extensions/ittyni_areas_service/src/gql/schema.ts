@@ -1,23 +1,23 @@
 import { buildSchema } from "graphql";
 import { 
-    COUNTRY, NAME, REGION, RURAL, TOTAL, TYPE, URBAIN, YEAR, ZIPCODE, _id 
+    country, name, area, rural, total, type, urbain, YEAR, zipcode, _id 
 } from "../../../../globalSchema";
 
 const AREA = `Area {
     ${_id}
-    ${NAME} ${TYPE}
-    ${REGION} ${COUNTRY}
+    ${name} ${type}
+    ${area} ${country}
     population : [Population]
 }`
 
 const AreaUnit = `AreaUnit {
-    ${NAME} ${TYPE} ${ZIPCODE}
+    ${name} ${type} ${zipcode}
     areaId : ID!
 }`
 
 const POPULATION = `Population {
-    ${TOTAL} ${RURAL}
-    ${URBAIN} ${YEAR}
+    ${total} ${rural}
+    ${urbain} ${YEAR}
 }`
 export const AreaSchema = buildSchema(`
 
@@ -28,12 +28,12 @@ export const AreaSchema = buildSchema(`
     input _${AreaUnit}
 
     type AreaQuery {
-        read_areaParents(${COUNTRY}): [String]
-        read_countryAreas(${COUNTRY}) : [Area]
-        read_regionAreas(${REGION}) : [Area]
-        read_areaByName(${NAME}) : [Area]
-        read_areaByType(${TYPE}) : [Area]
-        read_areasOfRegion(${REGION}): [Area]
+        read_areaParents(${country}): [String]
+        read_countryAreas(${country}) : [Area]
+        read_areaAreas(${area}) : [Area]
+        read_areaByname(${name}) : [Area]
+        read_areaBytype(${type}) : [Area]
+        read_areasOfarea(${area}): [Area]
         read_zipcodesOfArea(areaId: ID!): [AreaUnit]
     }
 

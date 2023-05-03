@@ -90,6 +90,3 @@ export const write_areaUnit = async ({ unit }: any, { user }: any) => {
         return "NO_AREA_FOUND"
     }
 }
-
-
-

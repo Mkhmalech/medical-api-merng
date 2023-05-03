@@ -58,6 +58,10 @@ import * as HandlerQU from './extensions/ittyni_queuing_api'
 import * as HandlerArea from './extensions/ittyni_areas_service'
 // laboratory packs
 import * as HandlerPacks from './extensions/ittyni_pack_service'
+// Parapharmacy
+import * as HandlerParaPharmacy from './extensions/ittyni_parapharmacy_api'
+// Paramedical 
+import * as HandlerParamedical from './extensions/ittyni_paramedical_api'
 
 const routes = ($: express.Router) => {
 
@@ -153,9 +157,19 @@ const routes = ($: express.Router) => {
     $.all('/zipcode', HandlerArea.AreaManger);
     
     /********************************
-     * Area Webserver Api v0.1
+     * Pack Webserver Api v0.1
      ********************************/
     $.all('/pack', HandlerPacks.PackManger);
+    
+    /********************************
+     * Pack Webserver Api v0.1
+     ********************************/
+    $.all('/parapharmacy', HandlerParaPharmacy.ParapharmacyManger);
+    
+    /********************************
+     * Pack Webserver Api v0.1
+     ********************************/
+    $.all('/paramedical', HandlerParamedical.ParamedicalManger);
     
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(
