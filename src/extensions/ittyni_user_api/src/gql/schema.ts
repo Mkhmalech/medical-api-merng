@@ -1,5 +1,6 @@
 import { buildSchema } from "graphql";
 import { roleAndPermissions } from "./schema/role";
+import { tele } from "../../../../globalSchema";
 
 // global variable
 const id = "_id : ID"
@@ -28,7 +29,7 @@ const status = `status:String`
 const value = `value:String`
 const type = `type:String`
 const location = `LOCATION{${latitude} ${longitude}}`
-const USER_TELE = `USER_TELE{${status} ${value} ${type}}`
+const USER_TELE = tele
 
 // Insurance
 const provider = `provider: String`;
