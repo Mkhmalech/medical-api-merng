@@ -199,3 +199,11 @@ export const referredOrdersChangeStatus = async (args: any, { user }: any) => {
     else
         return (Order)
 }
+
+export const write_MedicineOrder = async (args: any, { user }: any) =>{
+    console.log(args)
+    // save user information and after save the order
+    
+
+    return "we are her"
+}

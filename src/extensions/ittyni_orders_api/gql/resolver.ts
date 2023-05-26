@@ -14,4 +14,7 @@ export const OrdersResolver = {
     // get order detail
     referredOrdersChangeStatus: order.referredOrdersChangeStatus,
 
+    OrderMedicine: {
+        write_MedicineOrder: order.write_MedicineOrder        
+    }
 }

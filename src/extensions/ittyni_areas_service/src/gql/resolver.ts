@@ -8,7 +8,8 @@ export const areaResolver = {
     read_areaByName: Area.read_areaByName,
     read_areaByType: Area.read_areaByType,
     read_areasOfRegion: Area.read_areasOfRegion,
-    read_zipcodesOfArea: Area.read_zipcodesOfArea,
+    read_zipcodesByAreaName: Area.read_zipcodesByAreaName,
+    read_zipcodesByAreaId: Area.read_zipcodesByAreaId,
 
     // write 
     write_areaUnit: Area.write_areaUnit,

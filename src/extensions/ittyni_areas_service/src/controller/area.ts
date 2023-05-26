@@ -33,16 +33,13 @@ export const read_areaParents = ({ country }: any) => {
 }
 
 export const read_areas = ({ country }: any, { user }: any) => {
-
     return AREA.find({ country: country });
 }
 
 export const read_countryAreas = ({ country }: any, { user }: any) => {
-
-    return AREA.find({ country: country });
+    return AREA.find({ country }).sort('region').distinct('region')
 }
 export const read_regionAreas = ({ region }: any, { user }: any) => {
-
     return AREA.find({ region });
 }
 export const read_areaByName = ({ name }: any, { user }: any) => {
@@ -58,8 +55,11 @@ export const read_areasOfRegion = ({ region }: any, { user }: any) => {
     return AREA.find({ region }).sort('name');
 }
 
-export const read_zipcodesOfArea = ({areaId}: any, {user}: any) =>{
-    return AREAUNIT.find({area : areaId}).sort('name')
+export const read_zipcodesByAreaId = ({area_id}: any, {user}: any) =>{
+    return AREAUNIT.find({area : area_id}).sort('name')
+}
+export const read_zipcodesByAreaName = ({area_name}: any, {user}: any) =>{
+    return AREAUNIT.find({area : area_name}).sort('name')
 }
 // write data functions
 export const write_areaUnit = async ({ unit }: any, { user }: any) => {

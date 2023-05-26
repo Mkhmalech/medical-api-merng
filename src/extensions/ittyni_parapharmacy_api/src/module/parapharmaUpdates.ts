@@ -1,27 +1,6 @@
-import { Schema, model, Document } from "mongoose";
-import { parapharmacyUpdateSchema } from "./parapharmaUpdates";
+import { Schema } from "mongoose";
 
-type parapharmacyModel = IParapharmacy & Document;
-
-const permission = new Schema({
-    
-})
-interface IParapharmacy {
-    account: {
-        name: string,
-        code?: number,
-        type?: string,
-        start?: string,
-    }
-    contact?: {
-        tele?: any[],
-        address?: any,
-        website?: string
-    },
-    updates?: any[]
-}
-
-const parapharmacy = new Schema({
+export const parapharmacyUpdateSchema = new Schema({
     account: {
         name: { type: String },
         code: { type: Number },
@@ -56,8 +35,5 @@ const parapharmacy = new Schema({
     },
     status: { type: String, enum :['created', 'validated', 'suspended', 'deleted'], default: 'created'},
     createdAt: { type: String , default: new Date().toUTCString() },
-    createdBy: { type: Schema.Types.ObjectId, ref: 'USER' },
-    updates: [parapharmacyUpdateSchema]
+    createdBy: { type: Schema.Types.ObjectId, ref: "USER" }
 })
-
-export const PARAPHARMACY = model<parapharmacyModel>('PARAPHARMACY', parapharmacy)

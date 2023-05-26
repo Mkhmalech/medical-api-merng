@@ -32,7 +32,7 @@ export const MedicineSchema = buildSchema(`
 
     type MedicineQuery {
         fetchMedicine(id : String) : Medicine
-        fetchMedicneByAlphabete(letter : String): String
+        fetchMedicneByAlphabete(letter : String): [Medicine]
         fetchMedicneByName(name : String) : [Medicine]
         ListAllCategories : [String]
         ListByCategory(${categoty}) : [Medicine]

@@ -98,12 +98,12 @@ const UserSchema: Schema = new Schema({
       enum: ["created", "verified", "deleted", "suspended"],
       default: "created"
     },
-    country_code: String,
-    country_name: String,
-    country_dial_code: String,
-    dial_numero: String,
-    dial_operator: String,
-    dial_type: String,
+    country_code: {type: String},
+    country_name: {type: String},
+    country_dial_code: {type: String},
+    dial_numero: {type: String},
+    dial_operator: {type: String},
+    dial_type: {type: String, enum: ['fix', 'mobile']},
   }],
 
   contact: {

@@ -20,6 +20,8 @@ export const AccountSchema: Schema = new Schema({
     labo: { type: Schema.Types.ObjectId, ref: "LABO" },
     cabinet: { type: Schema.Types.ObjectId, ref: "CABINET" },
     pharma: { type: Schema.Types.ObjectId, ref: "PHARMA" },
+    parapharma: { type: Schema.Types.ObjectId, ref: "PHARMA" },
+    paramed: { type: Schema.Types.ObjectId, ref: "PHARMA" },
     enabledBy: { type: Schema.Types.ObjectId, ref: "USER" },
     enabledAt: { type: String, default: new Date().toUTCString() },
     role: {

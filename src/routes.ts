@@ -62,6 +62,8 @@ import * as HandlerPacks from './extensions/ittyni_pack_service'
 import * as HandlerParaPharmacy from './extensions/ittyni_parapharmacy_api'
 // Paramedical 
 import * as HandlerParamedical from './extensions/ittyni_paramedical_api'
+// import country dial code
+import countryDialCode from './common/country_dials_code.json'
 
 const routes = ($: express.Router) => {
 
@@ -179,6 +181,17 @@ const routes = ($: express.Router) => {
     {
         
     });
+
+    /**
+     * country dial json
+     */
+    $.get('/country_dials_code.json',(
+        req:express.Request, 
+        res: express.Response, 
+        next : express.NextFunction
+    )=>{
+        res.json(countryDialCode)
+    })
       
     
     return $;
