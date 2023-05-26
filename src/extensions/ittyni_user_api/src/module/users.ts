@@ -18,7 +18,7 @@ interface IUserModel extends Document {
   inp?: string
   accounts: any[];
   sessions: any
-  tele : any[]
+  tele: any[]
   // role of main application
   role: {
     name?: string,
@@ -37,10 +37,10 @@ const Role: Schema = new Schema({
 });
 
 const UserUpdate: Schema = new Schema({
-  addedBy : {type: Schema.Types.ObjectId, ref: "USER"},
-  loggedWith : {type: String},
-  createdAt : {type: String, default: new Date().toUTCString()},
-  cabinetId : {type: Schema.Types.ObjectId, ref: "CABINET"}
+  addedBy: { type: Schema.Types.ObjectId, ref: "USER" },
+  loggedWith: { type: String },
+  createdAt: { type: String, default: new Date().toUTCString() },
+  cabinetId: { type: Schema.Types.ObjectId, ref: "CABINET" }
 })
 
 export const Permission: Schema = new Schema({
@@ -70,47 +70,53 @@ const UserSchema: Schema = new Schema({
     required: true,
   },
 
-  gender: {type : String},
+  gender: { type: String },
 
   code: Number,
 
-  picture: {type: String},
+  picture: { type: String },
 
-  firstName: {type: String},
+  firstName: { type: String },
 
-  lastName: {type: String},
+  lastName: { type: String },
 
-  username: {type: String},
+  username: { type: String },
 
-  dob: {type: String},
+  dob: { type: String },
 
   pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
 
-  cne: {type: String},
+  cne: { type: String },
 
-  inp: {type: String},
+  inp: { type: String },
 
   tele: [{
-    type: {type : String, default: "mobile"},
-    value: {type : String},
+    type: { type: String, default: "mobile" },
+    value: { type: String },
     status: {
       type: String,
       enum: ["created", "verified", "deleted", "suspended"],
       default: "created"
-    }
+    },
+    country_code: String,
+    country_name: String,
+    country_dial_code: String,
+    dial_numero: String,
+    dial_operator: String,
+    dial_type: String,
   }],
 
-  contact : {
+  contact: {
     city: {
       type: String,
     },
-  
+
     address: {
       type: String,
     },
-  
-    country : {
-      type : String,
+
+    country: {
+      type: String,
     },
 
     area: {
@@ -139,7 +145,7 @@ const UserSchema: Schema = new Schema({
 
   addedBy: String,
 
-  updates : [UserUpdate],
+  updates: [UserUpdate],
 
   permissions: [Permission],
 
