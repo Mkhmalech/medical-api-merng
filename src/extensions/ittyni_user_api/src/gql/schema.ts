@@ -29,7 +29,7 @@ const status = `status:String`
 const value = `value:String`
 const type = `type:String`
 const location = `LOCATION{${latitude} ${longitude}}`
-const USER_TELE = tele
+const USER_TELE = `USER_${tele}`
 
 // Insurance
 const provider = `provider: String`;

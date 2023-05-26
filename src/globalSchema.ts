@@ -57,11 +57,12 @@ export const country_dial_code = `country_dial_code: String`
 export const dial_numero = `dial_numero: String`
 export const dial_operator = `dial_operator: String`
 export const dial_type = `dial_type: String` 
-export const tele = `Tele{
+export const tele = `TELE{
     ${tele_fix} ${tele_fax} 
     ${tele_mobile} ${country_code} 
     ${country_name} ${country_dial_code}
-    ${dial_numero}
+    ${dial_numero} ${dial_operator}
+    ${dial_type}
 }`
 
 // location
