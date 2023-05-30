@@ -33,8 +33,7 @@ export const account = `Account {
     ${start}
 }`
 
-/** Contact */
-// address
+// contact
 export const area_unit = `area_unit: ID`
 export const region = `region: String`
 export const region_id = `region_id: ID`
@@ -42,10 +41,12 @@ export const area_name = `area_name: String`
 export const area_id = `area_id: ID!`
 export const country = `country: String`
 export const zipcode = `zipcode: String`
+export const zipcode_id = `zipcode_id: ID`
 export const street = `street: String`
 export const ADDRESS = `Address {
     ${area_unit} ${area_name} ${street}
 }`
+export const contact = `CONTACT {${area_id} ${zipcode_id}}`
 
 /** tele */
 export const tele_fix = `fix: [String]`
@@ -62,7 +63,7 @@ export const tele = `TELE{
     ${tele_mobile} ${country_code} 
     ${country_name} ${country_dial_code}
     ${dial_numero} ${dial_operator}
-    ${dial_type}
+    ${dial_type} value: String
 }`
 
 // location
@@ -89,12 +90,22 @@ export const product_id = `product_id: String`
 export const consumer_id = `consumer_id: ID`
 export const provider_id = `provider_id: ID`
 // command details
+export const order_unique_code = `OrderUniqueCode: String`
+export const order_type = `OrderType: String`
 export const price_unit = `price_unit: String`
 export const quantity_unit = `quantity_unit: String`
 export const promotion_number = `promotion_number: String`
 export const discount = `discount: String`
 export const comment = `comment: String`
 export const order_date = `order_date: String`
+export const order_status_date = `createdAt : String`
+export const order_status_type = `type: String`
+export const order_status_user = `createdBy : String`
+export const order_status_comment = `comment: String`
+export const order_status = `OrderStatus{
+    ${order_status_date} ${order_status_type} 
+    ${order_status_user} ${order_status_comment}
+}`
 // delivery info
 export const delivery_date = `delivery_date: String`
 export const delivery_method = `delivery_method: String`
