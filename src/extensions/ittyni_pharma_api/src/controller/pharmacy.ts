@@ -57,3 +57,34 @@ export const fetchPharmaById = async ({ id }: any) => {
     if (!res) return "no_result_founded";
     else return res;
 }
+
+export const read_PharamaciesOnScroll= async ({ limit, skip }: any, { permissions, message, user }: any) => {
+    const pharmas = await PHARMA.aggregate([
+        { $match: {} },
+        { $sort: { 'account.name': 1 } },
+        {
+            $facet: {
+                "data": [{ $limit: limit + skip }, { $skip: skip }],
+                "metadata": [
+                    { $count: 'total' },
+                    { $addFields: { showed: limit + skip } }
+                ]
+            }
+        },
+        {
+            $project: {
+                pharmas: '$data',
+                showed: { $first: '$metadata.showed' },
+                total: { $first: '$metadata.total' },
+                rest: {
+                    $subtract: [
+                        { $first: '$metadata.total' },
+                        { $first: '$metadata.showed' }
+                    ]
+                }
+            }
+        }
+    ])
+
+    return pharmas.shift();
+}

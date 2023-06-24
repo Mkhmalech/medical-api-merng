@@ -36,6 +36,11 @@ interface IOrder {
     medicinesOrders: any[]
     OrderDeliveryArea?: string
     OrderDeliveryAreaUnit?: string
+    OrderTele? : {
+        country_code: string
+        country_dial_code: string
+        dial_numero: number
+    }
 }
 
 const LabOrderStatus = new Schema({
@@ -91,6 +96,11 @@ export const OrderSchema = new Schema({
     OrderDeliveryAreaUnit: { type: Schema.Types.ObjectId, ref: 'AREAUNIT' },
     OrderPromotion: [PromotionSchema],
     labOrders: [LabOrder],
+    OrderTele: {
+        country_code: { type: String },
+        country_dial_code: { type: String },
+        dial_numero: { type: Number }
+    },
     medicinesOrders: [MedicineOrderSchema],
 })
 

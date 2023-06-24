@@ -210,22 +210,29 @@ export const write_MedicineOrder = async ({ order }: any, { user, message, permi
     if (!order || !order.tele || !order.tele.dial_numero || !order.tele.country_dial_code)
         return "USER_NO_CONTACT"
     // save contact details
-    const updateContact = await USER.findOneAndUpdate({_id : user._id})
+    // const updateContact = await USER.findOneAndUpdate({_id : user._id})
     
     let toDay = new Date().toLocaleDateString('en-GB').split('/').reverse().join('')
     const lastOrderNumber = await ORDER.findOne({OrderDate: toDay}).sort({OrderUniqueNumber: -1})
 
     const newMedicineOrder = new ORDER({
         OrderUniqueCode : codifyOrderCode(lastOrderNumber?lastOrderNumber.OrderUniqueNumber+1: 1, uniqueCodeDigits),
-        OrderUniqueNumber: lastOrderNumber?lastOrderNumber.OrderUniqueNumber+1: 1,
-        Order
+        OrderUniqueNumber: lastOrderNumber?lastOrderNumber.OrderUniqueNumber+1: 1
     })
 
+    if(order.contact&&order.contact.area_id){
+        newMedicineOrder.OrderDeliveryArea = order.contact.area_id;
+    }
+    if(order.contact&&order.contact.zipcode_id){
+        newMedicineOrder.OrderDeliveryAreaUnit = order.contact.zipcode_id
+    }
     newMedicineOrder.OrderStatus.push({
         status: "created",
         createdBy: user._id,
         comment: order.comment || ''
     })
+
+    newMedicineOrder.OrderTele= order.tele
 
     newMedicineOrder.medicinesOrders.push({
         medicineId: order.medicine_id
