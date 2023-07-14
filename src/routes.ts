@@ -39,7 +39,7 @@ import * as HandlerPHARMA from './extensions/ittyni_pharma_api'
 // import extensions handler
 import * as HandlerMedicine from './extensions/ittyni_medicine_api'
 // import extensions handler
-import * as HandlerAM from './extensions/ittyni_account_api'
+import * as HandlerSpaces from './extensions/ittyni_space_service'
 // import extensions handler
 import * as EHR from './extensions/ittyni_ehr_api'
 // import extensions handler
@@ -106,7 +106,7 @@ const routes = ($: express.Router) => {
     /********************************
      * Account Webserver Api v0.1
      ********************************/
-    $.all('/account', HandlerAM.AccountManger);
+    $.all('/space', HandlerSpaces.SpaceManger);
 
     /********************************
      * Account Webserver Api v0.1
@@ -196,9 +196,5 @@ const routes = ($: express.Router) => {
     
     return $;
 }
-
-
-
-
 
 export default routes;

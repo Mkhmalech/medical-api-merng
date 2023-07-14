@@ -42,7 +42,7 @@ const contact = `
     }
 `
 
-export const AMSchema = buildSchema(`
+export const SpaceSchema = buildSchema(`
 
     ${contact}
 
@@ -53,10 +53,10 @@ export const AMSchema = buildSchema(`
         contact : Contact
     }
 
-    type AMQuery {
+    type SMQuery {
         fetchAccountData : Provider
     }
-    type AMMutation {
+    type SMMutation {
         updateAccountName(${name}): String
         updateAccountType(${type}): String
         updateAccountStartDate(${start}): String
@@ -65,7 +65,7 @@ export const AMSchema = buildSchema(`
         ): String
     }
     schema {
-        query : AMQuery
-        mutation : AMMutation
+        query : SMQuery
+        mutation : SMMutation
     }
 `)
