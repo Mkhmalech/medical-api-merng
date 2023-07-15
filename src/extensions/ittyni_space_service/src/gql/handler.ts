@@ -4,6 +4,6 @@ import * as Resolver from './resolver'
 
 export const SpaceManger = graphqlHTTP({
     schema : Schema.SpaceSchema,
-    rootValue : Resolver.AMResolver,
+    rootValue : Resolver.SMResolver,
     graphiql : true
 });

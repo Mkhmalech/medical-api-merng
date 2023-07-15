@@ -53,6 +53,8 @@ export const SpaceSchema = buildSchema(`
         contact : Contact
     }
 
+    
+
     type SMQuery {
         fetchAccountData : Provider
     }
