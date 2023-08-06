@@ -5,4 +5,9 @@ export const SMResolver = {
     updateAccountStartDate : SM.updateAccountStartDate,
     updateContact : SM.updateContact,
     fetchAccountData : SM.fetchAccountData,
+    // read data
+    read_user_spaces: SM.read_user_spaces,
+    read_space_details: SM.read_space_details,
+    // write data
+    write_linkSpaceToUser: SM.write_linkSpaceToUser,
 };

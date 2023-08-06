@@ -175,6 +175,7 @@ export const UserSchema = buildSchema(`
         labo : UserSubscribedAccounts
         cabinet : UserSubscribedAccounts
         pharma : UserSubscribedAccounts
+        space : UserSubscribedAccounts
         role : RoleName
         permissions : [ UserRoleAndPermissions ]
     }

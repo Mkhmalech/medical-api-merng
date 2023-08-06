@@ -1,70 +1,47 @@
 import { buildSchema } from "graphql";
+import { _id, account, location, photo, tele, viewport } from "../../../../globalSchema";
 
-const name = `name : String`
-const start = `start : String`
-const type = `type : String`
-const region = `region : String`
-const province = `province : String`
-const commune =  `commune : String`
-const street =   `street : String`
-const city = `city : String`
-const fix = `fix : [String]`
-const fax = `fax : [String]`
 
-const Tele =`
-    type Tele {
-        ${fix}
-        ${fax}
-    }
-`
-const Address = `
-    type Address {
-        ${region}
-        ${province}
-        ${commune}
-        ${street}
-        ${city}
-    }
-`
-const account = `
-    type Account {
-        ${name}
-        ${type}
-        ${start}
-    }
-`
-const contact = `
-    ${Tele}
-    ${Address}
-    type Contact {
-        tele : Tele
-        address : Address
-    }
-`
 
 export const SpaceSchema = buildSchema(`
-
-    ${contact}
-
-    ${account}
-
-    type Provider {
-        account : Account
-        contact : Contact
+    type ${tele}
+    input _${tele}
+    type ${location}
+    input _${location}
+    type ${viewport}
+    input _${viewport}
+    type Geometry{
+        location: Location
+        viewport: Viewport
+    }
+    input _Geometry{
+        location: _Location
+        viewport: _Viewport
+    }
+    type ${account}
+    input _${account}
+    type Space {
+        account: Account
+        geometry: Geometry
+        viewport: Viewport
+        tele: TELE
     }
 
-    
+    input _Space{
+        ${photo}
+        account: _Account
+        geometry: _Geometry
+        viewport: _Viewport
+        tele: _TELE
+    }
 
     type SMQuery {
-        fetchAccountData : Provider
+        read_user_spaces: [Account]
+        read_space_details(${_id}): Space
     }
+
     type SMMutation {
-        updateAccountName(${name}): String
-        updateAccountType(${type}): String
-        updateAccountStartDate(${start}): String
-        updateContact(
-            address: String, region: String, city:String, tele: String, fax:String, website:String
-        ): String
+       write_linkSpaceToUser(space: _Space): Account
     }
     schema {
         query : SMQuery

@@ -7,10 +7,16 @@ export const name = `name: String`
 export const total = `total: Int`
 export const rural = `rural: Int`
 export const urbain = `urbain: Int`
-
+export const photo = `photo: String`
 
 // date time
 export const YEAR = `year: Int`
+
+// location
+export const latitude = `latitude: Float`
+export const longitude = `longitude: Float`
+export const location = `Location{${latitude} ${longitude}}`
+export const viewport = `Viewport{south: String north: String east: String west: String}`
 
 // personal
 export const civility = `civility: String`
@@ -23,14 +29,17 @@ export const username = "username : String"
 export const day_of_birth = `dob: String`
 export const city_of_birth = `pob: String`
 export const cne = `cne: String`
-// account 
+// space
+export const user_ratings_total = "user_ratings_total: Int"
+export const rating="rating: Int"
 export const code = `code: String`
 export const start = `start: String`
 export const ice = `ice: String`
 export const rc = `rc: String`
 export const account = `Account {
     ${name} ${code} ${ice} ${rc}
-    ${start}
+    ${start} ${user_ratings_total}
+    ${rating} 
 }`
 
 // contact
@@ -55,7 +64,7 @@ export const tele_mobile = `mobile: [String]`
 export const country_code = `country_code: String`
 export const country_name = `country_name: String`
 export const country_dial_code = `country_dial_code: String`
-export const dial_numero = `dial_numero: String`
+export const dial_numero = `dial_numero: Float`
 export const dial_operator = `dial_operator: String`
 export const dial_type = `dial_type: String` 
 export const tele = `TELE{
@@ -66,10 +75,7 @@ export const tele = `TELE{
     ${dial_type} value: String
 }`
 
-// location
-export const latitude = `latitude: String`
-export const longitude = `longitude: String`
-export const location = `location{${latitude} ${longitude}}`
+
 
 // professional 
 export const INP = `inp: String`
@@ -124,3 +130,14 @@ export const commande = `Commande {
     ${order_date} ${payment_date} ${payment_method} 
     ${total_paid}
 }`
+
+// product schema
+/**
+product schema
+location schema
+category schema
+supplier schema 
+
+
+
+*/
