@@ -22,7 +22,7 @@ const Component = new Schema({
     status : String,
     space: {
       type : String, 
-      enum : ["admin", "user", "cabinet", "labm", "pharmacy"]
+      enum : ["admin", "user", "cabinet", "labm", "pharmacy", "store"]
     }
 })
 

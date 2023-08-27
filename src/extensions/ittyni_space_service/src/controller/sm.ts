@@ -78,7 +78,7 @@ export const read_user_spaces = async (args: any, { user, message, permissions }
     console.log(args);
 }
 // read space data
-export const read_space_details = async ({_id}: any, {user, message, permissions }: any) => {
+export const read_space_details = async ({ _id }: any, { user, message, permissions }: any) => {
     return SPACE.findById(_id);
 }
 // write data functions
@@ -93,7 +93,7 @@ export const write_linkSpaceToUser = async ({ space }: any, { user, message, per
             user_ratings_total: space?.account.user_rating,
             geometry: space?.geometry
         })
-    
+
         newSpace.contact.tele.push(space?.tele)
         newSpace.photos.push(space?.photos)
 
@@ -112,4 +112,52 @@ export const write_linkSpaceToUser = async ({ space }: any, { user, message, per
         }
     }
 
+}
+
+/**
+   * user activate extension
+   * with id 
+   */
+export const write_activateExtensionOnSpace = async (args: any, { user, message }: any) => {
+    const r = await Promise.resolve(SPACE.findById(args._id))
+    if (!r) return Error("Couldn't find space")
+    else if(r.extensions) {
+        let i = r.extensions.findIndex((c: any) => c.component.toString() === args.componentId.toString());
+        if (i === -1) {
+            r.extensions.push({
+                component: args.componentId,
+                canRead: true,
+                canCreate: false,
+                canUpdate: false,
+                canDelete: false,
+                canPublish: false,
+                addedBy: user._id,
+            })
+        }
+    } else {
+        r.extensions = [{
+            component: args.componentId,
+            canRead: true,
+            canCreate: false,
+            canUpdate: false,
+            canDelete: false,
+            canPublish: false,
+            addedBy: user._id,
+        }]
+    }
+
+    const saveNewData = await r.save();
+
+    return saveNewData? saveNewData.extensions : Error("not saved");
+}
+
+/**
+ * Read space extensions
+ */
+export const read_spaceExtensions = async (args: any, {user, message, permissions}: any)=>{
+
+    const space = await Promise.resolve(SPACE.findById(args._id).populate('extensions.component'));
+    if(space&&space.extensions)
+        return(space.extensions.map((cp:any)=>cp.component))
+    else Error("not found");
 }

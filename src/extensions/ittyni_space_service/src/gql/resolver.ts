@@ -10,4 +10,6 @@ export const SMResolver = {
     read_space_details: SM.read_space_details,
     // write data
     write_linkSpaceToUser: SM.write_linkSpaceToUser,
+    write_activateExtensionOnSpace: SM.write_activateExtensionOnSpace,
+    read_spaceExtensions: SM.read_spaceExtensions,
 };

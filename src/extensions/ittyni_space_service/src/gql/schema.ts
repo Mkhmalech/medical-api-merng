@@ -1,9 +1,17 @@
 import { buildSchema } from "graphql";
 import { _id, account, location, photo, tele, viewport } from "../../../../globalSchema";
 
+const extension = `Extension{
+    _id: String
+    name: String
+    status: String
+    space: String
+    description: String
+}`
 
 
 export const SpaceSchema = buildSchema(`
+    type ${extension}
     type ${tele}
     input _${tele}
     type ${location}
@@ -38,10 +46,12 @@ export const SpaceSchema = buildSchema(`
     type SMQuery {
         read_user_spaces: [Account]
         read_space_details(${_id}): Space
+        read_spaceExtensions(${_id}): [Extension]
     }
 
     type SMMutation {
        write_linkSpaceToUser(space: _Space): Account
+       write_activateExtensionOnSpace(${_id}, componentId: ID!): [Extension]
     }
     schema {
         query : SMQuery

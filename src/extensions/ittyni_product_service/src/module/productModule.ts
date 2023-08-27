@@ -1,16 +1,24 @@
 import { Schema, model, Document } from "mongoose";
 
-type exampleModel = IExample & Document;
+type ProductleModel = IProduct & Document;
 
-const permission = new Schema({
-    
-})
-interface IExample {
-    
+interface IProduct {
+    name: string
+    desctiption: string
+    price: {
+        value: number,
+        currency: string
+    }
 }
 
-const example = new Schema({
-    
+const product = new Schema({
+    name: String,
+    desctiption: String,
+    categories: [String],
+    price: {
+        value: Number,
+        currency: String
+    }
 })
 
-export const EXAMPLE = model<exampleModel>('EXAMPLE', example)
+export const PRODUCT = model<ProductleModel>('PRODUCT', product)

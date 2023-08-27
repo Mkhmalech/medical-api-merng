@@ -1,5 +1,17 @@
 import { Schema, model, Document } from "mongoose"
-
+/**
+ * extensions
+ */
+const extensionSchema = new Schema({
+    component: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
+    addedBy: { type: Schema.Types.ObjectId, ref: "USERS" },
+    createdAt: { type: String, default: new Date().toUTCString() },
+    canRead: Boolean,
+    canCreate: Boolean,
+    canUpdate: Boolean,
+    canDelete: Boolean,
+    canPublish: Boolean
+})
 interface ISpaceModel extends Document {
     account: {
         name: string,
@@ -82,7 +94,7 @@ const SpaceSchema: Schema = new Schema({
     /**
    * activated modules
    */
-    // extensions: [extensionSchema],
+    extensions: [extensionSchema],
     /**
      * patients not yet 
      * confirmed by ID
