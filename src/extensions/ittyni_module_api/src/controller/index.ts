@@ -1,13 +1,13 @@
 import { Db } from "../../../../gateway/db"
 import { COMPONENTS } from "../module/component"
 
-export const create = async (args:any, {user}:any)=>{
+export const create = async ({extension}:any, {user}:any)=>{
 
     const component = new Db(COMPONENTS);
     
-    const res :any = await component.checkExisting({'name' : args.name});
+    const res :any = await component.checkExisting({'name' : extension.name});
 
-    if(!res) return component.createNewDoc({...args, createdAt : new Date().toUTCString(), createdBy : user._id, status: "active" });
+    if(!res) return component.createNewDoc({...extension, createdAt : new Date().toUTCString(), createdBy : user._id, status: "active" });
     
     if(res) return res;
 }

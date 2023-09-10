@@ -66,6 +66,8 @@ import * as HandlerParamedical from './extensions/ittyni_paramedical_api'
 import * as HandlerProduct from './extensions/ittyni_product_service'
 // Category Management 
 import * as HandlerCategory from './extensions/ittyni_category_service'
+// Image Management 
+import * as HandlerImage from './extensions/ittyni_image_service'
 
 // import country dial code
 import countryDialCode from './common/country_dials_code.json'
@@ -187,6 +189,11 @@ const routes = ($: express.Router) => {
      * Category Webserver Api v0.1
      ********************************/
     $.all('/category', HandlerCategory.CategoryManger);
+    
+    /********************************
+     * Category Webserver Api v0.1
+     ********************************/
+    $.all('/image', HandlerImage.Image);
     
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(

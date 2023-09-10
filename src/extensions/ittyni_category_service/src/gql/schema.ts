@@ -1,27 +1,40 @@
 import { buildSchema } from "graphql";
+const iconDef = `Icon { filename: String, originName: String, extension: String}`;
+const category = `Category {
+    _id: ID
+    name: String
+    description: String
+    parentsCategory: ID
+    subcategories : ID
+    displayOrder: Int
+    isActive: Boolean
+}`;
 export const CategorySchema = buildSchema(`
 
-    type Category {
+    type ${iconDef}
+    type ${category}
+    type CategoryResponse {
+        _id: ID
         name: String
         description: String
         parentsCategory: ID
         subcategories : ID
-        image: String
-        icon: String
-        displayOrder: Int
-        isActive: Boolean
+        icon: Icon
+        status: Boolean
     }
+    input _${iconDef}
+    input _${category}
 
     type CategotyQuery {
-        read_category : Category
+        read_categories : [CategoryResponse]
     }
 
     type CategoryMutation {
-        write_category: String
+        write_category(category: _Category, icon: _Icon): String
     }
 
     schema {
         query : CategotyQuery
         mutation : CategoryMutation
     }
-`)
+`);

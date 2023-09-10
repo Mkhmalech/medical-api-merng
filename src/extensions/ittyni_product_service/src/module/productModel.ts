@@ -1,5 +1,10 @@
 import { Schema, model, Document } from "mongoose";
 
+const Image = new Schema({
+    filename: String,
+    originName: String,
+    extension: String
+})
 type ProductleModel = IProduct & Document;
 
 interface IProduct {
@@ -9,6 +14,7 @@ interface IProduct {
         value: number,
         currency: string
     }
+    icon: any
 }
 
 const product = new Schema({
@@ -18,7 +24,10 @@ const product = new Schema({
     price: {
         value: Number,
         currency: String
-    }
+    },
+    stockQuantity: Number,
+    images: [{type: Schema.Types.ObjectId, ref: "IMAGES"}]
+
 })
 
 export const PRODUCT = model<ProductleModel>('PRODUCT', product)

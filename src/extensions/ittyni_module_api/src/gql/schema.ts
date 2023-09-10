@@ -9,26 +9,28 @@ const createdBy = `createdBy : ID`
 const createdAt = `createdAt : String`
 const version = `version : String`
 const space = `space: String!`
-
+const extension = `Extension {
+    ${id}
+    ${componentName}
+    ${componentDescrpt}
+    ${createdBy}
+    ${createdAt}
+    ${version}
+    ${space}
+}`
 export const ComponentSchema = buildSchema(`
     
-    type component {
-        ${id}
-        ${componentName}
-        ${componentIco}
-        ${componentDescrpt}
-        ${createdBy}
-        ${createdAt}
-        ${version}
-    }
+    type ${extension}
+
+    input _${extension}
 
     type COMPONENTQ {
-        getAllComponents : [component],
-        readActiveComponents : [component],
-        readActiveExtensionsBySpace(space : String) : [component]
+        getAllComponents : [Extension]
+        readActiveComponents : [Extension]
+        readActiveExtensionsBySpace(space : String) : [Extension]
     }
     type COMPONENTM {
-        createComponent(${componentName},${componentIco},${componentDescrpt},${space}) : String
+        createComponent(extension: _Extension) : String
         removeComponentById(${id}) : String
     }
     schema {
