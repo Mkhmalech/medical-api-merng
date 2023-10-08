@@ -1,6 +1,8 @@
-import * as appointment from '../controller/referral'
+import * as referral from '../controller/referral'
 
 export const Referral = {
-    searchTests : appointment.searchTests,
-    searchContributorTests : appointment.searchContributorTests
+    // queries
+    searchTests : referral.searchTests,
+    searchContributorTests : referral.searchContributorTests,
+    read_referral_test : referral.read_referral_test
 }

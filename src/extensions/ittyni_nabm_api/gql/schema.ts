@@ -1,57 +1,56 @@
 import { buildSchema } from "graphql";
 
 // variables
-const id = `_id: ID`
+const id = `_id: ID`;
 const nameEn = `en : String`;
 const nameFr = `fr : String`;
-const CPT = `CPT : Int`
-const Mnemonic = `Mnemonic : String`
-const country = `country : String`
-const Bcode = `Bcode : Int`
-const code = `code : String`
-const value = `value : Int`
-const price = `price : Int`
-const currency = `currency : String`
-const financeDesc = `description : String`
-const sampleType = `nature : [String]`
-const tubeColor = `tubecolor : [String]`
-const anticoagulant = `anticoagulant : [String]`
-const tubeNumber = `numberoftube : Int`
-const volumeMin = `volumemin : Int`
-const updatedAt = `updatedAt : String`
-const userId = `_id : ID `
-const fname = `firstName : String `
-const lname = `lastName : String `
-const picture = `picture : String `
+const CPT = `CPT : Int`;
+const Mnemonic = `Mnemonic : String`;
+const country = `country : String`;
+const Bcode = `Bcode : Int`;
+const code = `code : String`;
+const value = `value : Int`;
+const price = `price : Int`;
+const currency = `currency : String`;
+const financeDesc = `description : String`;
+const sampleType = `nature : [String]`;
+const tubeColor = `tubecolor : [String]`;
+const anticoagulant = `anticoagulant : [String]`;
+const tubeNumber = `numberoftube : Int`;
+const volumeMin = `volumemin : Int`;
+const updatedAt = `updatedAt : String`;
+const userId = `_id : ID `;
+const fname = `firstName : String `;
+const lname = `lastName : String `;
+const picture = `picture : String `;
 // test descriptio
-const descOverview = `overview: String`
-const descWhy = `why : String `
-const descHow = `how : String `
-const descWhat = `what : String`
-const when = `when: String `
-const testDescription = `type Description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${when}}` 
+const descOverview = `overview: String`;
+const descWhy = `why : String `;
+const descHow = `how : String `;
+const descWhat = `what : String`;
+const when = `when: String `;
+const testDescription = `type Description {${descOverview} ${descWhy} ${descHow} ${descWhat} ${when}}`;
 // lab departments variable
-const departmentNameFr = `fr : String!`
-const departmentNameEn = `en : String`
-const depMnem = `mnemonic : String `
-const depDescriptionFr = `fr : String `
-const depDescriptionEn = `en : String `
+const departmentNameFr = `fr : String!`;
+const departmentNameEn = `en : String`;
+const depMnem = `mnemonic : String `;
+const depDescriptionFr = `fr : String `;
+const depDescriptionEn = `en : String `;
 // test sample
 
-
 // test types
-const names = `type Name { ${nameEn} ${nameFr}}`
-const reference = `type Reference { ${CPT} ${Mnemonic} }`
-const finance = `type Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} ${financeDesc} }`
-const specimen = `type Specimen { ${sampleType} ${tubeColor} ${anticoagulant} ${tubeNumber} ${volumeMin}}`
-const updatedBy = `type UpdatedBy { ${userId} ${fname} ${lname} ${picture}}`
-const depDescription = `type DepDescription {${depDescriptionFr} ${depDescriptionEn}} `
-
-
+const names = `type Name { ${nameEn} ${nameFr}}`;
+const reference = `type Reference { ${CPT} ${Mnemonic} }`;
+const finance = `type Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} ${financeDesc} }`;
+const specimen = `type Specimen { ${sampleType} ${tubeColor} ${anticoagulant} ${tubeNumber} ${volumeMin}}`;
+const updatedBy = `type UpdatedBy { ${userId} ${fname} ${lname} ${picture}}`;
+const depDescription = `type DepDescription {${depDescriptionFr} ${depDescriptionEn}}`;
+const delivery = `Delivery{time: String}`
+const transport = `Transport{temperature: String}`
 // departments types
-const departmentName = `type DepName {${departmentNameFr} ${departmentNameEn}} `
+const departmentName = `type DepName {${departmentNameFr} ${departmentNameEn}} `;
 
-const testDepartements = `type Departement {name: DepName ${depMnem} description: Description }`
+const testDepartements = `type Departement {name: DepName ${depMnem} description: Description }`;
 
 export const LabTestsSchema = buildSchema(`
 
@@ -71,6 +70,9 @@ export const LabTestsSchema = buildSchema(`
 
     ${depDescription}
 
+    type ${delivery}
+
+    type ${transport}
 
     ${testDepartements}
 
@@ -110,8 +112,21 @@ export const LabTestsSchema = buildSchema(`
         departements : [Departement]
         parameter: Boolean
         group: Boolean
-        description : Description 
+        description : Description
+        delivery: Delivery
+        transport: Transport
     }
+
+    type OnScrollNabmList {
+        procedures : [FrTest]
+        total : Int 
+        rest : Int
+        showed: Int
+    }
+
+    input _${delivery}
+
+    input _${transport}
 
     input LabTestsNames { 
         en : String
@@ -144,6 +159,14 @@ export const LabTestsSchema = buildSchema(`
         id : String!
     }
 
+    input _TestSpecimen {
+        nature: [String]
+        tubecolor: [String]
+        anticoagulant: [String]
+        numberoftube: Int
+        volumemin: Int
+    }
+
     type LabTestsQuery {
         AllLabTests_en : [EnTest]
         AllLabTests_fr : [FrTest]
@@ -158,8 +181,11 @@ export const LabTestsSchema = buildSchema(`
         nameEnFilter (en : String ) : [FrTest]
         fetchUpdates : [FrTest]
         fetchUpdateById(id: String) : Update
-
         fetchDepartments : [Department]
+
+        read_testsOnScroll(limit: Int, skip: Int) : OnScrollNabmList
+        read_labmTestsOnScroll(limit: Int, skip: Int) : OnScrollNabmList
+        read_labm_tests: [FrTest]
     }
 
     type LabTestsMutation {
@@ -215,6 +241,13 @@ export const LabTestsSchema = buildSchema(`
 
         addDepartment(depart : String!, mnem: String, descript : String) : String
 
+        write_labm_test(
+            name: LabTestsNames, 
+            reference: LabTestsReference,
+            delivery:_Delivery, transport:_Transport
+            specimen: _TestSpecimen
+        ): String
+
     }
 
     schema {
@@ -222,4 +255,4 @@ export const LabTestsSchema = buildSchema(`
         mutation : LabTestsMutation
     }
 
-`)
+`);

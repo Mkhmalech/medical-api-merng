@@ -1,29 +1,27 @@
 import { Schema, model, Document } from "mongoose";
 
-
-
 // updates schema
 const Update = new Schema({
-  updatedAt: {type : String, default : new Date().toUTCString()},
-  updatedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
+  updatedAt: { type: String, default: new Date().toUTCString() },
+  updatedBy: { type: Schema.Types.ObjectId, ref: "USER" },
   name: {
     en: String,
-    fr: String
+    fr: String,
   },
   reference: {
     Mnemonic: { type: String, unique: true },
-    CPT: { type: Number }
+    CPT: { type: Number },
   },
   finance: [
     {
       country: String,
       Bcode: Number,
-      code : String,
-      value : Number,
-      price : Number,
-      currency : String,
-      description : String
-    }
+      code: String,
+      value: Number,
+      price: Number,
+      currency: String,
+      description: String,
+    },
   ],
   description: {
     overview: { type: String },
@@ -32,25 +30,26 @@ const Update = new Schema({
     what: { type: String },
     when: { type: String },
   },
-  departements: [{ type: Schema.Types.ObjectId, ref: 'DEPARTEMENTS' }],
+  departements: [{ type: Schema.Types.ObjectId, ref: "DEPARTEMENTS" }],
   parameter: Boolean,
   group: Boolean,
-  components: [{ type: Schema.Types.ObjectId, ref: 'TESTS' }],
-  panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
-  structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },
+  components: [{ type: Schema.Types.ObjectId, ref: "TESTS" }],
+  panel: { type: Schema.Types.ObjectId, ref: "PANELS" },
+  structure: { type: Schema.Types.ObjectId, ref: "STRUCTURES" },
   preparation: {
     fasting: {
       required: Boolean,
       duration: {
         min: Number,
         max: Number,
-        unit: { type: String, enum: ["minutes", "hours", "days"] }
-      }
+        unit: { type: String, enum: ["minutes", "hours", "days"] },
+      },
     },
-    spectialTime: [String]
+    spectialTime: [String],
   },
   specimen: {
-    nature: { type: [String], 
+    nature: {
+      type: [String],
       // enum : ["serum", "plasma","blood"]
     },
     tubecolor: { type: [String] },
@@ -58,50 +57,55 @@ const Update = new Schema({
     numberoftube: { type: Number },
     volumemin: { type: Number },
     location: { type: String },
-    stability: [{
-      time: { type: Number },
-      temperature: { type: Number }
-    }]
-  }
-})
+    stability: [
+      {
+        time: { type: Number },
+        temperature: { type: Number },
+      },
+    ],
+  },
+});
 interface ITestModel extends Document {
-  reference: any;
-  name: any;
-  description: any
-  finance: any[];
-  departements: any
-  components: any
-  parameter: any
-  group: any
-  panel: any
-  structure: any
-  preparation: any
+  reference?: any;
+  name?: any;
+  description?: any;
+  finance?: any[];
+  departements?: any;
+  components?: any;
+  parameter?: any;
+  group?: any;
+  panel?: any;
+  structure?: any;
+  preparation?: any;
   specimen?: any;
+  delivery: any;
+  transport: any;
   updates: any;
-  views: number
+  views: number;
 }
 
-
 const TestSchema: Schema = new Schema({
+  space: {type: Schema.Types.ObjectId, ref: 'SPACE'},
+  user: {type: Schema.Types.ObjectId, ref: 'USER'},
   name: {
     en: String,
-    fr: String
+    fr: String,
   },
   reference: {
     code: { type: [Number] },
     Mnemonic: { type: String, unique: true },
-    CPT: { type: Number}
+    CPT: { type: Number },
   },
   finance: [
     {
       country: String,
       Bcode: Number,
-      code : String,
-      value : Number,
-      price : Number,
-      currency : String,
-      description : String
-    }
+      code: String,
+      value: Number,
+      price: Number,
+      currency: String,
+      description: String,
+    },
   ],
   description: {
     overview: { type: String },
@@ -110,22 +114,22 @@ const TestSchema: Schema = new Schema({
     what: { type: String },
     when: { type: String },
   },
-  departements: [{ type: Schema.Types.ObjectId, ref: 'DEPARTEMENTS' }],
-  components: [{ type: Schema.Types.ObjectId, ref: 'TESTS' }],
+  departements: [{ type: Schema.Types.ObjectId, ref: "DEPARTEMENTS" }],
+  components: [{ type: Schema.Types.ObjectId, ref: "TESTS" }],
   parameter: Boolean,
   group: Boolean,
-  panel: { type: Schema.Types.ObjectId, ref: 'PANELS' },
-  structure: { type: Schema.Types.ObjectId, ref: 'STRUCTURES' },
+  panel: { type: Schema.Types.ObjectId, ref: "PANELS" },
+  structure: { type: Schema.Types.ObjectId, ref: "STRUCTURES" },
   preparation: {
     fasting: {
       required: Boolean,
       duration: {
         min: Number,
         max: Number,
-        unit: { type: String, enum: ["minutes", "hours", "days"] }
-      }
+        unit: { type: String, enum: ["minutes", "hours", "days"] },
+      },
     },
-    spectialTime: [String]
+    spectialTime: [String],
   },
   specimen: {
     nature: { type: [String] },
@@ -134,22 +138,29 @@ const TestSchema: Schema = new Schema({
     numberoftube: { type: Number },
     volumemin: { type: Number },
     location: { type: String },
-    stability: [{
-      time: { type: Number },
-      temperature: { type: Number }
-    }],
+    stability: [
+      {
+        time: { type: Number },
+        temperature: { type: Number },
+      },
+    ],
     multiple: {
       isMultiple: Boolean,
       duration: Number,
       times: Number,
-      unit: { type: String, enum: ["minutes", "hours", "days"] }
-    }
+      unit: { type: String, enum: ["minutes", "hours", "days"] },
+    },
   },
-
+  delivery: {
+    time: { type: String, enum: ["24", "48", "72"] },
+    unit: { type: String, enum: ["hours", "days"], default: "hours" },
+  },
+  transport: {
+    temperature: { type: String, enum: ["room", "refrigerated", "frozen"] },
+  },
   updates: [Update],
 
-  views: Number
+  views: Number,
 });
-
 
 export const TESTS = model<ITestModel>("TESTS", TestSchema);

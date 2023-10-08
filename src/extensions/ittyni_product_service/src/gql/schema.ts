@@ -1,10 +1,34 @@
 import { buildSchema } from "graphql";
+
 export const ProductSchema = buildSchema(`
-    scalar Upload
-    
+    type Price {
+        value: Float
+        currency: String
+    }
+    type Icon { _id: ID, filename: String, originName: String, extension: String}
+    type Image { _id: ID, filename: String, originName: String, extension: String}
+    type Category {
+        _id: ID
+        name: String
+        description: String
+        parentsCategory: ID
+        subcategories : ID
+        icon: Icon
+        status: Boolean
+    }
     type Product {
         _id: ID
         name : String
+        description: String
+        price: Price
+        categories: [Category]
+        stockQuantity: String
+        images: [Image]
+        barcode: String
+    }
+    input _Price {
+        value: Float
+        currency: String
     }
     input _Image {
         filename: String
@@ -12,21 +36,25 @@ export const ProductSchema = buildSchema(`
         extension: String
     }
     input _Product {
+        _id: ID
         name: String
         description: String
         price: String
-        category: String
+        categories: [ID]
         stockQuantity: String
-        images: [_Image]
+        images: [ID]
+        barcode: String
     }
 
     type ProductQuery {
-        read_product : Product
+        read_account_products : [Product]
+        read_product_by_id(_id:ID) : Product
     }
 
     type ProductMutation {
-        write_product(product: _Product): String
-        upload_file(file: Upload!) : String
+        write_product(product: _Product): Product
+        update_product(product: _Product): Product
+        delete_product(_id: ID!): String
     }
 
     schema {

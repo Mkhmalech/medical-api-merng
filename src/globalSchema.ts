@@ -31,7 +31,7 @@ export const city_of_birth = `pob: String`
 export const cne = `cne: String`
 // space
 export const user_ratings_total = "user_ratings_total: Int"
-export const rating="rating: Int"
+export const rating="rating: Float"
 export const code = `code: String`
 export const start = `start: String`
 export const ice = `ice: String`

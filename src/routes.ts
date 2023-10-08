@@ -68,6 +68,8 @@ import * as HandlerProduct from './extensions/ittyni_product_service'
 import * as HandlerCategory from './extensions/ittyni_category_service'
 // Image Management 
 import * as HandlerImage from './extensions/ittyni_image_service'
+// catalog service
+import * as HandlerCatalog from './extensions/ittyni_catalog';
 
 // import country dial code
 import countryDialCode from './common/country_dials_code.json'
@@ -194,6 +196,11 @@ const routes = ($: express.Router) => {
      * Category Webserver Api v0.1
      ********************************/
     $.all('/image', HandlerImage.Image);
+    
+    /********************************
+     * Category Webserver Api v0.1
+     ********************************/
+    $.all('/catalog', HandlerCatalog.CatalogManger);
     
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(

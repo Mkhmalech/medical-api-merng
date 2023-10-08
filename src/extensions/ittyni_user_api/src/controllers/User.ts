@@ -449,7 +449,7 @@ class User extends Roles {
    */
   verifyFrontToken = (args: any, { user, message }: any) => {
     if (message) return Error(message)
-    return USER.findOne({_id: user._id}).populate('accounts.labo accounts.space');
+    return USER.findOne({_id: user._id}).populate('accounts.labo accounts.space permissions.component');
   }
   /**
    * ittyni front token verification

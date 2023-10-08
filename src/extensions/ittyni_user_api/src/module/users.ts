@@ -28,6 +28,7 @@ interface IUserModel extends Document {
   };
   // permissions of main application
   permissions: any[];
+  
 }
 
 const Role: Schema = new Schema({

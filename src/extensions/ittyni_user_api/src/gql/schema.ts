@@ -165,6 +165,22 @@ export const UserSchema = buildSchema(`
         publish : Boolean
         delete: Boolean
     }
+    type Extension {
+        _id: ID
+        name: String
+        status: String
+        space: String
+        description: String
+    }
+    type ExtensionPermissions {
+        ${id}
+        component: Extension
+        create: Boolean
+        read: Boolean
+        update: Boolean
+        publish : Boolean
+        delete: Boolean
+    }
     type UserRole {
         ${id}
       addedby: ID
@@ -187,6 +203,7 @@ export const UserSchema = buildSchema(`
         status : String
         accounts : [UserAccountName]
         personal : USER_PROFILE_PERSONAL
+        permissions : [ UserRoleAndPermissions ]
     }
 
     type SubscribedAccount {
@@ -211,6 +228,7 @@ export const UserSchema = buildSchema(`
         accounts : [UserAccountName]
         contact : USER_PROFILE_CONTACT
         tele : [USER_TELE]
+        permissions : [ ExtensionPermissions ]
     }
 
     type User {
@@ -242,16 +260,6 @@ export const UserSchema = buildSchema(`
         email : String!
         password : String!
         ConfirmPassword : String!
-    }
-
-    type Extension {
-        _id : ID!
-        name : String!        
-        canRead : Boolean
-        canCreate : Boolean
-        canUpdate : Boolean
-        canDelete : Boolean
-        canPublish : Boolean
     }
 
     input inputLinkAccount { ${linkAccount} }

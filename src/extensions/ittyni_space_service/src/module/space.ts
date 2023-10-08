@@ -36,6 +36,8 @@ interface ISpaceModel extends Document {
 
   patients?: any[];
 
+  catalogs?: any[];
+
   payement?: any[];
 
   waitingRoom?: any[];
@@ -49,6 +51,8 @@ interface ISpaceModel extends Document {
   rating?: number;
 
   user_ratings_total?: number;
+
+  status: any[]
 }
 
 const SpaceSchema: Schema = new Schema({
@@ -100,7 +104,7 @@ const SpaceSchema: Schema = new Schema({
   /**
    * products
    */
-  products: [{ type: Schema.Types.ObjectId, ref: "PRODUCTS" }],
+  products: [{ type: Schema.Types.ObjectId, ref: "PRODUCT" }],
 
   /**
    * categories
@@ -116,6 +120,10 @@ const SpaceSchema: Schema = new Schema({
    * confirmed by ID
    */
   // patients: [patient],
+  /**
+   * catalgs for B to Busniss
+   */
+  catalogs: [{ type: Schema.Types.ObjectId, ref: "CATALOG"}],
   /**
    * cabinet incomes
    * payement
@@ -134,6 +142,11 @@ const SpaceSchema: Schema = new Schema({
    */
   rating: Number,
   user_ratings_total: Number,
+  status: [{
+    updatedBy: {type: Schema.Types.ObjectId, ref: 'USER'},
+    updatedAt : {type: String, default: new Date().toUTCString()},
+    value: {type: String, default: "created"}
+  }]
 });
 
 export const SPACE = model<ISpaceModel>("SPACE", SpaceSchema);

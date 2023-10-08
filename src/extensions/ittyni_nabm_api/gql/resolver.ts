@@ -18,6 +18,9 @@ export const LabTestsResolver = {
     createTestsSiteMap : labTests.createTestsSiteMap,
     fetchTestsByFirstLetter : labTests.fetchTestsByFirstLetter,
 
+    read_testsOnScroll : labTests.read_testsOnScroll,
+    read_labmTestsOnScroll : labTests.read_labmTestsOnScroll,
+
     // add test
     LabTestAddNew : labTests.addNewTest,
 
@@ -31,6 +34,8 @@ export const LabTestsResolver = {
     LabTestSpecimenUpdate : labTests.specimenUpdate,
     updateSpecimen : labTests.updateSpecimen,
     LabTestAllUpdate : labTests.updateAll,
+
+    read_labm_tests: labTests.read_labm_tests,
     
     // fetch updates
     fetchUpdates : labTests.fetchUpdates,
@@ -43,4 +48,6 @@ export const LabTestsResolver = {
     modifyUpdateSpecimen : labTests.modifyUpdateSpecimen,
     modifyUpdateFinance : labTests.modifyUpdateFinance,
 
+    // mutations
+    write_labm_test: labTests.write_labm_test,
 }
