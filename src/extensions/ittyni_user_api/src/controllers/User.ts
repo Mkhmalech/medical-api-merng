@@ -296,7 +296,7 @@ class User extends Roles {
   };
 
   getUserProfile = async ({ token }: any) => {
-    let decodeToken: DecodeToken | any = jwt.decode(token);
+    let decodeToken: any = jwt.decode(token);
 
     if (decodeToken) {
       const { email } = decodeToken;
@@ -449,8 +449,7 @@ class User extends Roles {
    */
   verifyFrontToken = (args: any, { user, message }: any) => {
     if (message) return Error(message)
-
-    return USER.findOne({_id: user._id});
+    return USER.findOne({_id: user._id}).populate('accounts.labo accounts.space permissions.component');
   }
   /**
    * ittyni front token verification

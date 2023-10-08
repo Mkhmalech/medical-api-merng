@@ -2,34 +2,27 @@ import { Schema, model, Document } from "mongoose";
 
 type areaModel = IArea & Document;
 
-
+const Population = new Schema({
+    year: {type: Number},
+    total : {type : Number},
+    rural : {type : Number},
+    urbain : {type : Number}
+})
 interface IArea{
     name : string
     type : string
-    population: number
-    subdevision : any
-    devision : any
-    unit : any
+    population: any[]
+    region: string
     country : any
 }
 
 const area = new Schema({
     name : String,
     type : String,
-    population: Number,
-    subdevision : {
-        type : String,
-        name : String,
-    },
-    devision : {
-        type : String,
-        name : String,
-    },
-    unit : {
-        type : String,
-        name : String,
-    },
+    population: [Population],
+    region: String,
     country : String
 })
+
 
 export const AREA = model<areaModel>('AREA', area)

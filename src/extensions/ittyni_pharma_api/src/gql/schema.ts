@@ -25,7 +25,12 @@ export const PharmaSchema = buildSchema(`
         contact : Contact
         views : Int
     }
-
+    type PharmaWithScrollData {
+        pharmas : [Pharmacie]
+        showed: Int,
+        total: Int,
+        rest: Int
+    }
     type PharmaQuery {
         fetchAllPharmacies : String
         fetchTwentyPharmacy(letter : String!) : [Pharmacie]
@@ -34,6 +39,8 @@ export const PharmaSchema = buildSchema(`
         fetchPharmaDetails(name : String) : Pharmacie
         searchPharmaByName(name : String) : [Pharmacie]
         fetchPharmaById(id : String) : Pharmacie
+
+        read_PharamaciesOnScroll(limit: Int!, skip: Int!) : PharmaWithScrollData
     }
 
     type PharmaMutation {

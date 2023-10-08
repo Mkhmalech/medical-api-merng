@@ -7,4 +7,5 @@ export const pharmaResolver = {
     fetchPharmaDetails : pharma.fetchPharmaDetails,
     searchPharmaByName : pharma.searchPharmaByName,
     fetchPharmaById : pharma.fetchPharmaById,
+    read_PharamaciesOnScroll : pharma.read_PharamaciesOnScroll,
 };

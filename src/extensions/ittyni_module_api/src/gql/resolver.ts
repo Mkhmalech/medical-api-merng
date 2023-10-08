@@ -6,4 +6,5 @@ export const componentResolver = {
     getAllComponents : component.getAll,
     removeComponentById : component.remove, 
     readActiveComponents : component.readActiveComponents, 
+    readActiveExtensionsBySpace : component.readActiveExtensionsBySpace
 };

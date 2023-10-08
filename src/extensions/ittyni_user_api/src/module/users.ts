@@ -3,9 +3,9 @@ import { AccountSchema } from "./account";
 
 interface IUserModel extends Document {
   status?: string;
-  email: UserEmail;
-  password: UserPassword;
-  createdAt: UserCreatedAt;
+  email: string;
+  password: string;
+  createdAt: string;
   signedbygg: boolean;
   picture?: string
   gender?: string
@@ -18,6 +18,7 @@ interface IUserModel extends Document {
   inp?: string
   accounts: any[];
   sessions: any
+  tele: any[]
   // role of main application
   role: {
     name?: string,
@@ -27,6 +28,7 @@ interface IUserModel extends Document {
   };
   // permissions of main application
   permissions: any[];
+  
 }
 
 const Role: Schema = new Schema({
@@ -34,6 +36,13 @@ const Role: Schema = new Schema({
   updatedBy: String,
   updateddAt: String,
 });
+
+const UserUpdate: Schema = new Schema({
+  addedBy: { type: Schema.Types.ObjectId, ref: "USER" },
+  loggedWith: { type: String },
+  createdAt: { type: String, default: new Date().toUTCString() },
+  cabinetId: { type: Schema.Types.ObjectId, ref: "CABINET" }
+})
 
 export const Permission: Schema = new Schema({
   component: { type: Schema.Types.ObjectId, ref: "COMPONENTS" },
@@ -62,47 +71,53 @@ const UserSchema: Schema = new Schema({
     required: true,
   },
 
-  gender: {type : String},
+  gender: { type: String },
 
   code: Number,
 
-  picture: String,
+  picture: { type: String },
 
-  firstName: String,
+  firstName: { type: String },
 
-  lastName: String,
+  lastName: { type: String },
 
-  username: {type: String},
+  username: { type: String },
 
-  dob: String,
+  dob: { type: String },
 
   pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
 
-  cne: String,
+  cne: { type: String },
 
-  inp: String,
+  inp: { type: String },
 
   tele: [{
-    type: {type : String},
-    value: {type : String},
+    type: { type: String, default: "mobile" },
+    value: { type: String },
     status: {
       type: String,
       enum: ["created", "verified", "deleted", "suspended"],
       default: "created"
-    }
+    },
+    country_code: {type: String},
+    country_name: {type: String},
+    country_dial_code: {type: String},
+    dial_numero: {type: String},
+    dial_operator: {type: String},
+    dial_type: {type: String, enum: ['fix', 'mobile']},
   }],
 
-  contact : {
+  contact: {
     city: {
       type: String,
     },
-  
+
     address: {
       type: String,
     },
-  
-    country : {
-      type : String,
+
+    country: {
+      type: String,
     },
 
     area: {
@@ -130,6 +145,8 @@ const UserSchema: Schema = new Schema({
   status: String,
 
   addedBy: String,
+
+  updates: [UserUpdate],
 
   permissions: [Permission],
 

@@ -1,7 +1,9 @@
-import { PATIENT } from "../../ittyni_patient_api/src/module/patient";
+import { EHR } from "../../ittyni_ehr_api";
 import { PAYEMENT } from "../../ittyni_payement_api/src/module/payement";
 import { CABINET } from "../../ittyni_cabinet_api/src/module/cabinets";
 import { ORDER } from '../module/orders'
+import { codifyOrderCode } from "../../../common/utils";
+import { USER } from "../../ittyni_user_api";
 
 export const insertOrder = async ({ order, patient }: any, { user }: any) => {
 
@@ -40,18 +42,18 @@ export const insertCabinetOrder = async ({ order, patientId, payement }: any, { 
     let convertDateToUCode = new Date().toLocaleDateString().split('/');
     let UOC: string = ''
     if (Order.length > 0) { UOC = Math.floor(Number(Order[0].OrderUniqueCode) + 1).toString(); }
-    else { 
+    else {
         UOC = convertDateToUCode[2];
-        if(new Date().getMonth() < 10){
+        if (new Date().getMonth() < 10) {
             UOC = UOC + '0' + convertDateToUCode[0];
-        } else { UOC = UOC + convertDateToUCode[0]; } 
-        if(new Date().getDay() < 10){
-            UOC = UOC + '0' + convertDateToUCode[1] + '00001'; 
+        } else { UOC = UOC + convertDateToUCode[0]; }
+        if (new Date().getDay() < 10) {
+            UOC = UOC + '0' + convertDateToUCode[1] + '00001';
         } else {
-            UOC = UOC + convertDateToUCode[1] + '00001';  
+            UOC = UOC + convertDateToUCode[1] + '00001';
         }
     }
-        
+
     // lets saving the order and get order id
     let newOrder = new ORDER({
         OrderUniqueCode: UOC,
@@ -93,16 +95,16 @@ export const insertCabinetOrder = async ({ order, patientId, payement }: any, { 
                 payementId: paying._id,
                 patientId: patientId
             })
-            let i =cab.patients.findIndex((pat:any)=>(pat._id == patientId));
-            if(i>=0){
+            let i = cab.patients.findIndex((pat: any) => (pat._id == patientId));
+            if (i >= 0) {
                 cab.patients[i].payements.push({
                     payementId: paying._id,
                     cabinetId: user.accountId
                 })
             } else {
                 // track payement in patient
-                PATIENT.findById(patientId).then((pat:any)=>{
-                    if(pat){
+                EHR.findById(patientId).then((pat: any) => {
+                    if (pat) {
                         pat.payements.push({
                             payementId: paying._id,
                             cabinetId: user.accountId
@@ -154,8 +156,8 @@ export const referredOrdersDetails = async (args: any, { user }: any) => {
         .then(async (order: any) => {
             if (order) {
                 patient = await CABINET.findById(user.accountId).then((cabinet: any) => {
-                    return cabinet.patients.find((p: any) => p._id.toString() === order.patient.toString())
-                }) || await PATIENT.findById(order.patient)
+                    return cabinet.patients.find((p: any) => p._id.toString() === order.EHR.toString())
+                }) || await EHR.findById(order.patient)
             }
             return order;
         });
@@ -198,4 +200,45 @@ export const referredOrdersChangeStatus = async (args: any, { user }: any) => {
         return new Error("no_referred_order_founded")
     else
         return (Order)
+}
+
+export const write_MedicineOrder = async ({ order }: any, { user, message, permission }: any) => {
+    const uniqueCodeDigits = 4;
+    // check user
+    if (!user && order.email) return "USER_NOT_KNOWN"
+    // check contact
+    if (!order || !order.tele || !order.tele.dial_numero || !order.tele.country_dial_code)
+        return "USER_NO_CONTACT"
+    // save contact details
+    // const updateContact = await USER.findOneAndUpdate({_id : user._id})
+    
+    let toDay = new Date().toLocaleDateString('en-GB').split('/').reverse().join('')
+    const lastOrderNumber = await ORDER.findOne({OrderDate: toDay}).sort({OrderUniqueNumber: -1})
+
+    const newMedicineOrder = new ORDER({
+        OrderUniqueCode : codifyOrderCode(lastOrderNumber?lastOrderNumber.OrderUniqueNumber+1: 1, uniqueCodeDigits),
+        OrderUniqueNumber: lastOrderNumber?lastOrderNumber.OrderUniqueNumber+1: 1
+    })
+
+    if(order.contact&&order.contact.area_id){
+        newMedicineOrder.OrderDeliveryArea = order.contact.area_id;
+    }
+    if(order.contact&&order.contact.zipcode_id){
+        newMedicineOrder.OrderDeliveryAreaUnit = order.contact.zipcode_id
+    }
+    newMedicineOrder.OrderStatus.push({
+        status: "created",
+        createdBy: user._id,
+        comment: order.comment || ''
+    })
+
+    newMedicineOrder.OrderTele= order.tele
+
+    newMedicineOrder.medicinesOrders.push({
+        medicineId: order.medicine_id
+    })
+
+    const saveMedicineOrder = await newMedicineOrder.save();
+
+    return saveMedicineOrder? "saved" : 'not saved';
 }

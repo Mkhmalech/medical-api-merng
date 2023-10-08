@@ -1,13 +1,13 @@
 import { Db } from "../../../../gateway/db"
 import { COMPONENTS } from "../module/component"
 
-export const create = async (args:any, {user}:any)=>{
+export const create = async ({extension}:any, {user}:any)=>{
 
     const component = new Db(COMPONENTS);
     
-    const res :any = await component.checkExisting({'name' : args.name});
+    const res :any = await component.checkExisting({'name' : extension.name});
 
-    if(!res) return component.createNewDoc({...args, createdAt : new Date().toUTCString(), createdBy : user._id });
+    if(!res) return component.createNewDoc({...extension, createdAt : new Date().toUTCString(), createdBy : user._id, status: "active" });
     
     if(res) return res;
 }
@@ -27,6 +27,10 @@ export const getAll = (args:any, {user}:any)=>{
     const component = new Db(COMPONENTS);
 
     return component.getAllDocs();
+
+}
+export const readActiveExtensionsBySpace = async (args: any, {user, permission, message}:any)=>{
+  return COMPONENTS.find({$and : [{status: "active"}, {space: args.space}]})
 }
 export const readActiveComponents = (args:any, {user, permissions, message}:any)=>{
     // if (message) return Error(message);

@@ -12,8 +12,9 @@
     "start:server": "npm run clean && tsc && pm2 start --name api node build/server.js",
     "DEV": "nodemon -e ts -w ./src -x npm run watch:serve",
     "watch:serve": "npm run clean && tsc && node build/server.js",
-    "PROD": "npm run clean && tsc && set ENV=PROD&&set PORT=8080",
-    "PROD:linux": "npm run cleam && tsc && ENV=PROD&&PORT=8080"
+    "PROD:win": "npm run clean && tsc && set ENV=PROD&&set PORT=8080&& node build/server.js",
+    "PROD:linux": "npm run clean && tsc && export ENV=PROD&& export PORT=8080&& node build/server.js",
+    "doc": "ENV=PROD PORT=8080 node build/server.js"
   },
   "keywords": [
     "express",
@@ -22,6 +23,7 @@
     "typescript"
   ],
   "dependencies": {
+    "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",

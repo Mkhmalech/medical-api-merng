@@ -39,9 +39,9 @@ import * as HandlerPHARMA from './extensions/ittyni_pharma_api'
 // import extensions handler
 import * as HandlerMedicine from './extensions/ittyni_medicine_api'
 // import extensions handler
-import * as HandlerAM from './extensions/ittyni_account_api'
+import * as HandlerSpaces from './extensions/ittyni_space_service'
 // import extensions handler
-import * as HandlerPR from './extensions/ittyni_patient_api'
+import * as EHR from './extensions/ittyni_ehr_api'
 // import extensions handler
 import * as HandlerNGAP from './extensions/ittyni_ngap_api'
 // import extensions handler
@@ -58,6 +58,21 @@ import * as HandlerQU from './extensions/ittyni_queuing_api'
 import * as HandlerArea from './extensions/ittyni_areas_service'
 // laboratory packs
 import * as HandlerPacks from './extensions/ittyni_pack_service'
+// Parapharmacy
+import * as HandlerParaPharmacy from './extensions/ittyni_parapharmacy_api'
+// Paramedical 
+import * as HandlerParamedical from './extensions/ittyni_paramedical_api'
+// Product Management 
+import * as HandlerProduct from './extensions/ittyni_product_service'
+// Category Management 
+import * as HandlerCategory from './extensions/ittyni_category_service'
+// Image Management 
+import * as HandlerImage from './extensions/ittyni_image_service'
+// catalog service
+import * as HandlerCatalog from './extensions/ittyni_catalog';
+
+// import country dial code
+import countryDialCode from './common/country_dials_code.json'
 
 const routes = ($: express.Router) => {
 
@@ -92,71 +107,100 @@ const routes = ($: express.Router) => {
     // lab appointement module
     $.all('/appointement', HandlerAPPOINT.LabAppointement);
     /********************************
-     * routes to cabinets
+     * Cabinets Webserver Api v0.1
      ********************************/
     $.all('/cabinets', HandlerCabinet.Cabinet);
-    // cabinet order
     $.all('/cabinets/order', HandlerORDERS.LabOrders);
 
     /********************************
-     * Account Manager Api v0.1
+     * Account Webserver Api v0.1
      ********************************/
-    $.all('/account', HandlerAM.AccountManger);
+    $.all('/space', HandlerSpaces.SpaceManger);
 
     /********************************
-     * Account Manager Api v0.1
+     * Account Webserver Api v0.1
      ********************************/
-    $.all('/patient', HandlerPR.Patient);
+    $.all('/ehr', EHR.EHRHandler);
 
     /********************************
-     * Medicine Manager Api v0.1
+     * Medicine Webserver Api v0.1
      ********************************/
     $.all('/medicine', HandlerMedicine.Medicine);
     
     /********************************
-     * Pharma Manager Api v0.1
+     * Pharma Webserver Api v0.1
      ********************************/
     $.all('/pharma', HandlerPHARMA.PharmaManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/ngap', HandlerNGAP.NGAPManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/ccam', HandlerCCAM.CCAMManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/icd', HandlerICD.ICDManger);
     
     /********************************
-     * COMPONENT Manager Api v0.1
+     * COMPONENT Webserver Api v0.1
      ********************************/
     $.all('/component', HandlerComponent.ComponentManger);
 
     /********************************
-     * DEPARTMENT Manager Api v0.1
+     * DEPARTMENT Webserver Api v0.1
      ********************************/
     $.all('/department', HandlerDepartment.DepartmentManger);
 
     /********************************
-     * NGAP Manager Api v0.1
+     * NGAP Webserver Api v0.1
      ********************************/
     $.all('/queuing', HandlerQU.QueuingManger);
 
     /********************************
-     * Area Manager Api v0.1
+     * Area Webserver Api v0.1
      ********************************/
-    $.all('/area', HandlerArea.AreaManger);
+    $.all('/zipcode', HandlerArea.AreaManger);
     
     /********************************
-     * Area Manager Api v0.1
+     * Pack Webserver Api v0.1
      ********************************/
     $.all('/pack', HandlerPacks.PackManger);
+    
+    /********************************
+     * Pack Webserver Api v0.1
+     ********************************/
+    $.all('/parapharmacy', HandlerParaPharmacy.ParapharmacyManger);
+    
+    /********************************
+     * Pack Webserver Api v0.1
+     ********************************/
+    $.all('/paramedical', HandlerParamedical.ParamedicalManger);
+   
+    /********************************
+     * Product Webserver Api v0.1
+     ********************************/
+    $.all('/product', HandlerProduct.ProductManger);
+   
+    /********************************
+     * Category Webserver Api v0.1
+     ********************************/
+    $.all('/category', HandlerCategory.CategoryManger);
+    
+    /********************************
+     * Category Webserver Api v0.1
+     ********************************/
+    $.all('/image', HandlerImage.Image);
+    
+    /********************************
+     * Category Webserver Api v0.1
+     ********************************/
+    $.all('/catalog', HandlerCatalog.CatalogManger);
     
     // ====================>cabinet end
     $.get('/medicalapi.jpg',(
@@ -166,13 +210,20 @@ const routes = ($: express.Router) => {
     {
         
     });
+
+    /**
+     * country dial json
+     */
+    $.get('/country_dials_code.json',(
+        req:express.Request, 
+        res: express.Response, 
+        next : express.NextFunction
+    )=>{
+        res.json(countryDialCode)
+    })
       
     
     return $;
 }
-
-
-
-
 
 export default routes;

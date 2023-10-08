@@ -58,3 +58,7 @@ export const updateLabmDetailsById= async ({_id, ...rest}: any, {user, message, 
 
     return result ? "UPDATES_ADDED_SUCCESSFULLY" : null
 }
+
+export const readLabmExtensions = ({_id}:any, {user, permissions, message}:any)=>{
+  return LABO.findById(_id).select('extensions');
+}

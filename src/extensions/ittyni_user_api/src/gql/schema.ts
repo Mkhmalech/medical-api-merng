@@ -1,12 +1,12 @@
 import { buildSchema } from "graphql";
 import { roleAndPermissions } from "./schema/role";
+import { tele } from "../../../../globalSchema";
 
 // global variable
 const id = "_id : ID"
 
 // user schema variables 
-const fname = "firstname : String"
-const lname = "lastname : String"
+const civility = `civility: String`
 const gender = `gender: String`
 const firstname = "firstName : String"
 const lastname = "lastName : String"
@@ -25,21 +25,51 @@ const region = `region: String`
 const country = `country: String`
 const latitude = `latitude: String`
 const longitude = `longitude: String`
-const status =`status:String`
+const status = `status:String`
 const value = `value:String`
 const type = `type:String`
 const location = `LOCATION{${latitude} ${longitude}}`
-const tele = `tele{${status} ${value} ${type}}`
+const USER_TELE = `USER_${tele}`
+
+// Insurance
+const provider = `provider: String`;
+const beneficiary = `beneficiary: String`;
+const numAffiliation = `numAffiliation: String`;
+const numImmatriculation = `numImmatriculation: String`;
 
 // user personal information
 const user_profile_personal = `USER_PROFILE_PERSONAL {
-    ${gender} ${firstname} ${lastname} ${username} ${dayofbirth} ${cityofbirth} ${cne} ${inp}
+    ${civility}  ${gender} ${firstname} 
+    ${lastname} ${username} ${dayofbirth} 
+    ${cityofbirth} ${cne}
 }`
 // user profile contact 
 const user_profile_contact = `USER_PROFILE_CONTACT {
-    ${address} ${city} ${country}
+    ${email} ${address} 
+    ${city} ${country}
 }`
+// user professional profile
+const user_profile_professional = `USER_PROFILE_PROFESSIONAL {
+    ${inp}
+}`
+const user_insurance = `USER_INSURANCE {
+    ${provider}
+    ${beneficiary}
+    ${numAffiliation}
+    ${numImmatriculation}
+}`
+export const _USER_PROFILE_PERSONAL = `input _${user_profile_personal}`
+export const _USER_PROFILE_CONTACT = `input _${user_profile_contact}`
+export const _USER_LOCATION = `input _${location}`
+export const _USER_TELE = `input _${USER_TELE}`
+export const _USER_PROFILE_PROFESSIONAL = `input _${user_profile_professional}`
+export const _USER_INSURANCE = `input _${user_insurance}`
 
+export const newUser_inputs = `input _NewUser {
+    personal: _USER_PROFILE_PERSONAL
+    contact : _USER_PROFILE_CONTACT
+    profession : _USER_PROFILE_PROFESSIONAL
+}`
 
 
 // user updates
@@ -105,7 +135,7 @@ export const UserSchema = buildSchema(`
     type ${user_profile_personal}
     type ${user_profile_contact}
     type ${location}
-    type ${tele}
+    type ${USER_TELE}
 
     type RoleName {
         name : String
@@ -135,6 +165,22 @@ export const UserSchema = buildSchema(`
         publish : Boolean
         delete: Boolean
     }
+    type Extension {
+        _id: ID
+        name: String
+        status: String
+        space: String
+        description: String
+    }
+    type ExtensionPermissions {
+        ${id}
+        component: Extension
+        create: Boolean
+        read: Boolean
+        update: Boolean
+        publish : Boolean
+        delete: Boolean
+    }
     type UserRole {
         ${id}
       addedby: ID
@@ -142,9 +188,10 @@ export const UserSchema = buildSchema(`
       permissions: [ UserRoleAndPermissions ]          
     }
     type UserAccountName {
-        labo : ID
-        cabinet : ID
-        pharma : ID
+        labo : UserSubscribedAccounts
+        cabinet : UserSubscribedAccounts
+        pharma : UserSubscribedAccounts
+        space : UserSubscribedAccounts
         role : RoleName
         permissions : [ UserRoleAndPermissions ]
     }
@@ -156,6 +203,17 @@ export const UserSchema = buildSchema(`
         status : String
         accounts : [UserAccountName]
         personal : USER_PROFILE_PERSONAL
+        permissions : [ UserRoleAndPermissions ]
+    }
+
+    type SubscribedAccount {
+        _id: ID
+        name: String
+    }
+
+    type UserSubscribedAccounts {
+        _id : ID
+        account : SubscribedAccount
     }
 
     type FrontUser {
@@ -169,7 +227,8 @@ export const UserSchema = buildSchema(`
         role : RoleName
         accounts : [UserAccountName]
         contact : USER_PROFILE_CONTACT
-        tele : [tele]
+        tele : [USER_TELE]
+        permissions : [ ExtensionPermissions ]
     }
 
     type User {
@@ -203,24 +262,16 @@ export const UserSchema = buildSchema(`
         ConfirmPassword : String!
     }
 
-    type Extension {
-        _id : ID!
-        name : String!        
-        canRead : Boolean
-        canCreate : Boolean
-        canUpdate : Boolean
-        canDelete : Boolean
-        canPublish : Boolean
-    }
-
     input inputLinkAccount { ${linkAccount} }
 
     ${roleAndPermissions}
 
-    input _${user_profile_personal}
-    input _${user_profile_contact}
-    input _${location}
-    input _${tele}
+    ${_USER_PROFILE_PERSONAL}
+    ${_USER_PROFILE_CONTACT}
+    ${_USER_LOCATION}
+    ${_USER_TELE}
+    ${_USER_INSURANCE}
+    
 
     type RootQuery {
         userProfile(token : String ) : User
@@ -245,7 +296,7 @@ export const UserSchema = buildSchema(`
         
         createNewUser(userInput : UserSignUp) : UserSession 
         upgradeToUser(userInput : UserSignUp) : UserSession 
-        addNewUser(addedby : ID, email : String, password: String, role: String, status: String) : String 
+        addNewUser(_id: String) : String 
         login(userInput: UserInput) : UserAuth!
         getUserDetails(id : String) : UserWithRole
         linkUserToAccount(${userId}, ${accountId}, ${accoutType} ) : String
@@ -255,7 +306,9 @@ export const UserSchema = buildSchema(`
         user_updateProfileInformation(_id: ID!, iPersonal: _USER_PROFILE_PERSONAL): String
         user_updateProfileContact(_id: ID!, iContact: _USER_PROFILE_CONTACT): String
         user_updateProfileLocation(_id: ID!, iLocation: _LOCATION): String
-        user_updateProfileTele(_id: ID!, iTele: _tele) : String
+        user_updateProfileTele(_id: ID!, iTele: _USER_TELE) : String
+        user_addLabSpace(${id},tele: String, role: String): String
+        user_addCabinetSpace(${id},tele: String, role: String): String
     }
     
     schema {

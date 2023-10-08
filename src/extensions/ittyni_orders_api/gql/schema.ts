@@ -1,4 +1,5 @@
 import { buildSchema } from "graphql"
+import { _id, contact, tele } from "../../../globalSchema"
 
 const testId = `testId : ID`
 const testPrice = `testPrice : String`
@@ -31,7 +32,15 @@ const patient = `{
     ${documentIDType}
 }`
 
+// tele
+const user_tele = `USER_${tele}`
+
+// contact
+const user_contact = `USER_${contact}`
+
 export const labOrdersSchema = buildSchema(`
+
+    type ${user_tele}
 
     type Account {
         name : String
@@ -47,7 +56,10 @@ export const labOrdersSchema = buildSchema(`
 
     input panelInput ${panel}
     input patienInput ${patient}
+    input _${user_tele}
+    input _${user_contact}
 
+    
     input OrderInput { 
         ${OrderPriceTotal}
         ${laboId}
@@ -95,6 +107,18 @@ export const labOrdersSchema = buildSchema(`
         fetchReferredOrdersOut : [Order]
     }
 
+    input _ORDER_MEDICNE {
+        medicine_id : ID
+        email: String
+        tele: _USER_TELE 
+        contact: _USER_CONTACT
+
+    }
+    type OrderMedicineMutation {
+        write_MedicineOrder(
+            order: _ORDER_MEDICNE): String
+    }
+
     type orderMut {
         insertOrder(order : OrderInput, patient : patienInput) : String
         insertCabinetOrder(
@@ -102,6 +126,7 @@ export const labOrdersSchema = buildSchema(`
         ) : String
         referredOrdersDetails(orderId : String) : OrderDetails 
         referredOrdersChangeStatus(UOC : String, type : String) : NewStatus
+        OrderMedicine : OrderMedicineMutation
     }
 
     schema {

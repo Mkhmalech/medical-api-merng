@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  # namespace: default
+  name: ittyni
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: tt-dev-api-service
+              port:
+                number: 8060
