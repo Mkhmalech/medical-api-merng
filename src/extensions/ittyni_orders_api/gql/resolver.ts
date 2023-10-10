@@ -1,4 +1,4 @@
-import * as order from '../controller/orders'
+import * as order from '../controller/ordersController'
 
 export const OrdersResolver = {
     // insert new referred order 
@@ -16,5 +16,10 @@ export const OrdersResolver = {
 
     OrderMedicine: {
         write_MedicineOrder: order.write_MedicineOrder        
+    },
+
+    OrderLabmProcedures: {
+        write_referral_labm_order: order.write_referral_labm_order,
+        read_referral_labm_orders_out: order.read_referral_labm_orders_out
     }
 }
