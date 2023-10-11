@@ -7,23 +7,13 @@ interface IOrder {
     OrderedBy: string
 
     OrderTime: string
-    OrderPriceTotal: number
+    OrderPriceTotal: any
     /* payed
    */
 
     patient?: any
     laboratory?: any
     referredFrom?: any
-    referredFromCabinet?: any
-    sample?: {
-        /**
-         * sampleType
-         * sampleCondition
-         * samplePriseTime
-         * phlebotomistId
-         * 
-        */
-    }
     panel?: any[]
     OrderUniqueCode: string
     OrderDate: string
@@ -50,17 +40,38 @@ const LabOrderStatus = new Schema({
     createdAt: String,
     createdBy: { type: Schema.Types.ObjectId, ref: 'USER' }
 })
-const LabOrderPanel = new Schema({
-    testId: { type: Schema.Types.ObjectId, ref: 'TESTS' },
-    testPrice: Number
+const LabOrderProcedure = new Schema({
+    _id: { type: Schema.Types.ObjectId, ref: 'TESTS' },
+    price: {
+        value: String,
+        currency: {type: String, default: 'MAD'},
+    }
 })
 export const LabOrder = new Schema({
-    patient: { type: Schema.Types.ObjectId, ref: 'PATIENT' },
-    laboratory: { type: Schema.Types.ObjectId, ref: 'LABO' },
-    referredFrom: { type: Schema.Types.ObjectId, ref: 'LABO' },
-    referredFromCabinet: { type: Schema.Types.ObjectId, ref: 'CABINET' },
-    sample: {},
-    panel: [LabOrderPanel]
+    patient: {
+        civility : { type: String},
+
+        gender: { type: String },
+
+        firstName: { type: String },
+
+        lastName: { type: String },
+
+        dob: { type: String },
+
+        pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
+
+        cne: { type: String },
+    },
+    referredTo: { type: Schema.Types.ObjectId, ref: 'SPACE' },
+    referredFrom: { type: Schema.Types.ObjectId, ref: 'SPACE' },
+    procedures: [{
+        _id: { type: Schema.Types.ObjectId, ref: 'TESTS' },
+        price: {
+            value: String,
+            currency: {type: String, default: 'MAD'},
+        }
+    }],
 })
 
 export const MedicineOrderSchema = new Schema({
@@ -69,7 +80,7 @@ export const MedicineOrderSchema = new Schema({
 
 const OrderStatusSchema = new Schema({
     type: { type: String },
-    status: { type: String, required: true },
+    value: { type: String, required: true, default: "created" },
     // "created" || "sent" || "recieved" || "performed" || "validated_partially" 
     // || "validated" || "cancelled" || "deleted"
     createdAt: { type: String, default: new Date().toUTCString() },
@@ -92,10 +103,42 @@ export const OrderSchema = new Schema({
     OrderCreatedAt: { type: String, default: new Date().toUTCString() },
     OrderPriceUnit: { type: String },
     OrderQuantity: { type: Number },
+    OrderPriceTotal: {
+        value: String,
+        currency: {type: String, default: "MAD"}
+    },
     OrderDeliveryArea: { type: Schema.Types.ObjectId, ref: 'AREA' },
     OrderDeliveryAreaUnit: { type: Schema.Types.ObjectId, ref: 'AREAUNIT' },
     OrderPromotion: [PromotionSchema],
-    labOrders: [LabOrder],
+    labOrder: {
+        patient: {
+            civility : { type: String},
+    
+            gender: { type: String },
+    
+            firstname: { type: String },
+    
+            lastname: { type: String },
+    
+            dob: { type: String },
+    
+            pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
+    
+            documentID: { 
+                documentIDNumber: {type: String },
+                documentIDType: {type: String, default: "cne"}
+            }
+        },
+        referredTo: { type: Schema.Types.ObjectId, ref: 'SPACE' },
+        referredFrom: { type: Schema.Types.ObjectId, ref: 'SPACE' },
+        procedures: [{
+            _id: { type: Schema.Types.ObjectId, ref: 'TESTS' },
+            price: {
+                value: String,
+                currency: {type: String, default: 'MAD'},
+            }
+        }]
+    },
     OrderTele: {
         country_code: { type: String },
         country_dial_code: { type: String },
