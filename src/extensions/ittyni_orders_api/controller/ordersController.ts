@@ -341,7 +341,6 @@ export const read_referral_labm_orders_out = async (
   args: any,
   { user, account }: any
 ) => {
-  console.log(account._id);
   const res = await ORDER.aggregate([
     {
       $match: {
@@ -354,12 +353,56 @@ export const read_referral_labm_orders_out = async (
   ])
     .lookup({
       from: "spaces",
-      localField: "labOrder.referredFrom",
+      localField: "labOrder.referredTo",
       foreignField: "_id",
-      as: "labOrder.referredFrom",
+      as: "labOrder.referredTo",
+    })
+    .unwind({
+      path: "$labOrder.procedures",
+    })
+    .lookup({
+      from: "tests",
+      localField: "labOrder.procedures._id",
+      foreignField: "_id",
+      as: "labOrder.procedures._id",
     })
     .addFields({
-      "labOrder.referredFrom": { $arrayElemAt: ["$labOrder.referredFrom", 0] },
+      "labOrder.referredTo": { $arrayElemAt: ["$labOrder.referredTo", 0] },
+      "labOrder.procedures.test": {
+        $arrayElemAt: ["$labOrder.procedures._id", 0],
+      },
+    })
+    .group({
+      _id: "$_id",
+      procedures: { $push: "$labOrder.procedures" },
+      labOrder: { $first: "$labOrder" },
+      status: { $first: "$OrderStatus" },
+      space: { $first: "$labOrder.referredTo" },
+      patient: { $first: "$labOrder.patient" },
+      OrderUniqueCode: { $first: "$OrderUniqueCode" },
+      OrderDate: { $first: "$OrderCreatedAt" },
+      OrderUniqueNumber: { $first: "$OrderUniqueNumber" },
+    })
+    .sort({ OrderUniqueNumber: -1 });
+
+  return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
+};
+
+export const read_referral_labm_order_details = async (
+  { _id }: any,
+  { user, account }: any
+) => {
+  const res = await ORDER.aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(_id) } },
+  ])
+    .lookup({
+      from: "spaces",
+      localField: "labOrder.referredTo",
+      foreignField: "_id",
+      as: "labOrder.referredTo",
+    })
+    .addFields({
+      "labOrder.referredTo": { $arrayElemAt: ["$labOrder.referredTo", 0] },
     })
     .project({
       _id: "$_id",
@@ -370,6 +413,60 @@ export const read_referral_labm_orders_out = async (
         currency: "MAD",
       },
       status: "$OrderStatus",
+      space: "$labOrder.referredTo",
+      patient: "$labOrder.patient",
     });
-  return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
+
+  return res ? res : Error("NO_ORDER_FOUNDED");
+};
+
+export const read_referral_labm_orders_in = async (
+  args: any,
+  { user, account }: any
+) => {
+  const res = await ORDER.aggregate([
+    {
+      $match: {
+        $and: [
+          { "labOrder.referredTo": mongoose.Types.ObjectId(account._id) },
+          { OrderType: "referral" },
+        ],
+      },
+    },
+  ])
+    .lookup({
+      from: "spaces",
+      localField: "labOrder.referredTo",
+      foreignField: "_id",
+      as: "labOrder.referredTo",
+    })
+    .unwind({
+      path: "$labOrder.procedures",
+    })
+    .lookup({
+      from: "tests",
+      localField: "labOrder.procedures._id",
+      foreignField: "_id",
+      as: "labOrder.procedures._id",
+    })
+    .addFields({
+      "labOrder.referredTo": { $arrayElemAt: ["$labOrder.referredTo", 0] },
+      "labOrder.procedures.test": {
+        $arrayElemAt: ["$labOrder.procedures._id", 0],
+      },
+    })
+    .group({
+      _id: "$_id",
+      procedures: { $push: "$labOrder.procedures" },
+      labOrder: { $first: "$labOrder" },
+      status: { $first: "$OrderStatus" },
+      space: { $first: "$labOrder.referredTo" },
+      patient: { $first: "$labOrder.patient" },
+      OrderUniqueCode: { $first: "$OrderUniqueCode" },
+      OrderDate: { $first: "$OrderCreatedAt" },
+      OrderUniqueNumber: { $first: "$OrderUniqueNumber" },
+    })
+    .sort({ OrderUniqueNumber: -1 });
+
+    return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
 };

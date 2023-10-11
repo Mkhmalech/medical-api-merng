@@ -113,6 +113,18 @@ export const labOrdersSchema = buildSchema(`
         fetchReferredOrdersIn : [Order]
         fetchReferredOrdersOut : [Order]
     }
+    type Test {
+        _id : ID
+        name : Name
+    }
+    type Price {
+        value : String
+        currency : String
+    }
+    type Procedure {
+        price: Price
+        test: Test
+    }
 
     type Referred_Out_Orders {
         _id: String
@@ -120,6 +132,9 @@ export const labOrdersSchema = buildSchema(`
         ${OrderDate}
         OrderPriceTotal: OrderPriceTotal
         status: [Status]
+        space: Labo
+        patient: Patient
+        procedures: [Procedure]
     }
 
     input _Price {
@@ -150,9 +165,18 @@ export const labOrdersSchema = buildSchema(`
             order: _ORDER_MEDICNE): String
     }
 
-    type OrderLabmProcedures {
-        write_referral_labm_order(orderLabm: _ORDER_LABM_PROCEDURES): String
+    type OrderLabmProceduresQuery {
         read_referral_labm_orders_out: [Referred_Out_Orders]
+        read_referral_labm_orders_in: [Referred_Out_Orders]
+        read_referral_labm_order_details(_id: ID!): Referred_Out_Orders
+    }
+
+    type OrderQuery {
+        OrderLabmProceduresQuery: OrderLabmProceduresQuery
+    }
+
+    type OrderLabmProceduresMut {
+        write_referral_labm_order(orderLabm: _ORDER_LABM_PROCEDURES): String
     }
 
     type orderMut {
@@ -163,11 +187,11 @@ export const labOrdersSchema = buildSchema(`
         referredOrdersDetails(orderId : String) : OrderDetails 
         referredOrdersChangeStatus(UOC : String, type : String) : NewStatus
         OrderMedicine : OrderMedicineMutation
-        OrderLabmProcedures: OrderLabmProcedures
+        OrderLabmProceduresMut: OrderLabmProceduresMut
     }
 
     schema {
-        query : orderQuery
+        query : OrderQuery
         mutation : orderMut
     }  
 `)

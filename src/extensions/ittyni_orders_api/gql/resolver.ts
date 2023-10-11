@@ -18,8 +18,14 @@ export const OrdersResolver = {
         write_MedicineOrder: order.write_MedicineOrder        
     },
 
-    OrderLabmProcedures: {
+    OrderLabmProceduresQuery: {
+        read_referral_labm_orders_out: order.read_referral_labm_orders_out,
+        read_referral_labm_orders_in: order.read_referral_labm_orders_in,
+        read_referral_labm_order_details: order.read_referral_labm_order_details,
+    },
+
+    OrderLabmProceduresMut: {
         write_referral_labm_order: order.write_referral_labm_order,
-        read_referral_labm_orders_out: order.read_referral_labm_orders_out
+        
     }
 }
