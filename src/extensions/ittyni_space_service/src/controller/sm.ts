@@ -98,7 +98,7 @@ export const write_linkSpaceToUser = async (
   { space }: any,
   { user, message, permissions }: any
 ) => {
-  const res = await SPACE.findOne({ "account.name": space?.account?.name });
+  const res = await SPACE.findOne({ "account.name": space.account.name });
 
   const updateUser = await USER.findById(user._id);
   if (res) {
@@ -112,14 +112,14 @@ export const write_linkSpaceToUser = async (
     }
   } else {
     const newSpace = new SPACE({
-      account: { name: space?.account?.name },
-      rating: space?.account.rating,
-      user_ratings_total: space?.account.user_rating,
-      geometry: space?.geometry,
+      account: { name: space.account.name },
+      rating: space.account.rating,
+      user_ratings_total: space.account.user_rating,
+      geometry: space.geometry,
     });
 
-    newSpace.contact.tele.push(space?.tele);
-    newSpace.photos.push(space?.photos);
+    newSpace.contact.tele.push(space.tele);
+    newSpace.photos.push(space.photos);
 
     const newSpaceId = await newSpace.save();
 

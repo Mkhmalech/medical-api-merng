@@ -39,7 +39,7 @@ export const write_product = async ({ product }: any, { account, user }: any) =>
 };
 
 export const read_account_products = async (_: any, {user, account}: any) => {
-  const res = await PRODUCT.find({$and : [{"space": account?._id}, {"status.value": {$ne: "deleted"}}]})
+  const res = await PRODUCT.find({$and : [{"space": account._id}, {"status.value": {$ne: "deleted"}}]})
 
   return res;
 };
