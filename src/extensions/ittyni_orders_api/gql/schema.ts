@@ -4,14 +4,14 @@ import { _id, contact, tele } from "../../../globalSchema"
 const testId = `testId : ID`
 const testPrice = `testPrice : String`
 //  OrderedBy
-const OrderPriceTotal = `OrderPriceTotal : Int`
+const OrderPriceTotal = `{value : String currency: String}`
 const OrderUniqueCode = `OrderUniqueCode : String`
 const OrderDate = `OrderDate : String`
 const OrderTime = `OrderTime : String`
 const civility = `civility : String`
 const firstname = `firstname : String`
 const lastname = `lastname : String`
-const DOB = `DOB : String`
+const DOB = `dob : String`
 const documentIDNumber = `documentIDNumber : String`
 const documentIDType = `documentIDType : String`
 const laboId = `laboId : ID`
@@ -22,14 +22,14 @@ const panel = `{
     ${testId}
     ${testPrice}
 }`
-const status = `{type : String}`
+const status = `{type : String value: String}`
 const patient = `{
     ${civility}
     ${firstname}
     ${lastname}
+    gender: String
     ${DOB}
-    ${documentIDNumber}
-    ${documentIDType}
+    documentIDNumber: String
 }`
 
 // tele
@@ -41,6 +41,13 @@ const user_contact = `USER_${contact}`
 export const labOrdersSchema = buildSchema(`
 
     type ${user_tele}
+
+    type OrderPriceTotal ${OrderPriceTotal}
+
+    type DocumentID {
+        ${documentIDNumber}
+        ${documentIDType}
+    }
 
     type Account {
         name : String
@@ -61,7 +68,7 @@ export const labOrdersSchema = buildSchema(`
 
     
     input OrderInput { 
-        ${OrderPriceTotal}
+        OrderPriceTotal : String
         ${laboId}
         panel : [panelInput]
     }
@@ -94,7 +101,7 @@ export const labOrdersSchema = buildSchema(`
         ${civility}
         ${OrderDate}
         ${OrderTime}
-        ${OrderPriceTotal}
+        OrderPriceTotal: String
         panel : [Panel]
         laboratory : Labo
         referredFrom : Labo
@@ -106,17 +113,70 @@ export const labOrdersSchema = buildSchema(`
         fetchReferredOrdersIn : [Order]
         fetchReferredOrdersOut : [Order]
     }
+    type Test {
+        _id : ID
+        name : Name
+    }
+    type Price {
+        value : String
+        currency : String
+    }
+    type Procedure {
+        price: Price
+        test: Test
+    }
+
+    type Referred_Out_Orders {
+        _id: String
+        ${OrderUniqueCode}
+        ${OrderDate}
+        OrderPriceTotal: OrderPriceTotal
+        status: [Status]
+        space: Labo
+        patient: Patient
+        procedures: [Procedure]
+    }
+
+    input _Price {
+        value: String
+        currency: String
+    }
+    input _Procedure {
+        _id: ID
+        price: _Price
+        catalog: ID!
+    }
 
     input _ORDER_MEDICNE {
         medicine_id : ID
         email: String
         tele: _USER_TELE 
         contact: _USER_CONTACT
-
+    }
+    input _ORDER_LABM_PROCEDURES {
+        patient : patienInput
+        procedures: [_Procedure]
+        referredFrom: ID!
+        referredTo: ID!
+        price: _Price!
     }
     type OrderMedicineMutation {
         write_MedicineOrder(
             order: _ORDER_MEDICNE): String
+    }
+
+    type OrderLabmProceduresQuery {
+        read_referral_labm_orders_out: [Referred_Out_Orders]
+        read_referral_labm_orders_in: [Referred_Out_Orders]
+        read_referral_labm_order_details(_id: ID!): Referred_Out_Orders
+    }
+
+    type OrderQuery {
+        OrderLabmProceduresQuery: OrderLabmProceduresQuery
+    }
+
+    type OrderLabmProceduresMut {
+        write_referral_labm_order(orderLabm: _ORDER_LABM_PROCEDURES): String
     }
 
     type orderMut {
@@ -127,10 +187,11 @@ export const labOrdersSchema = buildSchema(`
         referredOrdersDetails(orderId : String) : OrderDetails 
         referredOrdersChangeStatus(UOC : String, type : String) : NewStatus
         OrderMedicine : OrderMedicineMutation
+        OrderLabmProceduresMut: OrderLabmProceduresMut
     }
 
     schema {
-        query : orderQuery
+        query : OrderQuery
         mutation : orderMut
     }  
 `)

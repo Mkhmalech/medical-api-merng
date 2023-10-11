@@ -2,6 +2,7 @@ import { CABINET } from "../../ittyni_cabinet_api/src/module/cabinets";
 import { CATALOG } from "../../ittyni_catalog/src/module/catalog";
 import { LABO } from "../../ittyni_labm_api/module/labo";
 import { TESTS } from "../../ittyni_nabm_api/module/labtests";
+import mongoose from "mongoose";
 
 export const searchTests = async ({ query }: any, { user }: any) => {
   let q = query;
@@ -88,7 +89,10 @@ export const searchContributorTests = async ({ query }: any, { user }: any) => {
   }
 };
 
-export const read_referral_test = async ({ query }: any, { user }: any) => {
+export const read_referral_test = async (
+  { query }: any,
+  { user, account }: any
+) => {
   // find query list
   let q = new RegExp(query, "ig");
   const res = await TESTS.find({
@@ -97,26 +101,45 @@ export const read_referral_test = async ({ query }: any, { user }: any) => {
   if (res) {
     let foundedTests = res.map((t: any) => t._id);
 
-    const resCat = await CATALOG.aggregate([{$match: {"tests.default": { $in: foundedTests }}}])
+    const resCat = await CATALOG.aggregate([
+      {
+        $match: {
+          $and: [
+            { "tests.default": { $in: foundedTests } },
+            { space: { $ne: mongoose.Types.ObjectId(account._id) } },
+          ],
+        },
+      },
+    ])
       .unwind("tests")
-      .match({"tests.default": { $in: foundedTests }})
-      .lookup({from: "tests", localField: "tests.default", foreignField: "_id", as: "tests.default"})
-      .lookup({from: "spaces", localField: "space", foreignField: "_id", as: "space"})
-      .addFields({"tests.default": { $arrayElemAt: ["$tests.default", 0]}})
-      .addFields({"space": { $arrayElemAt: ["$space", 0]}})
+      .match({ "tests.default": { $in: foundedTests } })
+      .lookup({
+        from: "tests",
+        localField: "tests.default",
+        foreignField: "_id",
+        as: "tests.default",
+      })
+      .lookup({
+        from: "spaces",
+        localField: "space",
+        foreignField: "_id",
+        as: "space",
+      })
+      .addFields({ "tests.default": { $arrayElemAt: ["$tests.default", 0] } })
+      .addFields({ space: { $arrayElemAt: ["$space", 0] } })
       .project({
         "test._id": "$tests.default._id",
         "test.name": "$tests.default.name.fr",
         mnemonic: "$tests.default.reference.Mnemonic",
-        ppv: {$arrayElemAt: ["$tests.default.finance",0]},
+        ppv: { $arrayElemAt: ["$tests.default.finance", 0] },
         refPrice: "$tests.finance.price",
         "space._id": "$space._id",
         "space.name": "$space.account.name",
         "catalog.title": "$title",
-        "catalog._id": "$_id"
-      })
+        "catalog._id": "$_id",
+      });
 
-    return(resCat);
+    return resCat;
   } else {
     return Error("NO_TEST_FOUNDED");
   }
