@@ -41,6 +41,7 @@ export const SpaceSchema = buildSchema(`
         geometry: _Geometry
         viewport: _Viewport
         tele: _TELE
+        space_id: String
     }
 
     type SMQuery {

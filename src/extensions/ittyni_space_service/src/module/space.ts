@@ -62,6 +62,7 @@ const SpaceSchema: Schema = new Schema({
     type: { type: String },
     start: { type: String },
   },
+  space_id: { type: String },
   photos: [String],
   contact: {
     tele: [
