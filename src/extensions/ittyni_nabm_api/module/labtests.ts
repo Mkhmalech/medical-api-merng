@@ -159,7 +159,11 @@ const TestSchema: Schema = new Schema({
     temperature: { type: String, enum: ["room", "refrigerated", "frozen"] },
   },
   updates: [Update],
-
+  status: [{
+    value: { type: String, default: "created", enum: ["created", "validated", "online", "offline", "deleted"]},
+    createdBy: { type: Schema.Types.ObjectId, ref: "USER"},
+    createdAt: { type: String, default: new Date().toUTCString()}
+  }],
   views: Number,
 });
 

@@ -5,3 +5,6 @@ src/user-medical-api
 #todo
 Todo.md
 src/extensions/lab-manager
+.vscode
+.git
+.github
