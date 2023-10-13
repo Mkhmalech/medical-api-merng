@@ -1,4 +1,4 @@
-import * as component from '../controller'
+import * as component from '../controller/moduleController'
 
 
 export const componentResolver = {
