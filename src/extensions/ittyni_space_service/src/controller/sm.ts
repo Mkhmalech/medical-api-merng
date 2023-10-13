@@ -8,10 +8,10 @@ import { SPACE } from "../module/space";
 export const updateAccountName = async ({ name }: any, { user }: any) => {
   const res = await CABINET.findById(user.accountId)
     .select("account")
-    .then((cabinet) => {
+    .then(async (cabinet) => {
       if (cabinet) {
         cabinet.account.name = name;
-        if (cabinet.save()) return "saved_successfully";
+        if (await cabinet.save()) return "saved_successfully";
         else return new Error("update_not_saved");
       } else return new Error("no_account_founded");
     });
@@ -22,10 +22,10 @@ export const updateAccountName = async ({ name }: any, { user }: any) => {
 export const updateAccountType = async ({ type }: any, { user }: any) => {
   const res = await CABINET.findById(user.accountId)
     .select("account")
-    .then((cabinet) => {
+    .then(async (cabinet) => {
       if (cabinet) {
         cabinet.account.type = type;
-        if (cabinet.save()) return "saved_successfully";
+        if (await cabinet.save()) return "saved_successfully";
         else return new Error("update_not_saved");
       } else return new Error("no_account_founded");
     });
@@ -36,10 +36,10 @@ export const updateAccountType = async ({ type }: any, { user }: any) => {
 export const updateAccountStartDate = async ({ start }: any, { user }: any) => {
   const res = await CABINET.findById(user.accountId)
     .select("account")
-    .then((cabinet) => {
+    .then(async (cabinet) => {
       if (cabinet) {
         cabinet.account.start = start;
-        if (cabinet.save()) return "saved_successfully";
+        if (await cabinet.save()) return "saved_successfully";
         else return new Error("update_not_saved");
       } else return new Error("no_account_founded");
     });
@@ -53,7 +53,7 @@ export const updateContact = async (args: any, { user }: any) => {
   }
   const res = await CABINET.findById(user.accountId)
     .select("contact")
-    .then((cabinet) => {
+    .then(async (cabinet) => {
       if (cabinet) {
         if (args.address) cabinet.contact.address.street = args.address;
         if (args.region) cabinet.contact.address.region = args.region;
@@ -61,13 +61,12 @@ export const updateContact = async (args: any, { user }: any) => {
         if (args.tele) cabinet.contact.address.tele.fix.push(args.tele);
         if (args.fax) cabinet.contact.address.tele.fax.push(args.fax);
         if (args.fax) cabinet.contact.website = args.website;
-        if (cabinet.save()) return "saved_successfully";
+        if (await cabinet.save()) return "saved_successfully";
         else return new Error("update_not_saved");
       } else return new Error("no_account_founded");
     });
   return res;
 };
-
 // fetch data
 export const fetchAccountData = async (args: any, { user }: any) => {
   const res = await CABINET.findById(user.accountId)
@@ -78,7 +77,6 @@ export const fetchAccountData = async (args: any, { user }: any) => {
     });
   return res;
 };
-
 // read data functions
 export const read_user_spaces = async (
   args: any,
@@ -134,7 +132,6 @@ export const write_linkSpaceToUser = async (
     }
   }
 };
-
 /**
  * user activate extension
  * with id
@@ -185,7 +182,6 @@ export const write_activateExtensionOnSpace = async (
       : Error("Could not find extension");
   } else Error("not saved");
 };
-
 /**
  * Read space extensions
  */

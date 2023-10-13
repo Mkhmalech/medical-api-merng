@@ -468,5 +468,23 @@ export const read_referral_labm_orders_in = async (
     })
     .sort({ OrderUniqueNumber: -1 });
 
-    return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
+  return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
+};
+
+export const update_referral_labm_order_status = async (
+  { _id, status }: any,
+  { user }: any
+) => {
+  const res = await ORDER.findOneAndUpdate(
+    { _id },
+    {
+      $push: {
+        status: {
+          type: "referral",
+          value: status,
+          createdBy: user._id,
+        },
+      },
+    }
+  );
 };
