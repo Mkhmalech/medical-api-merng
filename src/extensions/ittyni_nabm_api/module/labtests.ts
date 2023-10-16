@@ -80,7 +80,11 @@ interface ITestModel extends Document {
   specimen?: any;
   delivery: any;
   transport: any;
-  updates: any;
+  updates: any[];
+  official?: boolean
+  status?: any[]
+  space?: string
+  user?: string
   views: number;
 }
 
@@ -101,10 +105,10 @@ const TestSchema: Schema = new Schema({
       country: String,
       Bcode: Number,
       code: String,
-      value: Number,
       price: Number,
       currency: String,
       description: String,
+      symbol: String,
     },
   ],
   description: {
@@ -165,6 +169,7 @@ const TestSchema: Schema = new Schema({
     createdAt: { type: String, default: new Date().toUTCString()}
   }],
   views: Number,
+  official: {type: Boolean}
 });
 
 export const TESTS = model<ITestModel>("TESTS", TestSchema);

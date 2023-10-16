@@ -26,6 +26,7 @@ export const OrdersResolver = {
 
     OrderLabmProceduresMut: {
         write_referral_labm_order: order.write_referral_labm_order,
+        update_referral_labm_order_status: order.update_referral_labm_order_status,
         
     }
 }

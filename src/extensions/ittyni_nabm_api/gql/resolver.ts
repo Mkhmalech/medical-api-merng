@@ -50,4 +50,5 @@ export const LabTestsResolver = {
 
     // mutations
     write_labm_test: labTests.write_labm_test,
+    write_new_test: labTests.write_new_test,
 }

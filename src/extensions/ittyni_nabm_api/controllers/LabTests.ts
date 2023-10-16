@@ -173,7 +173,7 @@ export class LabTests {
     };
   };
   LabTestFrView = async ({ name }: any) => {
-    const test:any = await TESTS.findOne({ "name.fr": name });
+    const test: any = await TESTS.findOne({ "name.fr": name });
     if (!test) throw new Error("no test found");
 
     return {
@@ -452,7 +452,7 @@ export class LabTests {
 
     if (user && user.role && user.role.name === "supadmin") {
       const isExist = test.finance.findIndex(
-        (o:any) => o.country === finance.country
+        (o: any) => o.country === finance.country
       );
       if (test.finance[isExist]) {
         test.finance[isExist].Bcode = finance.Bcode;
@@ -697,7 +697,7 @@ export class LabTests {
     { limit, skip }: any,
     { permissions, message, user }: any
   ) => {
-    const result = await TESTS.find({"space": {$exists: false}})
+    const result = await TESTS.find({ space: { $exists: false } })
       .populate("departements updates.updatedBy")
       .sort({ name: 1 })
       .limit(limit + skip)
@@ -714,7 +714,7 @@ export class LabTests {
     { limit, skip }: any,
     { permissions, message, user, account }: any
   ) => {
-    const result = await TESTS.find({"space": account._id})
+    const result = await TESTS.find({ space: account._id })
       .populate("departements updates.updatedBy")
       .sort({ name: 1 })
       .limit(limit + skip)
@@ -728,9 +728,12 @@ export class LabTests {
     };
   };
 
-  write_labm_test= async (args: any, {permissions, message, user, account}: any) => {
-    const res = await TESTS.findOne({"name.fr": args.name.fr})
-    if(res) return Error('ALREADY_EXISTS')
+  write_labm_test = async (
+    args: any,
+    { permissions, message, user, account }: any
+  ) => {
+    const res = await TESTS.findOne({ "name.fr": args.name.fr });
+    if (res) return Error("ALREADY_EXISTS");
     else {
       let newTest = new TESTS({
         name: args.name,
@@ -739,17 +742,46 @@ export class LabTests {
         transport: args.transport,
         specimen: args.specimen,
         space: account._id,
-        user: user._id
-      })
+      });
 
       const testSaved = await newTest.save();
 
-      return testSaved? "SAVED_SUCCESSFULLY" : Error("LABM_NOT_SAVED");
+      return testSaved ? "SAVED_SUCCESSFULLY" : Error("LABM_NOT_SAVED");
     }
-  }
+  };
 
-  read_labm_tests= async (args: any, {permissions, message, user, account}: any) => {
-    return TESTS.find({space: account._id})
-  }
+  write_new_test = async (
+    args: any,
+    { permission, message, user, account }: any
+  ) => {
+    const res = await TESTS.findOne({
+      $or: [
+        { "name.fr": args.name.fr },
+        { "reference.Mnemonic": args.reference.Mnemonic },
+      ],
+    });
+    if (res) return Error("ALREADY_EXISTS");
+    else {
+      let newTest = new TESTS({
+        name: args.name,
+        reference: args.reference,
+        delivery: args.delivery,
+        transport: args.transport,
+        specimen: args.specimen,
+        finance: args.finance,
+        user: user._id,
+      });
+
+      const testSaved = await newTest.save();
+
+      return testSaved ? "SAVED_SUCCESSFULLY" : Error("NEW_TEST_NOT_SAVED");
+    }
+  };
+  read_labm_tests = async (
+    args: any,
+    { permissions, message, user, account }: any
+  ) => {
+    return TESTS.find({ space: account._id });
+  };
   // ====>>>>>> end of modify update
 }

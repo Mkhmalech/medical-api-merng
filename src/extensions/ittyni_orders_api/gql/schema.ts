@@ -177,6 +177,7 @@ export const labOrdersSchema = buildSchema(`
 
     type OrderLabmProceduresMut {
         write_referral_labm_order(orderLabm: _ORDER_LABM_PROCEDURES): String
+        update_referral_labm_order_status(_id: ID!, status: String!): String
     }
 
     type orderMut {

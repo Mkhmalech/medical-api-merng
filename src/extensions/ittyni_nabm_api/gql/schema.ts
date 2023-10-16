@@ -13,6 +13,7 @@ const value = `value : Int`;
 const price = `price : Int`;
 const currency = `currency : String`;
 const financeDesc = `description : String`;
+const financeSymbol = `symbol : String`;
 const sampleType = `nature : [String]`;
 const tubeColor = `tubecolor : [String]`;
 const anticoagulant = `anticoagulant : [String]`;
@@ -41,7 +42,7 @@ const depDescriptionEn = `en : String `;
 // test types
 const names = `type Name { ${nameEn} ${nameFr}}`;
 const reference = `type Reference { ${CPT} ${Mnemonic} }`;
-const finance = `type Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} ${financeDesc} }`;
+const finance = `Finance {${id} ${country} ${Bcode} ${code} ${value} ${price} ${currency} ${financeDesc} ${financeSymbol} }`;
 const specimen = `type Specimen { ${sampleType} ${tubeColor} ${anticoagulant} ${tubeNumber} ${volumeMin}}`;
 const updatedBy = `type UpdatedBy { ${userId} ${fname} ${lname} ${picture}}`;
 const depDescription = `type DepDescription {${depDescriptionFr} ${depDescriptionEn}}`;
@@ -60,7 +61,8 @@ export const LabTestsSchema = buildSchema(`
 
     ${testDescription}
 
-    ${finance} 
+    type ${finance}
+    input _${finance}
 
     ${specimen}
 
@@ -139,7 +141,7 @@ export const LabTestsSchema = buildSchema(`
         Mnemonic : String
     }
 
-    input LabTestsFinance { ${id} ${country} ${Bcode} }
+    input LabTestsFinance { ${id} ${country} ${Bcode} ${code} }
 
     input LabTestsClassification {
         Panels : String
@@ -246,6 +248,14 @@ export const LabTestsSchema = buildSchema(`
             reference: LabTestsReference,
             delivery:_Delivery, transport:_Transport
             specimen: _TestSpecimen
+        ): String
+        
+        write_new_test(
+            name: LabTestsNames, 
+            reference: LabTestsReference,
+            delivery:_Delivery, transport:_Transport
+            specimen: _TestSpecimen
+            finance: _Finance
         ): String
 
     }

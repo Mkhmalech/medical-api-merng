@@ -250,16 +250,16 @@ export const write_MedicineOrder = async (
     .reverse()
     .join("");
   const lastOrderNumber = await ORDER.findOne({ OrderDate: toDay }).sort({
-    OrderUniqueNumber: -1,
+    OrderNumber: -1,
   });
 
   const newMedicineOrder = new ORDER({
     OrderUniqueCode: codifyOrderCode(
-      lastOrderNumber ? lastOrderNumber.OrderUniqueNumber + 1 : 1,
+      lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
       uniqueCodeDigits
     ),
-    OrderUniqueNumber: lastOrderNumber
-      ? lastOrderNumber.OrderUniqueNumber + 1
+    OrderNumber: lastOrderNumber
+      ? lastOrderNumber.OrderNumber + 1
       : 1,
   });
 
@@ -297,22 +297,23 @@ export const write_referral_labm_order = async (
     .reverse()
     .join("");
   const lastOrderNumber = await ORDER.findOne({ OrderDate: toDay }).sort({
-    OrderUniqueNumber: -1,
+    OrderNumber: -1,
   });
 
   let newOrder = new ORDER({
     OrderUniqueCode: codifyOrderCode(
-      lastOrderNumber ? lastOrderNumber.OrderUniqueNumber + 1 : 1,
+      lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
       codeDigits
     ),
-    OrderUniqueNumber: lastOrderNumber
-      ? lastOrderNumber.OrderUniqueNumber + 1
+    OrderNumber: lastOrderNumber
+      ? lastOrderNumber.OrderNumber + 1
       : 1,
     OrderType: "referral",
     OrderedBy: user._id,
     OrderDate: toDay,
     OrderTime: new Date().toLocaleTimeString(),
-    OrderPriceTotal: { value: orderLabm.price, currency: "MAD" },
+    OrderPriceTotal: { ...orderLabm.price },
+    OrderCreatedAt : new Date().toUTCString(),
     labOrder: {
       patient: {
         ...orderLabm.patient,
@@ -327,7 +328,7 @@ export const write_referral_labm_order = async (
   });
 
   newOrder.OrderStatus.push({
-    type: "labToLab",
+    type: "LabToLab",
     createdAt: new Date().toLocaleString(),
     createdBy: user._id,
   });
@@ -381,9 +382,9 @@ export const read_referral_labm_orders_out = async (
       patient: { $first: "$labOrder.patient" },
       OrderUniqueCode: { $first: "$OrderUniqueCode" },
       OrderDate: { $first: "$OrderCreatedAt" },
-      OrderUniqueNumber: { $first: "$OrderUniqueNumber" },
+      OrderNumber: { $first: "$OrderNumber" },
     })
-    .sort({ OrderUniqueNumber: -1 });
+    .sort({ OrderNumber: -1 });
 
   return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
 };
@@ -464,9 +465,9 @@ export const read_referral_labm_orders_in = async (
       patient: { $first: "$labOrder.patient" },
       OrderUniqueCode: { $first: "$OrderUniqueCode" },
       OrderDate: { $first: "$OrderCreatedAt" },
-      OrderUniqueNumber: { $first: "$OrderUniqueNumber" },
+      OrderNumber: { $first: "$OrderNumber" },
     })
-    .sort({ OrderUniqueNumber: -1 });
+    .sort({ OrderNumber: -1 });
 
   return res ? res : Error("NO_REFERRALS_ORDER_FOUNDED");
 };
@@ -475,16 +476,17 @@ export const update_referral_labm_order_status = async (
   { _id, status }: any,
   { user }: any
 ) => {
-  const res = await ORDER.findOneAndUpdate(
-    { _id },
+  const res = await ORDER.findOneAndUpdate({ _id },
     {
       $push: {
-        status: {
-          type: "referral",
+        OrderStatus: {
+          type: "LabToLab",
           value: status,
           createdBy: user._id,
         },
       },
-    }
+    }, {new : true}
   );
+
+  return res? "ORDER_STATUS_UPDATED" : Error("ORDER_STATUS_NOT_SAVED");
 };

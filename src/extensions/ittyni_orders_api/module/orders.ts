@@ -16,7 +16,7 @@ interface IOrder {
   panel?: any[];
   OrderUniqueCode: string;
   OrderDate: string;
-  OrderUniqueNumber: number;
+  OrderNumber: number;
   OrderType: string;
   OrderStatus: any[];
   OrderCreatedAt: string;
@@ -116,7 +116,7 @@ export const OrderSchema = new Schema({
       .reverse()
       .join(""),
   },
-  OrderUniqueNumber: { type: Number, unique: true },
+  OrderNumber: { type: Number, required: true },
   OrderType: { type: String },
   OrderStatus: [OrderStatusSchema],
   OrderCreatedAt: { type: String, default: new Date().toUTCString() },
