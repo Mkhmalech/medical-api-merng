@@ -178,7 +178,7 @@ export const LabTestsSchema = buildSchema(`
         LabTestFrViewByAbbr( abbr : String ) : FrTest
         LabTestFrenchSearch( query : String) : [FrTest]
         LabTestFrenchById (id : String ) : FrTest
-        LabTestFrenchByIds (ids : [String] ) : [FrTest]
+        read_tests_multiple_ids (_ids : [ID!] ) : [FrTest]
         fetchTestsByFirstLetter (letter : String) : [EnTest]
         nameEnFilter (en : String ) : [FrTest]
         fetchUpdates : [FrTest]
@@ -188,6 +188,7 @@ export const LabTestsSchema = buildSchema(`
         read_testsOnScroll(limit: Int, skip: Int) : OnScrollNabmList
         read_labmTestsOnScroll(limit: Int, skip: Int) : OnScrollNabmList
         read_labm_tests: [FrTest]
+        read_tests_name_mnemonic(query: String): [FrTest]
     }
 
     type LabTestsMutation {

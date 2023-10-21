@@ -13,13 +13,14 @@ export const LabTestsResolver = {
     LabTestFrViewByAbbr: labTests.LabTestFrViewByAbbr,
     LabTestFrenchSearch: labTests.LabTestsFrFilterByNameAndMnemonic,
     LabTestFrenchById : labTests.LabTestFrenchById,
-    LabTestFrenchByIds : labTests.LabTestFrenchByIds,
+    read_tests_multiple_ids : labTests.read_tests_multiple_ids,
     nameEnFilter : labTests.nameEnFilter,
     createTestsSiteMap : labTests.createTestsSiteMap,
     fetchTestsByFirstLetter : labTests.fetchTestsByFirstLetter,
 
     read_testsOnScroll : labTests.read_testsOnScroll,
     read_labmTestsOnScroll : labTests.read_labmTestsOnScroll,
+    read_tests_name_mnemonic: labTests.LabTestsFrFilterByNameAndMnemonic,
 
     // add test
     LabTestAddNew : labTests.addNewTest,

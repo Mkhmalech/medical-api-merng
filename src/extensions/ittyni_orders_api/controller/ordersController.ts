@@ -258,9 +258,7 @@ export const write_MedicineOrder = async (
       lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
       uniqueCodeDigits
     ),
-    OrderNumber: lastOrderNumber
-      ? lastOrderNumber.OrderNumber + 1
-      : 1,
+    OrderNumber: lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
   });
 
   if (order.contact && order.contact.area_id) {
@@ -305,15 +303,13 @@ export const write_referral_labm_order = async (
       lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
       codeDigits
     ),
-    OrderNumber: lastOrderNumber
-      ? lastOrderNumber.OrderNumber + 1
-      : 1,
+    OrderNumber: lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
     OrderType: "referral",
     OrderedBy: user._id,
     OrderDate: toDay,
     OrderTime: new Date().toLocaleTimeString(),
     OrderPriceTotal: { ...orderLabm.price },
-    OrderCreatedAt : new Date().toUTCString(),
+    OrderCreatedAt: new Date().toUTCString(),
     labOrder: {
       patient: {
         ...orderLabm.patient,
@@ -476,7 +472,8 @@ export const update_referral_labm_order_status = async (
   { _id, status }: any,
   { user }: any
 ) => {
-  const res = await ORDER.findOneAndUpdate({ _id },
+  const res = await ORDER.findOneAndUpdate(
+    { _id },
     {
       $push: {
         OrderStatus: {
@@ -485,8 +482,55 @@ export const update_referral_labm_order_status = async (
           createdBy: user._id,
         },
       },
-    }, {new : true}
+    },
+    { new: true }
   );
 
-  return res? "ORDER_STATUS_UPDATED" : Error("ORDER_STATUS_NOT_SAVED");
+  return res ? "ORDER_STATUS_UPDATED" : Error("ORDER_STATUS_NOT_SAVED");
+};
+
+export const write_home_collection_tests = async (
+  args: any,
+  { user }: any
+) => {
+  const codeDigits = 4;
+  let toDay = new Date()
+    .toLocaleDateString("en-GB")
+    .split("/")
+    .reverse()
+    .join("");
+  const lastOrderNumber = await ORDER.findOne({ OrderDate: toDay }).sort({
+    OrderNumber: -1,
+  });
+
+  let newOrder = new ORDER({
+    OrderUniqueCode: codifyOrderCode(
+      lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
+      codeDigits
+    ),
+    OrderNumber: lastOrderNumber ? lastOrderNumber.OrderNumber + 1 : 1,
+    OrderType: "PatientToLab",
+    OrderedBy: user._id,
+    OrderDate: toDay,
+    OrderTime: new Date().toLocaleTimeString(),
+    OrderPriceTotal: args.total,
+    OrderCreatedAt: new Date().toUTCString(),
+    labOrder: {
+      patient: {
+        ...args.patient,
+      },
+      procedures: args.procedures,
+      phlebotomist: args.phlebotomist
+    },
+  });
+
+  newOrder.OrderStatus.push({
+    type: "PatientToLab",
+    createdAt: new Date().toUTCString(),
+    createdBy: user._id,
+  });
+
+  const res = await newOrder.save();
+  if (res) return "order_created_successfully";
+  else return "order_not_created";
 };

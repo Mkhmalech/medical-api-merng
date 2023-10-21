@@ -3,10 +3,10 @@ import { Schema, model, Document } from "mongoose";
 type LabOrderModel = IOrder & Document;
 
 interface IOrder {
-  OrderedBy: string;
+  OrderedBy?: string;
 
-  OrderTime: string;
-  OrderPriceTotal: any;
+  OrderTime?: string;
+  OrderPriceTotal?: any;
   /* payed
    */
 
@@ -119,6 +119,7 @@ export const OrderSchema = new Schema({
   OrderNumber: { type: Number, required: true },
   OrderType: { type: String },
   OrderStatus: [OrderStatusSchema],
+  OrderTime: { type: String },
   OrderCreatedAt: { type: String, default: new Date().toUTCString() },
   OrderPriceUnit: { type: String },
   OrderQuantity: { type: Number },
@@ -143,6 +144,10 @@ export const OrderSchema = new Schema({
 
       pob: { type: Schema.Types.ObjectId, ref: "CITIES" },
 
+      tele: { type: String },
+
+      city: { type: String },
+
       documentID: {
         documentIDNumber: { type: String },
         documentIDType: { type: String, default: "cne" },
@@ -159,6 +164,13 @@ export const OrderSchema = new Schema({
         },
       },
     ],
+    phlebotomist: {
+      price: { 
+        value: String,
+        currency: { type: String, default: "MAD" }
+      },
+      requested: {type: Boolean, default: false }
+    }
   },
   OrderTele: {
     country_code: { type: String },

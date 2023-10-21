@@ -25,30 +25,10 @@ export class LabTests {
       updates: test.updates,
     };
   };
-  LabTestFrenchByIds = async ({ ids }: any) => {
-    let testFetchedByIds: any[] = [];
-
-    for (let i = 0; i < ids.length; i++) {
-      const test: any = await TESTS.findOne({ _id: ids[i] });
-      if (!test) throw new Error("no test found");
-
-      testFetchedByIds.push({
-        id: test._id.toString(),
-        name: {
-          en: test.name.en,
-          fr: test.name.fr,
-        },
-        reference: { ...test.reference },
-        finance: [
-          {
-            Bcode: test.finance[0] ? test.finance[0].Bcode : null,
-            country: test.finance[0] ? test.finance[0].country : null,
-          },
-        ],
-      });
-    }
-
-    return testFetchedByIds;
+  read_tests_multiple_ids = async ({ _ids }: any) => {
+    const tests: any = await TESTS.find({ _id: { $in: _ids } });
+    if (!tests) throw new Error("no test found");
+    return tests ? tests : Error("NO_TESTS_FOUNDED");
   };
   nameEnFilter = async ({ en }: any) => {
     let q = en;

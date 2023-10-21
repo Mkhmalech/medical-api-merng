@@ -27,6 +27,8 @@ const patient = `{
     ${civility}
     ${firstname}
     ${lastname}
+    city: String
+    tele: String
     gender: String
     ${DOB}
     documentIDNumber: String
@@ -147,6 +149,11 @@ export const labOrdersSchema = buildSchema(`
         catalog: ID!
     }
 
+    input _ProcedureTests {
+        _id: ID!
+        price: _Price
+    }
+
     input _ORDER_MEDICNE {
         medicine_id : ID
         email: String
@@ -159,6 +166,10 @@ export const labOrdersSchema = buildSchema(`
         referredFrom: ID!
         referredTo: ID!
         price: _Price!
+    }
+    input _Phlebotomist {
+        requested: Boolean
+        price: _Price
     }
     type OrderMedicineMutation {
         write_MedicineOrder(
@@ -178,6 +189,12 @@ export const labOrdersSchema = buildSchema(`
     type OrderLabmProceduresMut {
         write_referral_labm_order(orderLabm: _ORDER_LABM_PROCEDURES): String
         update_referral_labm_order_status(_id: ID!, status: String!): String
+        write_home_collection_tests(
+            procedures: [_ProcedureTests],
+            total: String,
+            phlebotomist: _Phlebotomist,
+            patient: patienInput
+        ): String
     }
 
     type orderMut {
