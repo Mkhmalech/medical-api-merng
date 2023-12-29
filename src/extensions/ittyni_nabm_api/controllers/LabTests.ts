@@ -30,6 +30,16 @@ export class LabTests {
     if (!tests) throw new Error("no test found");
     return tests ? tests : Error("NO_TESTS_FOUNDED");
   };
+  read_test_by_id = async ({_id}: any, {user, message, permissions}: any)=>{
+    const test: any = await TESTS.findById(_id)
+    return test? test: Error("NO_TEST_FOUNDED");
+  }
+  read_test_by_query = async ({query}: any, {user}: any)=>{
+    const q = new RegExp(query, 'ig');
+    const tests: any = await TESTS.find({$or: [{"name.fr": q}, {"reference.Mnemonic": q}]});
+
+    return tests
+  }
   nameEnFilter = async ({ en }: any) => {
     let q = en;
     q = new RegExp(q, "ig");
@@ -722,6 +732,7 @@ export class LabTests {
         transport: args.transport,
         specimen: args.specimen,
         space: account._id,
+        isDefault: false
       });
 
       const testSaved = await newTest.save();
@@ -750,6 +761,7 @@ export class LabTests {
         specimen: args.specimen,
         finance: args.finance,
         user: user._id,
+        isDefault : true
       });
 
       const testSaved = await newTest.save();

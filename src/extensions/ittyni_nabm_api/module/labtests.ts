@@ -4,6 +4,7 @@ import { Schema, model, Document } from "mongoose";
 const Update = new Schema({
   updatedAt: { type: String, default: new Date().toUTCString() },
   updatedBy: { type: Schema.Types.ObjectId, ref: "USER" },
+  isDefault: Boolean,
   name: {
     en: String,
     fr: String,
@@ -67,6 +68,7 @@ const Update = new Schema({
 });
 interface ITestModel extends Document {
   reference?: any;
+  isDefault?: boolean;
   name?: any;
   description?: any;
   finance?: any[];
@@ -91,6 +93,7 @@ interface ITestModel extends Document {
 const TestSchema: Schema = new Schema({
   space: {type: Schema.Types.ObjectId, ref: 'SPACE'},
   user: {type: Schema.Types.ObjectId, ref: 'USER'},
+  isDefault: Boolean,
   name: {
     en: String,
     fr: String,

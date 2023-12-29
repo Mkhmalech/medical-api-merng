@@ -191,7 +191,7 @@ export const labOrdersSchema = buildSchema(`
         update_referral_labm_order_status(_id: ID!, status: String!): String
         write_home_collection_tests(
             procedures: [_ProcedureTests],
-            total: String,
+            total: _Price,
             phlebotomist: _Phlebotomist,
             patient: patienInput
         ): String

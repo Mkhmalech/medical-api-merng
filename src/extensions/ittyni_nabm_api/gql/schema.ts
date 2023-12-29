@@ -189,6 +189,8 @@ export const LabTestsSchema = buildSchema(`
         read_labmTestsOnScroll(limit: Int, skip: Int) : OnScrollNabmList
         read_labm_tests: [FrTest]
         read_tests_name_mnemonic(query: String): [FrTest]
+        read_test_by_id(_id: ID!) : FrTest
+        read_test_by_query(query: String) : [FrTest]
     }
 
     type LabTestsMutation {

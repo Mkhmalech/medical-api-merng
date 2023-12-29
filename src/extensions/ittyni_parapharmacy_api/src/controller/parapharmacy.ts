@@ -1,12 +1,12 @@
 import { requestData } from "../../../../common/request";
 import { PARAPHARMACY } from "../module/parapharmacy"
-const http = require("http");
+import { para_1 } from './paraProductDetails_2'
+import mongoose from 'mongoose'
 
 
 export const read_ParaPharamaciesOnScroll= async ({ limit, skip }: any, { permissions, message, user }: any) => {
     const parapharmas = await PARAPHARMACY.aggregate([
         { $match: {} },
-        { $sort: { 'account.name': 1 } },
         {
             $facet: {
                 "data": [{ $limit: limit + skip }, { $skip: skip }],
@@ -16,6 +16,7 @@ export const read_ParaPharamaciesOnScroll= async ({ limit, skip }: any, { permis
                 ]
             }
         },
+        { $sort: { 'name': 1 } },
         {
             $project: {
                 parapharmas: '$data',
@@ -33,28 +34,49 @@ export const read_ParaPharamaciesOnScroll= async ({ limit, skip }: any, { permis
 
     return parapharmas.shift();
 }
-export const write_parapharmacy = async (args: any, { user, permission, message }: any) => {
-    const res = await PARAPHARMACY.findOne({ "account.name": args.name }).then(async (result: any) => {
-        if (res) return "ACCOUNT_ALREADY_EXIST";
+export const write_parapharmacies = async (args: any, { user, permission, message }: any) => {
+    for (let i = args.index; i < para_1.length; i++) {
+        const para: any = para_1[i];
+        if( para.product.length >= 0 ){
+            let paraPharmacy: any = new PARAPHARMACY({
+                name: para.product,
+                brand: para.distributeur,
+                createdBy: mongoose.Types.ObjectId('605b97864a4db74074bc86e2')
+            })
+            paraPharmacy.forms = para.package.map((p:any)=>({
+                form: p.name,
+                code: { 
+                    type: "EAN",
+                    value: p.EAN
+                },
+                status: {
+                    value: p.status,
+                    createdBy:mongoose.Types.ObjectId('605b97864a4db74074bc86e2')
+                }
+    
+            }))
+           const res = await paraPharmacy.save();
+           
+           if(res) console.log(`${i} saved rest ${para_1.length - i} => ${(100-(((para_1.length - i)/para_1.length)*100)).toFixed(2)}% completed`)
+        }
 
-        const newParapharma = new PARAPHARMACY({ ...args });
+    }
+}
 
-        let saved = await newParapharma.save();
-        return saved
+export const read_parpharmacy_by_id = (args: any, req: any) => {
+  return para_1[args.index]
+}
 
-    })
+export const read_parapharmacy_brands = async (args: any, req: any) =>{
+    const brands = await PARAPHARMACY.aggregate()
+    .group({ _id: "$brand", brand: {$first: "$brand"}})
+    .sort({_id: 1})
 
-    requestData(
-        'path',
-        `query Read_LABMDetails($_id : ID!){
-            readLabmDetailsById(_id: $_id){
-                account { name }
-            }
-            }`, 
-        data => data);
+    return brands? brands.map((f:any)=>f.brand) : Error("NO_BRAND_FOUNDED");
+}
 
+export const read_parapharmacy_by_brand = async (args: any, req: any) =>{
+    const parapharmas = await PARAPHARMACY.find({brand: args.brand});
 
-    console.log(res);
-
-    return "ACCOUNT_SAVED_SUCCESSFULLY";
+    return parapharmas? parapharmas: Error("NO_PARAPHARMA_FOUNDED");
 }

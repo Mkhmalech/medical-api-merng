@@ -7,53 +7,30 @@ const permission = new Schema({
     
 })
 interface IParapharmacy {
-    account: {
-        name: string,
-        code?: number,
-        type?: string,
-        start?: string,
-    }
-    contact?: {
-        tele?: any[],
-        address?: any,
-        website?: string
-    },
+    name: string
+    brand?: string
+    forms?: any[]
+    status?: any
+    createdAt?:any
+    createdBy?: any
     updates?: any[]
 }
 
 const parapharmacy = new Schema({
-    account: {
-        name: { type: String },
-        code: { type: Number },
-        type: { type: String },
-        start: { type: String },
-        ice: { type: String},
-        rc: { type: String}
-    },
-
-    contact: {
-        tele: {
-            fix: [String],
-
-            fax: [String],
-
+    name: {type: String, required: true},
+    brand: {type: String},
+    forms: [{
+        form: {type: String},
+        code: {
+            type: {type: String},
+            value: {type: String}
         },
-        website: { type: String },
-        address: {
-            area: {
-                type: String,
-            },
-
-            area_unit: {
-                type: String,
-            },
-
-            street: {
-                type: String,
-            },
-
-        },
-    },
+        status: {
+            value: String,
+            createdBy: {type: Schema.Types.ObjectId, ref: "USER"},
+            createdAt: {type: String , default: new Date().toUTCString() }
+        }
+    }],
     status: { type: String, enum :['created', 'validated', 'suspended', 'deleted'], default: 'created'},
     createdAt: { type: String , default: new Date().toUTCString() },
     createdBy: { type: Schema.Types.ObjectId, ref: 'USER' },

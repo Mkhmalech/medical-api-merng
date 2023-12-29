@@ -21,7 +21,8 @@ export const LabTestsResolver = {
     read_testsOnScroll : labTests.read_testsOnScroll,
     read_labmTestsOnScroll : labTests.read_labmTestsOnScroll,
     read_tests_name_mnemonic: labTests.LabTestsFrFilterByNameAndMnemonic,
-
+    read_test_by_id: labTests.read_test_by_id,
+    read_test_by_query: labTests.read_test_by_query,
     // add test
     LabTestAddNew : labTests.addNewTest,
 
