@@ -57,6 +57,17 @@ const LaboContributorSchema = new Schema({
   cabinetId: { type: Schema.Types.ObjectId, ref: 'CABINET' },
   createdAt: String
 });
+const LaboAffiliatesSchema = new Schema({
+  addedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
+  user: { type: Schema.Types.ObjectId, ref: 'USER' },
+  createdAt: String,
+  status: {
+    value: String,
+    updatedBy: { type: Schema.Types.ObjectId, ref:'USER' },
+    updatedAt: { type: String, default: new Date().toUTCString() }
+  },
+  catalog: { type: Schema.Types.ObjectId, ref: 'CATALOG' }
+});
 
 
 const LaboSchema = new Schema({
@@ -158,7 +169,7 @@ const LaboSchema = new Schema({
    * affiliate person can send orders to lab and get
    * commissions
    */
-  affiliates: [],
+  affiliates: [LaboAffiliatesSchema],
 
   /**
    * laboratoire staff that hold all
@@ -184,16 +195,19 @@ const LaboSchema = new Schema({
     departements: [settings.laboSettingDepartement],
 
     // holidays of labortory
-    holidays: [settings.laboSettingHoliday],
+    holidays: [settings.LaboSettingHoliday],
 
     // employed leaves vacance not dispo in this time
-    leaves: [settings.laboSettingLeave],
+    leaves: [settings.LaboSettingLeave],
 
-    // what automate the labo has
-    automates: [settings.laboSettingAutomate],
+    // what automate the Labo has
+    automates: [settings.LaboSettingAutomate],
 
-    // status of team that labo has
-    team: [settings.laboSettingTeam]
+    // status of team that Labo has
+    // team: [settings.LaboSettingTeam],
+    
+    // affiliation settings
+    affiliation: [settings.LaboSettingAffiliation]
   },
   /**
    * activated modules

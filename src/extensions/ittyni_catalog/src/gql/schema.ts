@@ -40,6 +40,7 @@ export const CatalogSchema = buildSchema(`
         title : String!
         description: String
         tests: [ID]
+        for: String!
     }
     type CatalogQuery {
         read_space_catalogs: [Catalog],

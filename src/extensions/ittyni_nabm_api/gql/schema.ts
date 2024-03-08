@@ -183,7 +183,7 @@ export const LabTestsSchema = buildSchema(`
         nameEnFilter (en : String ) : [FrTest]
         fetchUpdates : [FrTest]
         fetchUpdateById(id: String) : Update
-        fetchDepartments : [Department]
+        read_departments : [Department]
 
         read_testsOnScroll(limit: Int, skip: Int) : OnScrollNabmList
         read_labmTestsOnScroll(limit: Int, skip: Int) : OnScrollNabmList

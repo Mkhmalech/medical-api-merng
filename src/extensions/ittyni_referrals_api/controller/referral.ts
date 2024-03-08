@@ -106,7 +106,7 @@ export const read_referral_test = async (
         $match: {
           $and: [
             { "tests.default": { $in: foundedTests } },
-            { space: { $ne: mongoose.Types.ObjectId(account._id) } },
+            { space: { $ne: new mongoose.Types.ObjectId(account._id) } },
           ],
         },
       },

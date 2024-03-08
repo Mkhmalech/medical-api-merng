@@ -217,7 +217,7 @@ export class Db {
             {
                 $match: {
                     $and: [
-                        { _id: mongoose.Types.ObjectId(_id) },
+                        { _id: new mongoose.Types.ObjectId(_id) },
                         {
                             $expr: {
                                 '$eq': [

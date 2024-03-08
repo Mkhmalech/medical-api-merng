@@ -22,7 +22,7 @@ export class Labo {
   }
   // update labo address 
   LaboUpdateAddress = ({ city }: any) => {
-    LABO.find((e, r) => {
+    LABO.find((e:any, r:any) => {
       if (r) {
         for (let index = 0; index < r.length; index++) {
           r[index].contact.address.city = city;
@@ -32,9 +32,7 @@ export class Labo {
     })
   }
   // delete repeated account
-  LaboDeleteRepeatedAccount = () => {
-    LABO.find({ "contact.address.city": "meknes" }).remove().exec(e => console.log(e));
-  }
+  LaboDeleteRepeatedAccount = () => {}
   // update labo address 
   LaboAddNewLabos = () => {
     labdata.map((lab: any) => {

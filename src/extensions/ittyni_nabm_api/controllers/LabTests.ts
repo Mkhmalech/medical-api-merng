@@ -2,6 +2,7 @@ import { TESTS } from "../module/labtests";
 import { Db } from "../../../gateway/db";
 import { SPACE } from "../../ittyni_space_service/src/module/space";
 import account from "../../ittyni_user_api/src/controllers/account";
+import { DEPARTMENTS } from "../../ittyni_department_service/src/module/departments";
 const fs = require("fs");
 export class LabTests {
   // fetching data of test
@@ -34,6 +35,10 @@ export class LabTests {
     const test: any = await TESTS.findById(_id)
     return test? test: Error("NO_TEST_FOUNDED");
   }
+  read_departments = async(args: any, req: any)=>{
+    const departements: any = await DEPARTMENTS.find();
+    return departements? departements : Error("NO_DEPARTEMENTS_FOUNDED")
+  }  
   read_test_by_query = async ({query}: any, {user}: any)=>{
     const q = new RegExp(query, 'ig');
     const tests: any = await TESTS.find({$or: [{"name.fr": q}, {"reference.Mnemonic": q}]});
@@ -221,10 +226,7 @@ export class LabTests {
           if (names.fr) test.name.fr = names.fr;
           if (names.en) test.name.en = names.en;
 
-          test.save((err: any) => {
-            if (err) throw new Error(err);
-            else return "Names_updates_successfully_by_admin";
-          });
+          test.save();
         } else {
           let update = {
             updatedBy: user.id,
@@ -237,10 +239,7 @@ export class LabTests {
 
           test.updates.push(update);
 
-          test.save((err: any) => {
-            if (err) throw new Error(err);
-            else return "names_fr_updated_successfully";
-          });
+          test.save();
         }
       })
       .catch((e) => {
@@ -272,10 +271,7 @@ export class LabTests {
       test.reference.CPT = newRef.CPT;
       test.reference.Mnemonic = newRef.Mnemonic;
 
-      test.save((err: any) => {
-        if (err) throw new Error(err);
-        else return "reference_updates_successfully_by_admin";
-      });
+      test.save();
     } else {
       let update = {
         updatedBy: user,
@@ -290,10 +286,7 @@ export class LabTests {
 
       test.updates.push(update);
 
-      test.save((err: any) => {
-        if (err) throw new Error(err);
-        else return "reference_fr_updated_successfully";
-      });
+      test.save();
     }
   };
   updateDescription = async (args: any, { user }: any) => {

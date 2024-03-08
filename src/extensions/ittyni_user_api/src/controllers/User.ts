@@ -8,7 +8,6 @@ import { CABINET } from "../../../ittyni_cabinet_api/src/module/cabinets";
 import * as CUser from "../../../../gateway/supadmin";
 import { componentResolver } from "../../../ittyni_module_api/src/gql/resolver";
 
-
 class User extends Roles {
   /**
    * we instanciate database class with mongoose
@@ -48,13 +47,14 @@ class User extends Roles {
   //Login Methods
   applyToAuthentify = async (args: any, req: any) => {
     const user = await USER.findOne({ email: args.userInput.email });
-    // if no user in user db 
+    // if no user in user db
     if (!user) {
-
       return Error("USER_NOT_FOUNDED");
-    }
-    else {
-      const isEqual = await bcrypt.compare(args.userInput.password, user.password);
+    } else {
+      const isEqual = await bcrypt.compare(
+        args.userInput.password,
+        user.password
+      );
       // @@Todo console.log(isEqual)
       // console.log(user.password)
       if (!isEqual) throw new Error("PASSWORD_DOES_NOT_MATCH!");
@@ -63,7 +63,7 @@ class User extends Roles {
         {
           _id: user._id,
           email: user.email,
-          createdAt: new Date().toUTCString()
+          createdAt: new Date().toUTCString(),
         },
         "iTTyniTokenApplicationByKHM@MEDv1.1",
         {
@@ -74,7 +74,7 @@ class User extends Roles {
         _id: user.id,
         token: token,
         email: user.email,
-        username: user.email.split("@")[0]
+        username: user.email.split("@")[0],
       };
     }
   };
@@ -88,7 +88,6 @@ class User extends Roles {
         return bcrypt.hash(userInput.password, 12);
       })
       .then(async (hashPassword) => {
-
         const User = new USER({
           email: userInput.email,
           password: hashPassword,
@@ -99,7 +98,6 @@ class User extends Roles {
         const newUser = await User.save();
 
         return newUser;
-
       })
       .then((newUser: any) => ({
         token: jwt.sign(
@@ -123,8 +121,6 @@ class User extends Roles {
         return bcrypt.hash(userInput.password, 12);
       })
       .then(async (hashPassword) => {
-
-
         const User = new USER({
           email: userInput.email,
           password: hashPassword,
@@ -134,7 +130,7 @@ class User extends Roles {
           role: {
             name: "employer",
             createdAt: new Date().toISOString(),
-          }
+          },
         });
         let account = {
           accountId: user.accountId,
@@ -142,15 +138,14 @@ class User extends Roles {
           enabledBy: user.enabledBy,
           role: user.role,
           status: "active",
-          staffId: user._id
-        }
+          staffId: user._id,
+        };
 
         User.accounts.push(account);
 
         const newUser = await User.save();
 
         return newUser;
-
       })
       .then((newUser: any) => ({
         token: jwt.sign(
@@ -181,23 +176,26 @@ class User extends Roles {
             name: args.role,
             addedby: args.addedby,
             createdAt: new Date().toISOString(),
-          }
+          },
         });
 
         const newUser = await User.save();
 
         return newUser;
-
       })
-      .then((newUser) => { if (newUser) return "user_added_successfully" })
+      .then((newUser) => {
+        if (newUser) return "user_added_successfully";
+      })
       .catch((err: any) => {
         throw err;
       });
-  }
+  };
 
   // link user to account
-  linkUserToAccount = ({ userId, accountType, accountId }: any, { user }: any) => {
-
+  linkUserToAccount = (
+    { userId, accountType, accountId }: any,
+    { user }: any
+  ) => {
     return user.supadmin(user, (_id: any) => {
       const updateUser = new Db(USER);
       updateUser.getDocByIdAndPushSubDoc(userId, {
@@ -205,18 +203,20 @@ class User extends Roles {
           [accountType]: accountId,
           enabledBy: _id,
           role: {
-            name: 'manager',
-            status: 'active'
-          }
-        }
-      })
-    })
+            name: "manager",
+            status: "active",
+          },
+        },
+      });
+    });
   };
   // add permissions to user
   addPermissions = async (args: any, { user }: any) => {
     const r = await user.supadmin(user, (_id: any) => {
       const updateComp = new Db(USER);
-      updateComp.updateSubDocs({ '_id': args.userId }, { arrayFilters: [{ 'i.lab': args.accountId }], new: true },
+      updateComp.updateSubDocs(
+        { _id: args.userId },
+        { arrayFilters: [{ "i.lab": args.accountId }], new: true },
         {
           "accounts.$[i].permissions": {
             component: args.componentId,
@@ -225,59 +225,59 @@ class User extends Roles {
             canUpdate: true,
             canDelete: true,
             canPublish: true,
-            addedBy: _id
-          }
+            addedBy: _id,
+          },
         }
-      )
+      );
+    });
 
-    })
-
-    return r ? "SAVED_SUCCESSFULLY" : "NOT_SAVED"
-  }
+    return r ? "SAVED_SUCCESSFULLY" : "NOT_SAVED";
+  };
   /**
-   * 
-   * @param id 
+   *
+   * @param id
    */
   activateModuleInAccount = async (args: any, { user }: any) => {
     // activate modules
-    const labo = await LABO.findById(args.accountId).then(account => {
-      if (account) {
-        const exts = args.extensions.map((ext: any) => {
-          account.extensions.push({
-            component: args._id,
-            activatedBy: user._id,
-            plan: "free"
-          })
-        })
+    const labo = await LABO.findById(args.accountId)
+      .then((account) => {
+        if (account) {
+          const exts = args.extensions.map((ext: any) => {
+            account.extensions.push({
+              component: args._id,
+              activatedBy: user._id,
+              plan: "free",
+            });
+          });
 
-        return account.save((e: any) => new Error(e));
-      }
-    })
-      .then((r: any) => {
-        if (r) return "account_extensions_added_successfully"
+          return account.save();
+        }
       })
-      .catch(e => new Error(e));
+      .then((r: any) => {
+        if (r) return "account_extensions_added_successfully";
+      })
+      .catch((e) => new Error(e));
 
-    const cabinet = await CABINET.findById(args.accountId).then(account => {
-      if (account) {
-        const exts = args.extensions.map((ext: any) => {
-          account.extensions.push({
-            componentName: ext,
-            create: true,
-            read: true,
-            update: true,
-            delete: true
-          })
-        })
+    const cabinet = await CABINET.findById(args.accountId)
+      .then((account) => {
+        if (account) {
+          const exts = args.extensions.map((ext: any) => {
+            account.extensions.push({
+              componentName: ext,
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+            });
+          });
 
-        return account.save((e: any) => new Error(e));
-      }
-    })
-      .catch(e => new Error(e));;
+          return account.save();
+        }
+      })
+      .catch((e) => new Error(e));
 
-    return ("account_extensions_added_successfully")
-
-  }
+    return "account_extensions_added_successfully";
+  };
 
   getUserRole = async (id: string) => {
     const user = await USER.findById(id);
@@ -322,15 +322,14 @@ class User extends Roles {
       return users.map((user: any) => {
         return {
           ...user._doc,
-          id: user._doc._id.toString()
+          id: user._doc._id.toString(),
         };
-
       });
     });
   };
 
   findUserDetailById = (args: any) => {
-    return USER.findOne({ "_id": args.id }).then((user: any) => {
+    return USER.findOne({ _id: args.id }).then((user: any) => {
       if (user) {
         return {
           ...user._doc,
@@ -344,7 +343,7 @@ class User extends Roles {
     if (req.user) {
       return req.user;
     } else {
-      return Error(req.message)
+      return Error(req.message);
     }
   };
 
@@ -353,40 +352,43 @@ class User extends Roles {
    * for system mangement
    */
   addRoleToUser = async (args: any, req: any) => {
-
-    const { inputRole } = args, { user, message, hasAuthorization } = req;
+    const { inputRole } = args,
+      { user, message, hasAuthorization } = req;
 
     if (hasAuthorization(user)) {
-
       const User = await USER.findById(inputRole.id, (e: any, r: any) => {
-
         if (e) throw new Error(e);
 
         if (r) {
+          r.role = {
+            ...inputRole,
+            addedBy: user._id,
+            createdAt: new Date().toString(),
+          };
 
-          r.role = { ...inputRole, addedBy: user._id, createdAt: new Date().toString() };
-
-          r.save((e: any) => { if (e) throw new Error(e) });
-
+          r.save((e: any) => {
+            if (e) throw new Error(e);
+          });
         } else {
-          return "no_user_founded"
+          return "no_user_founded";
         }
-
       });
     } else {
-
-      return "not_allowed"
+      return "not_allowed";
     }
 
-
-    if (User) { return "success" } else { return "not_saved" }
+    if (User) {
+      return "success";
+    } else {
+      return "not_saved";
+    }
   };
 
   /**
    * update role of an user
    * system management
    */
-  updatePermissionsOfUser = () => { };
+  updatePermissionsOfUser = () => {};
 
   /**
    * Signup with google
@@ -400,21 +402,18 @@ class User extends Roles {
             user.firstName = fname;
             user.lastName = lname;
             user.signedbygg = true;
-            user.role.name = user.role.name ? user.role.name : 'user';
+            user.role.name = user.role.name ? user.role.name : "user";
             const updateUser = await user.save();
             return updateUser;
-          }
-          else {
+          } else {
             user.sessions.push({
-              at: new Date().toLocaleString()
-            })
+              at: new Date().toLocaleString(),
+            });
             const saved = await user.save();
-            if (saved)
-              return user;
+            if (saved) return user;
             else Error("session_not_saved");
           }
-        }
-        else {
+        } else {
           const User = new USER({
             email: email,
             picture: picture,
@@ -422,7 +421,7 @@ class User extends Roles {
             firstName: fname,
             lastName: lname,
             signedbygg: true,
-            role: { name: 'client' },
+            role: { name: "client" },
             createdAt: new Date(),
           });
 
@@ -433,100 +432,106 @@ class User extends Roles {
       })
       .then((newUser: any) => ({
         ...newUser,
-        token: jwt.sign({ _id: newUser._id, email: newUser.email, createdAt: new Date().toUTCString() },
-          "iTTyniTokenApplicationByKHM@MEDv1.1", { expiresIn: "8h" }),
+        token: jwt.sign(
+          {
+            _id: newUser._id,
+            email: newUser.email,
+            createdAt: new Date().toUTCString(),
+          },
+          "iTTyniTokenApplicationByKHM@MEDv1.1",
+          { expiresIn: "8h" }
+        ),
         tokenExpired: 8,
-        createdAt: new Date()
+        createdAt: new Date(),
       }))
       .catch((err: any) => {
         throw err;
       });
     return res;
-  }
+  };
 
   /**
    * ittyni front token verification
    */
   verifyFrontToken = (args: any, { user, message }: any) => {
-    if (message) return Error(message)
-    return USER.findOne({_id: user._id}).populate('accounts.labo accounts.space permissions.component');
-  }
+    if (message) return Error(message);
+    return USER.findOne({ _id: user._id }).populate(
+      "accounts.labo accounts.space permissions.component"
+    );
+  };
   /**
    * ittyni front token verification
    */
   subscribedAccounts = async (args: any, { user, message }: any) => {
-    if (message) return Error(message)
-    const res = await new Db(USER).getSubDocWithPop(user._id, "accounts", "accounts.labo")
+    if (message) return Error(message);
+    const res = await new Db(USER).getSubDocWithPop(
+      user._id,
+      "accounts",
+      "accounts.labo"
+    );
 
-    return res.map((r: any) => ({ name: r.labo.account.name }))
-  }
+    return res.map((r: any) => ({ name: r.labo.account.name }));
+  };
 
   /**
    * load component of the user
-   * to be displayed in the 
+   * to be displayed in the
    * sidebar
    */
   readUserExtensions = async (args: any, { user, message }: any) => {
     if (message) return Error(message);
     const cp = await USER.findOne({ _id: user._id })
-      .populate('permissions.component','_id name')
-      .select('permissions')
+      .populate("permissions.component", "_id name")
+      .select("permissions");
 
     if (cp && cp.permissions.length > 0) {
-      return cp.permissions.map(
-        (p: any) => (
-          {
-            name: p.component.name,
-            _id: p.component._id,
-            canRead: p.canRead,
-            canCreate: p.canCreate,
-            canUpdate: p.canUpdate,
-            canDelete: p.canDelete,
-            canPublish: p.canPublish
-          }))
-    }
-    else return []
-  }
+      return cp.permissions.map((p: any) => ({
+        name: p.component.name,
+        _id: p.component._id,
+        canRead: p.canRead,
+        canCreate: p.canCreate,
+        canUpdate: p.canUpdate,
+        canDelete: p.canDelete,
+        canPublish: p.canPublish,
+      }));
+    } else return [];
+  };
   /**
    * user activate extension
-   * with id 
+   * with id
    */
   activateExtension = async (args: any, { user, message }: any) => {
-    const r = await USER.findById(user._id, (e: Error, r: any) => {
-      if (e) return Error(e.message);
-      if (!r) return Error('NOT_CONNECTED');
-      let i = r.permissions.findIndex((c: any) => c.component.toString() === args._id.toString());
-      if (i === -1) {
-        r.permissions.push({
-          component: args._id,
-          canRead: true,
-          canCreate: false,
-          canUpdate: false,
-          canDelete: false,
-          canPublish: false,
-          addedBy: user._id,
-        })
+    const r: any = await USER.findOne({ _id: user._id });
+    if (!r) return Error("NOT_CONNECTED");
 
-        r.save();
-      }
-      else return Error('ALREADY_ACTIVATED');
-    });
-    if (r) {
-      const cp = await USER.findOne({ _id: user._id })
-        .populate('permissions.component')
-        .select('permissions.component')
+    let i = r.permissions.findIndex(
+      (c: any) => c.component.toString() === args._id.toString()
+    );
+    if (i === -1) {
+      r.permissions.push({
+        component: args._id,
+        canRead: true,
+        canCreate: false,
+        canUpdate: false,
+        canDelete: false,
+        canPublish: false,
+        addedBy: user._id,
+      });
 
-      if (cp && cp.permissions.length > 0) {
-        return cp.permissions.map(
-          (p: any) => (
-            {
-              name: p.component.name,
-              _id: p.component._id
-            }))
-      }
-    } else return Error("NOT_SAVED")
+      r.save();
+    } else return Error("ALREADY_ACTIVATED");
 
-  }
+    const cp = await USER.findOne({ _id: user._id })
+      .populate("permissions.component")
+      .select("permissions.component");
+
+    if (cp && cp.permissions.length > 0) {
+      return cp.permissions.map((p: any) => ({
+        name: p.component.name,
+        _id: p.component._id,
+      }));
+    }
+  };
 }
 
 export const userFunc = new User();

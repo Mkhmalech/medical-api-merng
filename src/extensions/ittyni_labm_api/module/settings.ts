@@ -5,32 +5,36 @@ import mongoose from 'mongoose';
  * labo departement hold all 
  */
 export const laboSettingDepartement = new Schema({  name : String, date : String })
-export const LaboSettingDeperatement = mongoose.model('labosettingdepartements', laboSettingDepartement)
 
 /**
  * holiday when labo doesn't work
  * @data from, to, name
  */
-export const laboSettingHoliday = new Schema({ holiday : String, duration : Number, createdAt : String })
-export const LaboSettingHoliday = mongoose.model('labosettingholidays', laboSettingHoliday)
+export const LaboSettingHoliday = new Schema({ holiday : String, duration : Number, createdAt : String });
 
 /**
  * leave is the personal vacation 
  */
-export const laboSettingLeave = new Schema({  leave : String, duration : Number, createdAt : String })
-export const LaboSettingLeave = mongoose.model('labosettingleave', laboSettingLeave)
+export const LaboSettingLeave = new Schema({  leave : String, duration : Number, createdAt : String })
 
 /**
  * labo automates
  */
-export const laboSettingAutomate = new Schema({ brand : String, analyzer : String, entryDate : String, createdAt : String })
-export const LaboSettingAutomate = mongoose.model('labosettingautomate', laboSettingAutomate)
+export const LaboSettingAutomate = new Schema({ brand : String, analyzer : String, entryDate : String, createdAt : String })
 
 /**
  * labo permission gived to status by component
  */
-export const permissionByComponent = new Schema({ componentName : String, create : Boolean, read : Boolean, update : Boolean, delete : Boolean  })
-export const PermissionByComponent = mongoose.model('permissionbycomponent', permissionByComponent)
+// export const PermissionByComponent = new Schema({ componentName : String, create : Boolean, read : Boolean, update : Boolean, delete : Boolean  })
+
+/**
+ * labo affiliation
+ */
+export const LaboSettingAffiliation = new Schema({ 
+    allow_invitations : { type: Boolean, default: false },  
+    updatedAt: { type: String, default: new Date().toISOString() },
+    updatedBy: { type: Schema.Types.ObjectId, ref: 'USER' },
+});
 
 /**
  * labo Team Status
@@ -39,6 +43,6 @@ export const laboSettingTeam = new Schema({
     addedby : {type : Schema.Types.ObjectId, ref : 'USER'}, 
     updatedby : {type : Schema.Types.ObjectId, ref : 'USER'}, 
     role : String, 
-    permissions : [permissionByComponent] 
+    // permissions : [PermissionByComponent] 
 })
-export const LaboSettingTeam = mongoose.model('LaboSettingTeam', laboSettingTeam)
+export const LaboSettingTeam = mongoose.model<any>('LaboSettingTeam', laboSettingTeam)

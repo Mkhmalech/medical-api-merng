@@ -1,7 +1,7 @@
 import express from "express";
 import routes from './routes';
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 import { DEV_API, PROD_API } from "./config"
 // import { WS } from "./ws";
 import { AuthAccount, authAdmin, authUser } from "./gateway";
@@ -9,11 +9,10 @@ import { AuthAccount, authAdmin, authUser } from "./gateway";
 // env variables
 const PORT = process.env.PORT || 8060;
 const API = process.env.ENV === "PROD"? PROD_API : DEV_API;
-mongoose.connect(API, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(API)
     .then(() => { console.log('MongoDB connected...') })
     .catch((err: any) => console.log(err));
 
-mongoose.set('useCreateIndex', true);
 
 const app: express.Application = express();
 

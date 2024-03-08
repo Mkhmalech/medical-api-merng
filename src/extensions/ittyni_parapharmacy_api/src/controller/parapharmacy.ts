@@ -41,7 +41,7 @@ export const write_parapharmacies = async (args: any, { user, permission, messag
             let paraPharmacy: any = new PARAPHARMACY({
                 name: para.product,
                 brand: para.distributeur,
-                createdBy: mongoose.Types.ObjectId('605b97864a4db74074bc86e2')
+                createdBy: new mongoose.Types.ObjectId('605b97864a4db74074bc86e2')
             })
             paraPharmacy.forms = para.package.map((p:any)=>({
                 form: p.name,
@@ -51,7 +51,7 @@ export const write_parapharmacies = async (args: any, { user, permission, messag
                 },
                 status: {
                     value: p.status,
-                    createdBy:mongoose.Types.ObjectId('605b97864a4db74074bc86e2')
+                    createdBy: new mongoose.Types.ObjectId('605b97864a4db74074bc86e2')
                 }
     
             }))

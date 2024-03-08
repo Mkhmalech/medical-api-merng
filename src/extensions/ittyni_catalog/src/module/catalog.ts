@@ -11,12 +11,14 @@ interface ICatalog {
     tests? : any[]
     createdBy? : string
     updatedAt? : string
+    for?: string
     status? : any[]
 }
 
 const catalog = new Schema({
     title: {type: String, required: true},
     description: {type: String},
+    for: {type: String, required: true, enum : ['affiliation', 'contribution'], default: 'contribution'},
     tests: [{
         default: {type: Schema.Types.ObjectId, ref: 'TESTS'},
         finance: {

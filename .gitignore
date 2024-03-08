@@ -1,7 +1,7 @@
 build
 node_modules
 src/user-medical-api
-
+exe_folder
 #todo
 Todo.md
 src/extensions/lab-manager

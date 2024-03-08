@@ -5,6 +5,24 @@ const Update = new Schema({
   updatedAt: { type: String, default: new Date().toUTCString() },
   updatedBy: { type: Schema.Types.ObjectId, ref: "USER" },
   isDefault: Boolean,
+  names: [{
+    name_value: { type: String },
+    name_lang: { type: String },
+    name_country: { type: String },
+  }],
+  codification: [{
+    code_name: { type: String },
+    code_key: { type: String },
+    code_value: { type: String },
+    code_mnemonic: { type: String , unique: true },
+  }],
+  type: { type: String, enum: ['parameter', 'group', 'panel'] },
+  components: [{ type: Schema.Types.ObjectId, ref: "TESTS" }],
+  parameters: [{
+    parameter_name: { type: String },
+    parameter_mnemonic: { type: String },
+    parameter_unit: { type: String },
+  }],
   name: {
     en: String,
     fr: String,
@@ -34,7 +52,6 @@ const Update = new Schema({
   departements: [{ type: Schema.Types.ObjectId, ref: "DEPARTEMENTS" }],
   parameter: Boolean,
   group: Boolean,
-  components: [{ type: Schema.Types.ObjectId, ref: "TESTS" }],
   panel: { type: Schema.Types.ObjectId, ref: "PANELS" },
   structure: { type: Schema.Types.ObjectId, ref: "STRUCTURES" },
   preparation: {
@@ -91,8 +108,8 @@ interface ITestModel extends Document {
 }
 
 const TestSchema: Schema = new Schema({
-  space: {type: Schema.Types.ObjectId, ref: 'SPACE'},
-  user: {type: Schema.Types.ObjectId, ref: 'USER'},
+  space: { type: Schema.Types.ObjectId, ref: 'SPACE' },
+  user: { type: Schema.Types.ObjectId, ref: 'USER' },
   isDefault: Boolean,
   name: {
     en: String,
@@ -103,6 +120,11 @@ const TestSchema: Schema = new Schema({
     Mnemonic: { type: String, unique: true },
     CPT: { type: Number },
   },
+  codification: [{
+    name: { type: String, required: true },
+    mnemonic: { type: String, unique: true },
+    code: { type: String, unique: true }
+  }],
   finance: [
     {
       country: String,
@@ -167,12 +189,12 @@ const TestSchema: Schema = new Schema({
   },
   updates: [Update],
   status: [{
-    value: { type: String, default: "created", enum: ["created", "validated", "online", "offline", "deleted"]},
-    createdBy: { type: Schema.Types.ObjectId, ref: "USER"},
-    createdAt: { type: String, default: new Date().toUTCString()}
+    value: { type: String, default: "created", enum: ["created", "validated", "online", "offline", "deleted"] },
+    createdBy: { type: Schema.Types.ObjectId, ref: "USER" },
+    createdAt: { type: String, default: new Date().toUTCString() }
   }],
   views: Number,
-  official: {type: Boolean}
+  official: { type: Boolean }
 });
 
 export const TESTS = model<ITestModel>("TESTS", TestSchema);

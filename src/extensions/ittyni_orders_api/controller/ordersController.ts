@@ -342,7 +342,7 @@ export const read_referral_labm_orders_out = async (
     {
       $match: {
         $and: [
-          { "labOrder.referredFrom": mongoose.Types.ObjectId(account._id) },
+          { "labOrder.referredFrom": new mongoose.Types.ObjectId(account._id) },
           { OrderType: "referral" },
         ],
       },
@@ -390,7 +390,7 @@ export const read_referral_labm_order_details = async (
   { user, account }: any
 ) => {
   const res = await ORDER.aggregate([
-    { $match: { _id: mongoose.Types.ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
   ])
     .lookup({
       from: "spaces",
@@ -425,7 +425,7 @@ export const read_referral_labm_orders_in = async (
     {
       $match: {
         $and: [
-          { "labOrder.referredTo": mongoose.Types.ObjectId(account._id) },
+          { "labOrder.referredTo": new mongoose.Types.ObjectId(account._id) },
           { OrderType: "referral" },
         ],
       },
