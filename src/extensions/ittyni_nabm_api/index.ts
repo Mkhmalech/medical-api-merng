@@ -1,3 +1,3 @@
 export * from './gql/handler'
 export * from './gql/resolver'
-export * from './gql/schema'
+export * from './gql/schema_procedures'

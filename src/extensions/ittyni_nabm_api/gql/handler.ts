@@ -1,5 +1,5 @@
 import graphqlHTTP from "express-graphql";
-import * as Schema from './schema'
+import * as Schema from './schema_procedures'
 import * as Resolver from './resolver'
 
 export const LabTests = graphqlHTTP({
